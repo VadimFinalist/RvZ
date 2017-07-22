@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# .gitattributes
+
+# Treat them as binary files for GitMerge
+*.unity binary
+*.prefab binary
+*.asset binary
