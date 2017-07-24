@@ -63,6 +63,19 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         {
 
         }
+        
+        /// <summary>
+        /// Sets the HUD for player
+        /// </summary>
+        [PunRPC]
+        public virtual void SetHUD()
+        {
+            //Утром сделать в плеймоде топ расположение канваса, и запомнить его как префаб, (или нет) и засунуть с таким же расположением в префаб игрока(и зомби) с расположением как при старте.
+            //Если не поможет, то инстансить префаб канваса с такими же параметрами всегда)0
+            GameObject go = Instantiate(Resources.Load("CanvasPlayer") as GameObject, gameObject.transform.Find("Head"));
+            go.transform.localPosition = new Vector3(-0.4017296f, 0.7296268f, 2.908004f);
+            go.transform.position = gameObject.transform.position;
+        }
 
         #endregion
     }

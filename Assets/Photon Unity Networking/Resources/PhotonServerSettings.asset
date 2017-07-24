@@ -83,4 +83,5 @@ MonoBehaviour:
   - Win
   - Death
   - Respawn
+  - SetHUD
   DisableAutoOpenWizard: 1

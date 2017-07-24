@@ -33,8 +33,8 @@ public class HillManager : ScoreManager
     public GameObject[] hillsPositions;
     public GameObject hillMessagesTextObject;
     public GameObject hillPoint;
-    public GameObject hillScoreTextObject;
-    public GameObject sliderHillCaptureObject;
+    public GameObject scoreRobotsTextObject;
+    public GameObject scoreZombiesTextObject;
 
     public Slider sliderHillCaptureSlider;
     public Text hillMessagesText;
@@ -51,9 +51,8 @@ public class HillManager : ScoreManager
     {
         hillStandMaxValue = sliderHillCaptureSlider.maxValue;
         
-        hillScoreTextObject.SetActive(false);
         hillMessagesTextObject.SetActive(false);
-        sliderHillCaptureObject.SetActive(false);
+
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
     }
 
@@ -95,12 +94,6 @@ public class HillManager : ScoreManager
         {
             PlayerStayingHill(headZombieTag);
         }
-
-        //BOTH
-        else if (other.gameObject.tag == headZombieTag && other.gameObject.tag == headRobotTag)
-        {
-            Debug.Log("BOTH!");
-        }
     }
 
     /// <summary>
@@ -130,7 +123,6 @@ public class HillManager : ScoreManager
     private void PlayerEnterHill(string headTag)
     {
         hillCanTeleport = false;
-        sliderHillCaptureObject.SetActive(true);
 
         if (headTag == "RobotHead")
         {
@@ -186,7 +178,7 @@ public class HillManager : ScoreManager
         //        hillPoint.GetComponent<Renderer>().material.SetColor("_TintColor", Color.green);
 
         //        isHillCaptured = true;
-        //        sliderHillCaptureObject.SetActive(false);
+        //        sliderCaptureSlider.SetActive(false);
         //        hillScoreTextObject.SetActive(true);
         //        StartCoroutine(TemporarilyActivateCaptured(3.00f));
 
@@ -206,7 +198,6 @@ public class HillManager : ScoreManager
     private void PlayerExitHill(string headTag)
     {
         hillCanTeleport = true;
-        sliderHillCaptureObject.SetActive(false);
 
         if (hillStandValue != hillStandMaxValue)
         {
@@ -289,7 +280,6 @@ public class HillManager : ScoreManager
         hillMessagesText.text = "You won!";
         yield return new WaitForSeconds(duration);
         hillMessagesTextObject.SetActive(false);
-        hillScoreTextObject.SetActive(false);
         isCouroutineEnded = true;
     }
 

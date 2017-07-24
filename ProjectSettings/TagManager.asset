@@ -15,6 +15,7 @@ TagManager:
   - TeamZombie
   - RobotHead
   - ZombieHead
+  - UI
   layers:
   - Default
   - TransparentFX
