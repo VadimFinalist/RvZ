@@ -50,7 +50,7 @@ public class HillManager : ScoreManager
     void Start()
     {
         hillStandMaxValue = sliderHillCaptureSlider.maxValue;
-
+        
         hillScoreTextObject.SetActive(false);
         hillMessagesTextObject.SetActive(false);
         sliderHillCaptureObject.SetActive(false);
@@ -94,6 +94,12 @@ public class HillManager : ScoreManager
         else if (other.gameObject.tag == headZombieTag)
         {
             PlayerStayingHill(headZombieTag);
+        }
+
+        //BOTH
+        else if (other.gameObject.tag == headZombieTag && other.gameObject.tag == headRobotTag)
+        {
+            Debug.Log("BOTH!");
         }
     }
 

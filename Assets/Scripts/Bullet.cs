@@ -43,6 +43,7 @@ public class Bullet : MonoBehaviour
         {
             NetworkAudio.SendPlayClipAtPoint(hitSoftSound, transform.position, 1.0f);
             Debug.Log("Headshot");
+            
         }
     }
 }
