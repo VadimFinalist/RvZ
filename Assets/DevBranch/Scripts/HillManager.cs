@@ -51,7 +51,7 @@ public class HillManager : ScoreManager
     {
         scoreLimit = (int)captureSlider.maxValue;
         
-        messageTextObject.SetActive(false);
+        //messageTextObject.SetActive(false);
 
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
     }

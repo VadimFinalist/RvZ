@@ -88,7 +88,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         /// <summary>
         /// Sets the HUD for player
         /// </summary>
-        [PunRPC]
+        //[PunRPC]
         public virtual void SetHUD()
         {
             GameObject go = Instantiate(Resources.Load("CanvasPlayer") as GameObject, gameObject.transform.Find("Head"));
