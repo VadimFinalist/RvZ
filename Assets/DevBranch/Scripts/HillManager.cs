@@ -49,6 +49,7 @@ public class HillManager : ScoreManager
     /// </summary>
     void Start()
     {
+        scoreRobotsTextObject.GetComponent<Text>().text = "1";
         hillStandMaxValue = sliderHillCaptureSlider.maxValue;
         
         hillMessagesTextObject.SetActive(false);
