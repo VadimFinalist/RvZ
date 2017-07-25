@@ -84,4 +84,7 @@ MonoBehaviour:
   - Death
   - Respawn
   - SetHUD
+  - ScoreUp
+  - ScoreRobotsUp
+  - ScoreZombiesUp
   DisableAutoOpenWizard: 1

@@ -65,7 +65,7 @@ public class ScoreManager: Photon.PunBehaviour {
                 return;
             }
 
-            robotsScore ++;
+            InvokeRepeating("ScoreRobotsUp", 0.0f, 5.0f);
         }
         else if (teamName == teamZombieName)
         {
@@ -75,7 +75,7 @@ public class ScoreManager: Photon.PunBehaviour {
                 return;
             }
 
-            zombiesScore ++;
+            InvokeRepeating("ScoreZombiesUp", 0.0f, 5.0f);
         }
     }
 
@@ -108,6 +108,33 @@ public class ScoreManager: Photon.PunBehaviour {
 
             Debug.Log("Team Zombie wins!");
         }
+    }
+
+    /*[PunRPC]
+    private IEnumerator ScoreUp(string teamName)
+    {
+        if (teamName == teamRobotName)
+        {
+            robotsScore += 1;
+        }
+        else if (teamName == teamZombieName)
+        {
+            zombiesScore += 1;
+        }
+
+        yield return new WaitForSeconds(1.0f);
+    }*/
+
+    [PunRPC]
+    private void ScoreRobotsUp()
+    {
+        robotsScore += 1;
+    }
+
+    [PunRPC]
+    private void ScoreZombiesUp()
+    {
+        zombiesScore += 1;
     }
 
     #endregion
