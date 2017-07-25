@@ -22,7 +22,7 @@ public class HillManager : ScoreManager
 
     private bool isCouroutineEnded = false;
     private bool isCouroutineStarted = false;
-    private bool hillCanTeleport = true;
+    private bool hillCanTeleport = false;/////////////////////////////////
     private bool capturedByRobots;
     private bool capturedByZombies;
 
