@@ -12,33 +12,33 @@ public class HillManager : ScoreManager
     private string headZombieTag = "ZombieHead";
     private string teamRobotTag = "TeamRobot";
     private string teamZombieTag = "TeamZombie";
+    private string robotsName = "Robots";
+    private string zombiesName = "Zombies";
 
-    private int currentScore = 0;
     private int hillTeleportCounter = 1;
-    private int scoreToWin = 1000;
 
-    private float hillStandValue = 0.0f;
-    private float hillStandMaxValue;
-
-    private bool isCouroutineEnded = false;
-    private bool isCouroutineStarted = false;
-    private bool hillCanTeleport = false;/////////////////////////////////
+    private bool isCouroutineStarted;
+    private bool isCouroutineEnded;
+    private bool isHillEmpty = false; ///////////////////////////////// Temporary False, should be True
     private bool capturedByRobots;
     private bool capturedByZombies;
+    private bool isRobotInside;
+    private bool isZombieInside;
 
     #endregion
 
     #region Public Variables
 
     public GameObject[] hillsPositions;
-    public GameObject hillMessagesTextObject;
     public GameObject hillPoint;
+    public GameObject messageTextObject;
     public GameObject scoreRobotsTextObject;
     public GameObject scoreZombiesTextObject;
 
-    public Slider sliderHillCaptureSlider;
-    public Text hillMessagesText;
-    public Text hillScoreText;
+    public Slider captureSlider;
+    public Text messageText;
+    public Text scoreRobotsText;
+    public Text scoreZombiesText;
 
     #endregion
 
@@ -49,10 +49,9 @@ public class HillManager : ScoreManager
     /// </summary>
     void Start()
     {
-        scoreRobotsTextObject.GetComponent<Text>().text = "1";
-        hillStandMaxValue = sliderHillCaptureSlider.maxValue;
+        scoreLimit = (int)captureSlider.maxValue;
         
-        hillMessagesTextObject.SetActive(false);
+        messageTextObject.SetActive(false);
 
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
     }
@@ -64,6 +63,8 @@ public class HillManager : ScoreManager
     {
         ScoreUp();
     }
+
+    #region Collision Methods
 
     /// <summary>
     /// Method which invokes when player enters an hill area
@@ -115,24 +116,27 @@ public class HillManager : ScoreManager
 
     #endregion
 
+    #endregion
+
     #region Private Methods
-    
+
     /// <summary>
     /// Method which invokes when enters in depend on player team
     /// </summary>
     /// <param name="headTag"></param>
     private void PlayerEnterHill(string headTag)
     {
-        hillCanTeleport = false;
+        isHillEmpty = false;
 
-        if (headTag == "RobotHead")
+        if (headTag == headRobotTag)
         {
-            Debug.Log("Robot entered!");
+            
         }
-        else if (headTag == "ZombieHead")
+        else if (headTag == headZombieTag)
         {
-            Debug.Log("Zombie entered!");
+            
         }
+
     }
 
     /// <summary>
@@ -141,13 +145,26 @@ public class HillManager : ScoreManager
     /// <param name="headTag"></param>
     private void PlayerStayingHill(string headTag)
     {
-        if (headTag == "RobotHead")
+        isHillEmpty = false;
+
+        if (headTag == headRobotTag)
         {
-            Debug.Log("Robot staying!");
+            isRobotInside = true;
+            messageText.text = robotsName + " on hill!";
+
+            ScoreUpdate(teamRobotTag);
         }
-        else if (headTag == "ZombieHead")
+        else if (headTag == headZombieTag)
         {
-            Debug.Log("Zombie staying!");
+            isZombieInside = true;
+
+            messageText.text = zombiesName + " on hill!";
+
+            ScoreUpdate(teamZombieTag);
+        }
+        else if (isRobotInside && isZombieInside)
+        {
+            messageText.text = "Duel!";
         }
 
         //if (other.gameObject.tag == headRobotTag)
@@ -172,14 +189,14 @@ public class HillManager : ScoreManager
         //        //    GetComponent<Renderer>().enabled = true;
         //        //}
         //    }
-        //    sliderHillCaptureSlider.value = hillStandValue;
+        //    captureSlider.value = hillStandValue;
         //    if (hillStandValue == hillStandMaxValue)
         //    {
         //        gameObject.GetComponent<Renderer>().material.SetColor("_TintColor", Color.green);
         //        hillPoint.GetComponent<Renderer>().material.SetColor("_TintColor", Color.green);
 
         //        isHillCaptured = true;
-        //        sliderCaptureSlider.SetActive(false);
+        //        captureSlider.SetActive(false);
         //        hillScoreTextObject.SetActive(true);
         //        StartCoroutine(TemporarilyActivateCaptured(3.00f));
 
@@ -198,20 +215,19 @@ public class HillManager : ScoreManager
     /// <param name="headTag"></param>
     private void PlayerExitHill(string headTag)
     {
-        hillCanTeleport = true;
+        isHillEmpty = true;
+        
+        if (headTag == headRobotTag)
+        {
+            isRobotInside = false;
 
-        if (hillStandValue != hillStandMaxValue)
-        {
-            hillStandValue = 0.0f;
+            
         }
+        else if (headTag == headZombieTag)
+        {
+            isZombieInside = false;
 
-        if (headTag == "RobotHead")
-        {
-            Debug.Log("Robot exited!");
-        }
-        else if (headTag == "ZombieHead")
-        {
-            Debug.Log("Zombie exited!");
+            
         }
     }
 
@@ -220,7 +236,7 @@ public class HillManager : ScoreManager
     /// </summary>
     private void ScoreUp()
     {
-        if (true/*                                                       */)
+        /*if (true)
         {
             if (currentScore < scoreToWin)
             {
@@ -241,7 +257,7 @@ public class HillManager : ScoreManager
                     return;
                 }
             }
-        }
+        }*/
     }
 
     /// <summary>
@@ -249,7 +265,7 @@ public class HillManager : ScoreManager
     /// </summary>
     private void HillTeleport()
     {
-        if (hillCanTeleport)
+        if (isHillEmpty)
         {
             if (hillTeleportCounter == hillsPositions.Length)
             {
@@ -265,22 +281,31 @@ public class HillManager : ScoreManager
 
     #region IEnumerator Methods
 
-    private IEnumerator TemporarilyActivateCaptured(float duration)
+    private IEnumerator TemporarilyActivateCaptured(float duration, string teamTag)
     {
-        hillMessagesTextObject.SetActive(true);
-        hillMessagesText.text = "Hill captured!";
+        messageTextObject.SetActive(true);
+
+        if (teamTag == teamRobotTag)
+        {
+            messageText.text = "Hill is captured by " + robotsName + "!";
+        }
+        else if (teamTag == teamZombieTag)
+        {
+            messageText.text = "Hill is captured by " + zombiesName + "!";
+        }
+
         yield return new WaitForSeconds(duration);
-        hillMessagesTextObject.SetActive(false);
+        messageTextObject.SetActive(false);
     }
 
-    private IEnumerator TemporarilyActivateWin(float duration)
+    private IEnumerator TemporarilyActivateWin(float duration, string teamName)
     {
         isCouroutineEnded = false;
         isCouroutineStarted = true;
-        hillMessagesTextObject.SetActive(true);
-        hillMessagesText.text = "You won!";
+        messageTextObject.SetActive(true);
+        messageText.text = "You won!";
         yield return new WaitForSeconds(duration);
-        hillMessagesTextObject.SetActive(false);
+        messageTextObject.SetActive(false);
         isCouroutineEnded = true;
     }
 

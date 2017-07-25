@@ -16,6 +16,8 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 
             photonView.RPC("SetTags", PhotonTargets.All, new object[] { teamTag, headTag });
             photonView.RPC("SetName", PhotonTargets.All, playerName + " ");
+
+            SetHUD();
         }
     }
 }

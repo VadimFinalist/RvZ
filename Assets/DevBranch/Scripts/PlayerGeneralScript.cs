@@ -1,15 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 {
     public abstract class PlayerGeneralScript : Photon.PunBehaviour
     {
+        #region Private Variables
+
+        //private string _textHealth;
+
+        #endregion
+
         #region Protected Variables
 
-        [Tooltip("Health of current player")]
+        [Tooltip("Health value of current player")]
         protected byte health = 100;
+
+        /*protected byte Health
+        { 
+            get
+            {
+                return health;
+            }
+            set
+            {
+                health = value;
+                _textHealth = value.ToString();
+            }
+        }*/
 
         [Tooltip("Name of current player in hierarchy")]
         protected string playerName;
@@ -21,7 +41,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         protected string headTag;
 
         #endregion
-
+        
         #region Public Methods
 
         /// <summary>
@@ -71,10 +91,11 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         [PunRPC]
         public virtual void SetHUD()
         {
-            GameObject go = Instantiate(Resources.Load("CanvasPlayer 1") as GameObject, gameObject.transform.Find("Head"));
+            GameObject go = Instantiate(Resources.Load("CanvasPlayer") as GameObject, gameObject.transform.Find("Head"));
             go.transform.localPosition = new Vector3(0.03f, 1.010859f, 2.958178f);
+
+            gameObject.transform.Find("Head/CanvasPlayerHealth/HealthGroup/TextHealth").GetComponent<Text>().text = health.ToString();
         }
-        
 
         #endregion
     }

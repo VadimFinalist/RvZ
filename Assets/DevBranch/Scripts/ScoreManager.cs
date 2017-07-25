@@ -8,19 +8,20 @@ public class ScoreManager: Photon.PunBehaviour {
 
     #region Private Variables
 
+    [Tooltip("Score of Robot Team")]
     private int robotsScore = 0;
+    [Tooltip("Score of Zombie Team")]
     private int zombiesScore = 0;
-
-    private int scoreLimit = 1000;
-
+    
     private static string teamRobotName = "TeamRobot";
     private static string teamZombieName = "TeamZombie";
 
     #endregion
 
     #region Public Variables
-
-    public Text scoreText;
+    
+    [Tooltip("Score limit which will grant Victory")]
+    public int scoreLimit;
 
     #endregion
 
@@ -30,16 +31,17 @@ public class ScoreManager: Photon.PunBehaviour {
     /// </summary>
     void Start()
     {
-        scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
+
     }
 
+    /* Update
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update()
     {
 
-    }
+    }*/
 
     #endregion
 
@@ -61,7 +63,6 @@ public class ScoreManager: Photon.PunBehaviour {
             }
 
             robotsScore ++;
-            scoreText.text = robotsScore.ToString();
         }
         else if (teamName == teamZombieName)
         {
@@ -72,7 +73,6 @@ public class ScoreManager: Photon.PunBehaviour {
             }
 
             zombiesScore ++;
-            scoreText.text = zombiesScore.ToString();
         }
     }
 
