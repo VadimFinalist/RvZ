@@ -149,9 +149,10 @@ public class HillManager : ScoreManager
         if (headTag == headRobotTag)
         {
             isRobotInside = true;
-            
-            ScoreUpdate(teamRobotTag);
-            
+
+            //ScoreUpdate(teamRobotTag);
+            InvokeRepeating("ScoreRobotsUp", 0.0f, 1.0f);
+
             GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
             for (int i = 0; i < GOs.Length; i++)
             {
@@ -165,7 +166,8 @@ public class HillManager : ScoreManager
 
             messageText.text = zombiesName + " on hill!";
 
-            ScoreUpdate(teamZombieTag);
+            //ScoreUpdate(teamZombieTag);
+            InvokeRepeating("ScoreZombiesUp", 0.0f, 1.0f);
 
             GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
             for (int i = 0; i < GOs.Length; i++)

@@ -126,15 +126,27 @@ public class ScoreManager: Photon.PunBehaviour {
     }*/
 
     [PunRPC]
-    private void ScoreRobotsUp()
+    public void ScoreRobotsUp()
     {
-        robotsScore += 1;
+        if (robotsScore >= scoreLimit)
+        {
+            Win(teamRobotName);
+            return;
+        }
+
+        robotsScore += 10;
     }
 
     [PunRPC]
-    private void ScoreZombiesUp()
+    public void ScoreZombiesUp()
     {
-        zombiesScore += 1;
+        if (zombiesScore >= scoreLimit)
+        {
+            Win(teamZombieName);
+            return;
+        }
+
+        zombiesScore += 10;
     }
 
     #endregion
