@@ -7,12 +7,9 @@ using UnityEngine.UI;
 public class ScoreManager: Photon.PunBehaviour {
 
     #region Private Variables
-
-    [Tooltip("Score of Robot Team")]
-    private int robotsScore = 0;
-    [Tooltip("Score of Zombie Team")]
-    private int zombiesScore = 0;
     
+    private GameObject hill;
+
     private static string teamRobotName = "TeamRobot";
     private static string teamZombieName = "TeamZombie";
 
@@ -20,6 +17,12 @@ public class ScoreManager: Photon.PunBehaviour {
 
     #region Public Variables
     
+    [Tooltip("Score of Robot Team")]
+    public int robotsScore = 0;
+
+    [Tooltip("Score of Zombie Team")]
+    public int zombiesScore = 0;
+
     [Tooltip("Score limit which will grant Victory")]
     public int scoreLimit;
 
@@ -31,7 +34,7 @@ public class ScoreManager: Photon.PunBehaviour {
     /// </summary>
     void Start()
     {
-
+        hill = GameObject.Find("Hill (0)");
     }
 
     /* Update
@@ -66,7 +69,7 @@ public class ScoreManager: Photon.PunBehaviour {
         }
         else if (teamName == teamZombieName)
         {
-            if (robotsScore >= scoreLimit)
+            if (zombiesScore >= scoreLimit)
             {
                 Win(teamZombieName);
                 return;
@@ -87,10 +90,22 @@ public class ScoreManager: Photon.PunBehaviour {
 
         if (teamName == teamRobotName)
         {
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Robot team wins!";
+            }
+
             Debug.Log("Team Robot wins!");
         }
         else if (teamName == teamZombieName)
         {
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Zombie team wins!";
+            }
+
             Debug.Log("Team Zombie wins!");
         }
     }

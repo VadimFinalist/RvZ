@@ -50,7 +50,6 @@ public class HillManager : ScoreManager
     void Start()
     {
         scoreLimit = (int)captureSlider.maxValue;
-        
         //messageTextObject.SetActive(false);
 
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
@@ -138,7 +137,7 @@ public class HillManager : ScoreManager
         }
 
     }
-
+    
     /// <summary>
     /// Method which invokes while staying in depend on player team
     /// </summary>
@@ -150,9 +149,15 @@ public class HillManager : ScoreManager
         if (headTag == headRobotTag)
         {
             isRobotInside = true;
-            messageText.text = robotsName + " on hill!";
-
+            
             ScoreUpdate(teamRobotTag);
+            
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = robotsName + " on hill!";
+                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString(); ;
+            }
         }
         else if (headTag == headZombieTag)
         {
@@ -161,8 +166,16 @@ public class HillManager : ScoreManager
             messageText.text = zombiesName + " on hill!";
 
             ScoreUpdate(teamZombieTag);
+
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = zombiesName + " on hill!";
+                GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString(); ;
+            }
         }
-        else if (isRobotInside && isZombieInside)
+
+        if (isRobotInside && isZombieInside)
         {
             messageText.text = "Duel!";
         }
@@ -215,7 +228,10 @@ public class HillManager : ScoreManager
     /// <param name="headTag"></param>
     private void PlayerExitHill(string headTag)
     {
-        isHillEmpty = true;
+        if (!isRobotInside && !isZombieInside)
+        {
+            isHillEmpty = true;
+        }
         
         if (headTag == headRobotTag)
         {
