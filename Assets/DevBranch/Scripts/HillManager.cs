@@ -16,10 +16,10 @@ public class HillManager : ScoreManager
     private string zombiesName = "Zombies";
 
     private int hillTeleportCounter = 1;
+    private int _countInHill;
 
     private bool isCouroutineStarted;
     private bool isCouroutineEnded;
-    private bool isHillEmpty = false; ///////////////////////////////// Temporary False, should be True
     private bool capturedByRobots;
     private bool capturedByZombies;
     private bool isRobotInside;
@@ -50,7 +50,6 @@ public class HillManager : ScoreManager
     void Start()
     {
         scoreLimit = (int)captureSlider.maxValue;
-        //messageTextObject.SetActive(false);
 
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
     }
@@ -60,7 +59,7 @@ public class HillManager : ScoreManager
     /// </summary>
     void Update()
     {
-        ScoreUp();
+
     }
 
     #region Collision Methods
@@ -120,67 +119,73 @@ public class HillManager : ScoreManager
     #region Private Methods
 
     /// <summary>
-    /// Method which invokes when enters in depend on player team
+    /// Method which invokes when enters hill in depend on player team
     /// </summary>
     /// <param name="headTag"></param>
     private void PlayerEnterHill(string headTag)
     {
-        isHillEmpty = false;
-
         if (headTag == headRobotTag)
         {
-            
+            _countInHill++;
+            InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
         }
         else if (headTag == headZombieTag)
         {
-            
+            _countInHill++;
+            InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
         }
 
     }
     
     /// <summary>
-    /// Method which invokes while staying in depend on player team
+    /// Method which invokes while staying hill in depend on player team
     /// </summary>
     /// <param name="headTag"></param>
     private void PlayerStayingHill(string headTag)
     {
-        isHillEmpty = false;
+        if (isRobotInside && isZombieInside)
+        {
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Duel!";
+            }
+
+            CancelInvoke("ScoreRobotsUpdate");
+            CancelInvoke("ScoreZombiesUpdate");
+        }
 
         if (headTag == headRobotTag)
         {
             isRobotInside = true;
 
             //ScoreUpdate(teamRobotTag);
-            InvokeRepeating("ScoreRobotsUp", 0.0f, 1.0f);
 
-            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            /*GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
             for (int i = 0; i < GOs.Length; i++)
             {
-                GOs[i].transform.Find("Message").GetComponent<Text>().text = robotsName + " on hill!";
-                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString(); ;
-            }
+                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString();
+            }*/
         }
         else if (headTag == headZombieTag)
         {
             isZombieInside = true;
 
-            messageText.text = zombiesName + " on hill!";
+            //messageText.text = zombiesName + " on hill!";
 
             //ScoreUpdate(teamZombieTag);
-            InvokeRepeating("ScoreZombiesUp", 0.0f, 1.0f);
+            //InvokeRepeating("ScoreZombiesUp", 0.0f, 1.0f);
 
-            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            /*GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
             for (int i = 0; i < GOs.Length; i++)
             {
                 GOs[i].transform.Find("Message").GetComponent<Text>().text = zombiesName + " on hill!";
-                GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString(); ;
-            }
+                GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString();
+            }*/
         }
 
-        if (isRobotInside && isZombieInside)
-        {
-            messageText.text = "Duel!";
-        }
+
+
 
         //if (other.gameObject.tag == headRobotTag)
         //{
@@ -225,57 +230,31 @@ public class HillManager : ScoreManager
     }
 
     /// <summary>
-    /// Method which invokes when exited in depend on player team
+    /// Method which invokes when exited hill in depend on player team
     /// </summary>
     /// <param name="headTag"></param>
     private void PlayerExitHill(string headTag)
     {
-        if (!isRobotInside && !isZombieInside)
-        {
-            isHillEmpty = true;
-        }
-        
         if (headTag == headRobotTag)
         {
             isRobotInside = false;
+            _countInHill--;
 
-            
+            if (_countInHill == 0)
+            {
+                CancelInvoke("ScoreRobotsUpdate");
+            }
         }
         else if (headTag == headZombieTag)
         {
             isZombieInside = false;
+            _countInHill--;
 
-            
+            if (_countInHill == 0)
+            {
+                CancelInvoke("ScoreZombiesUpdate");
+            }
         }
-    }
-
-    /// <summary>
-    /// Only if hill is captured by someone, score UPs
-    /// </summary>
-    private void ScoreUp()
-    {
-        /*if (true)
-        {
-            if (currentScore < scoreToWin)
-            {
-                currentScore++;
-                if (currentScore % 100 == 0)
-                {
-                    hillScoreText.text = currentScore.ToString() + " / 1000";
-                }
-            }
-            else if (currentScore == scoreToWin)
-            {
-                if (!isCouroutineStarted)
-                {
-                    StartCoroutine(TemporarilyActivateWin(5.0f));
-                }
-                if (isCouroutineEnded)
-                {
-                    return;
-                }
-            }
-        }*/
     }
 
     /// <summary>
@@ -283,7 +262,7 @@ public class HillManager : ScoreManager
     /// </summary>
     private void HillTeleport()
     {
-        if (isHillEmpty)
+        if (_countInHill == -1) //Temporary, should be zero
         {
             if (hillTeleportCounter == hillsPositions.Length)
             {
@@ -293,38 +272,6 @@ public class HillManager : ScoreManager
             gameObject.transform.position = hillsPositions[hillTeleportCounter].transform.position;
             hillTeleportCounter++;
         }
-    }
-
-    #endregion
-
-    #region IEnumerator Methods
-
-    private IEnumerator TemporarilyActivateCaptured(float duration, string teamTag)
-    {
-        messageTextObject.SetActive(true);
-
-        if (teamTag == teamRobotTag)
-        {
-            messageText.text = "Hill is captured by " + robotsName + "!";
-        }
-        else if (teamTag == teamZombieTag)
-        {
-            messageText.text = "Hill is captured by " + zombiesName + "!";
-        }
-
-        yield return new WaitForSeconds(duration);
-        messageTextObject.SetActive(false);
-    }
-
-    private IEnumerator TemporarilyActivateWin(float duration, string teamName)
-    {
-        isCouroutineEnded = false;
-        isCouroutineStarted = true;
-        messageTextObject.SetActive(true);
-        messageText.text = "You won!";
-        yield return new WaitForSeconds(duration);
-        messageTextObject.SetActive(false);
-        isCouroutineEnded = true;
     }
 
     #endregion

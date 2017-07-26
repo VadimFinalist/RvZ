@@ -87,4 +87,6 @@ MonoBehaviour:
   - ScoreUp
   - ScoreRobotsUp
   - ScoreZombiesUp
+  - ScoreRobotsUpdate
+  - ScoreZombiesUpdate
   DisableAutoOpenWizard: 1
