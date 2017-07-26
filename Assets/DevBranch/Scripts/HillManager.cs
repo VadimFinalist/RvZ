@@ -20,8 +20,6 @@ public class HillManager : ScoreManager
 
     private bool isCouroutineStarted;
     private bool isCouroutineEnded;
-    private bool capturedByRobots;
-    private bool capturedByZombies;
     private bool isRobotInside;
     private bool isZombieInside;
 
@@ -127,12 +125,14 @@ public class HillManager : ScoreManager
         if (headTag == headRobotTag)
         {
             _countInHill++;
-            InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
+            InvokeRepeating("RobotsCapture", 0.0f, 0.01f);
+            //InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
         }
         else if (headTag == headZombieTag)
         {
             _countInHill++;
-            InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
+            InvokeRepeating("ZombiesCapture", 0.0f, 0.01f);
+            //InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
         }
 
     }
@@ -151,8 +151,8 @@ public class HillManager : ScoreManager
                 GOs[i].transform.Find("Message").GetComponent<Text>().text = "Duel!";
             }
 
-            CancelInvoke("ScoreRobotsUpdate");
-            CancelInvoke("ScoreZombiesUpdate");
+            CancelInvoke("RobotsCapture");
+            CancelInvoke("ZombiesCapture");
         }
 
         if (headTag == headRobotTag)
@@ -242,7 +242,7 @@ public class HillManager : ScoreManager
 
             if (_countInHill == 0)
             {
-                CancelInvoke("ScoreRobotsUpdate");
+                CancelInvoke("RobotsCapture");
             }
         }
         else if (headTag == headZombieTag)
@@ -252,7 +252,7 @@ public class HillManager : ScoreManager
 
             if (_countInHill == 0)
             {
-                CancelInvoke("ScoreZombiesUpdate");
+                CancelInvoke("ZombiesCapture");
             }
         }
     }

@@ -89,4 +89,6 @@ MonoBehaviour:
   - ScoreZombiesUp
   - ScoreRobotsUpdate
   - ScoreZombiesUpdate
+  - RobotsCapture
+  - ZombiesCapture
   DisableAutoOpenWizard: 1
