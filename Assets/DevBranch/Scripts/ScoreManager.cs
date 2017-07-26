@@ -116,7 +116,7 @@ public class ScoreManager: Photon.PunBehaviour {
             Debug.Log("Zombie team wins!");
         }
     }
-    
+
     /*
     [PunRPC]
     protected IEnumerator ScoreUpdate(string teamName, float timeRepeat)
@@ -161,6 +161,28 @@ public class ScoreManager: Photon.PunBehaviour {
     */
 
     [PunRPC]
+    public void RobotsCapture()
+    {
+        if (sliderRobotsVal >= scoreLimit)
+        {
+
+        }
+
+        sliderRobotsVal++;
+    }
+
+    [PunRPC]
+    public void ZombiesCapture()
+    {
+        if (sliderZombiesVal >= scoreLimit)
+        {
+
+        }
+
+        sliderZombiesVal++;
+    }
+
+    [PunRPC]
     public void ScoreRobotsUpdate()
     {
         if (robotsScore >= scoreLimit)
@@ -194,7 +216,7 @@ public class ScoreManager: Photon.PunBehaviour {
         for (int i = 0; i < GOs.Length; i++)
         {
             GOs[i].transform.Find("Message").GetComponent<Text>().text = "Zombies on hill!";
-            GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = zombiesScore.ToString();
+            GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString();
         }
     }
 
