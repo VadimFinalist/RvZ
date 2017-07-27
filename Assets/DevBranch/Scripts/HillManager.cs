@@ -12,14 +12,10 @@ public class HillManager : ScoreManager
     private string headZombieTag = "ZombieHead";
     private string teamRobotTag = "TeamRobot";
     private string teamZombieTag = "TeamZombie";
-    private string robotsName = "Robots";
-    private string zombiesName = "Zombies";
 
     private int hillTeleportCounter = 1;
     private int _countInHill;
-
-    private bool isCouroutineStarted;
-    private bool isCouroutineEnded;
+    
     private bool isRobotInside;
     private bool isZombieInside;
 
@@ -28,16 +24,7 @@ public class HillManager : ScoreManager
     #region Public Variables
 
     public GameObject[] hillsPositions;
-    public GameObject hillPoint;
-    public GameObject messageTextObject;
-    public GameObject scoreRobotsTextObject;
-    public GameObject scoreZombiesTextObject;
-
-    public Slider captureSlider;
-    public Text messageText;
-    public Text scoreRobotsText;
-    public Text scoreZombiesText;
-
+    
     #endregion
 
     #region MonoBehaviour CallBacks
@@ -46,9 +33,7 @@ public class HillManager : ScoreManager
     /// Use this for initialization
     /// </summary>
     void Start()
-    {
-        scoreLimit = (int)captureSlider.maxValue;
-
+    {        
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
     }
 
@@ -125,14 +110,14 @@ public class HillManager : ScoreManager
         if (headTag == headRobotTag)
         {
             _countInHill++;
+            isRobotInside = true;
             InvokeRepeating("RobotsCapture", 0.0f, 0.01f);
-            //InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
         }
         else if (headTag == headZombieTag)
         {
             _countInHill++;
+            isZombieInside = true;
             InvokeRepeating("ZombiesCapture", 0.0f, 0.01f);
-            //InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
         }
 
     }
@@ -158,75 +143,11 @@ public class HillManager : ScoreManager
         if (headTag == headRobotTag)
         {
             isRobotInside = true;
-
-            //ScoreUpdate(teamRobotTag);
-
-            /*GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-            for (int i = 0; i < GOs.Length; i++)
-            {
-                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString();
-            }*/
         }
         else if (headTag == headZombieTag)
         {
             isZombieInside = true;
-
-            //messageText.text = zombiesName + " on hill!";
-
-            //ScoreUpdate(teamZombieTag);
-            //InvokeRepeating("ScoreZombiesUp", 0.0f, 1.0f);
-
-            /*GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-            for (int i = 0; i < GOs.Length; i++)
-            {
-                GOs[i].transform.Find("Message").GetComponent<Text>().text = zombiesName + " on hill!";
-                GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString();
-            }*/
         }
-
-
-
-
-        //if (other.gameObject.tag == headRobotTag)
-        //{
-        //    if (hillStandValue == hillStandMaxValue)
-        //    {
-        //        return;
-        //    }
-        //    if (hillStandValue < hillStandMaxValue)
-        //    {
-        //        hillStandValue++;
-        //        Debug.Log("Inside...");
-
-        //        //Blinking
-        //        //
-        //        //if (Time.fixedTime % .5 < .2)
-        //        //{
-        //        //    GetComponent<Renderer>().enabled = false;
-        //        //}
-        //        //else
-        //        //{
-        //        //    GetComponent<Renderer>().enabled = true;
-        //        //}
-        //    }
-        //    captureSlider.value = hillStandValue;
-        //    if (hillStandValue == hillStandMaxValue)
-        //    {
-        //        gameObject.GetComponent<Renderer>().material.SetColor("_TintColor", Color.green);
-        //        hillPoint.GetComponent<Renderer>().material.SetColor("_TintColor", Color.green);
-
-        //        isHillCaptured = true;
-        //        captureSlider.SetActive(false);
-        //        hillScoreTextObject.SetActive(true);
-        //        StartCoroutine(TemporarilyActivateCaptured(3.00f));
-
-        //        Debug.Log("Captured!");
-        //    }
-        //}
-        //else if (other.gameObject.tag == headZombieTag)
-        //{
-
-        //}
     }
 
     /// <summary>
@@ -253,6 +174,11 @@ public class HillManager : ScoreManager
             if (_countInHill == 0)
             {
                 CancelInvoke("ZombiesCapture");
+                GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+                for (int i = 0; i < GOs.Length; i++)
+                {
+                    GOs[i].transform.Find("Message").GetComponent<Text>().text = " ";
+                }
             }
         }
     }

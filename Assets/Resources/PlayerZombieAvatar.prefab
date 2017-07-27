@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 135175479994911956}
   - component: {fileID: 114628915782370294}
   - component: {fileID: 114008885173194800}
+  - component: {fileID: 114355689307929314}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -843,6 +844,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb2919a78bce9e4b9bc83c0e493db9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _purpleTex: {fileID: 0}
+  _blueTex: {fileID: 0}
+  _greenTex: {fileID: 0}
 --- !u!114 &114108857198974370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -907,6 +911,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114355689307929314
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1316983645817718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e040879df8e0cc94a9cb98a1b8e008ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _purpleTex: {fileID: 0}
+  _blueTex: {fileID: 0}
+  _greenTex: {fileID: 0}
 --- !u!114 &114359785504396256
 MonoBehaviour:
   m_ObjectHideFlags: 1

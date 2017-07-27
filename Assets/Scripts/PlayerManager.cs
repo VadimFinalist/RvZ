@@ -11,19 +11,23 @@ public class PlayerManager : Photon.PunBehaviour {
 
     [Tooltip("Reference to the player Zombie avatar prefab")]
     public GameObject playerZombieAvatar;
-
-    public List<PhotonPlayer> MyPlayers = new List<PhotonPlayer>(); // list customnih pleer  controllerov shtobi mojno bilo naiti index
-
+    
     public delegate void OnCharacterInstantiated(GameObject character);
 
     public static event OnCharacterInstantiated CharacterInstantiated;
 
+    /// <summary>
+    /// On script start
+    /// </summary>
     void Awake() {
         if (playerRobotAvatar == null || playerZombieAvatar == null) {
             Debug.LogError("MyNetworkManager is missing a reference to the player avatar prefab!");
         }
     }
 
+    /// <summary>
+    /// When joined Room
+    /// </summary>
     public override void OnJoinedRoom()
     {
         //Debug.Log("[PlayerManager] OnJoinedRoom ");
@@ -34,6 +38,10 @@ public class PlayerManager : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// When player connected
+    /// </summary>
+    /// <param name="newPlayer"></param>
     public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
     {
         if (PhotonNetwork.isMasterClient)
@@ -43,6 +51,10 @@ public class PlayerManager : Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// New player instantiation
+    /// </summary>
+    /// <param name="idx"></param>
     [PunRPC]
     void NewPlayer(int idx)
     {
@@ -50,37 +62,15 @@ public class PlayerManager : Photon.PunBehaviour {
         var count = PhotonNetwork.room.playerCount;
         var trans = spawns[idx].transform;
 
-
         // Robots and zombies will spawn one after another
         if (count % 2 != 0)
         {
             var player = PhotonNetwork.Instantiate(playerRobotAvatar.name, trans.position, trans.rotation, 0);
-
-            //photonView.RPC("SetName", PhotonTargets.All,  new object[] { "PlayerRobot " + idx.ToString(), idx });
-
-            player.name = "PlayerRobot " + (idx + 1);
-            //player.tag = "TeamRobot";
         }
         else
         {
             var player = PhotonNetwork.Instantiate(playerZombieAvatar.name, trans.position, trans.rotation, 0);
-
-            player.name = "PlayerZombie " + (idx + 1);
-            //player.tag = "TeamZombie";
         }
 
     }
-
-    /*[PunRPC]
-    public void SetTag(object [] parameters)
-    {
-        var name = parameters[0];
-
-        var ind = parameters[1];
-
-        // var player = MyPlayers.Find(plr => plr.ID == ind); //  ishesh sredi massiva playera s nujnim indexom
-
-      //  player.gameobject.name = name;
-
-    }*/
 }

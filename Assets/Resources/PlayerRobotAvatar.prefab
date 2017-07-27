@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 135175479994911956}
   - component: {fileID: 114628915782370294}
   - component: {fileID: 114008885173194800}
+  - component: {fileID: 114101074525371374}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -865,6 +866,20 @@ MonoBehaviour:
   velocity: 1
   angularVelocity: 1
   useLocalValues: 1
+--- !u!114 &114101074525371374
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1316983645817718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e040879df8e0cc94a9cb98a1b8e008ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _purpleTex: {fileID: 0}
+  _blueTex: {fileID: 0}
+  _greenTex: {fileID: 0}
 --- !u!114 &114108857198974370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -995,6 +1010,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40de6dd13d24ea84b81e84a5aabf2c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _purpleTex: {fileID: 0}
+  _blueTex: {fileID: 0}
+  _greenTex: {fileID: 0}
 --- !u!114 &114578242593311320
 MonoBehaviour:
   m_ObjectHideFlags: 1

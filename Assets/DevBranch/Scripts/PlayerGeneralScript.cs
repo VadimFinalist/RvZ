@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 {
-    public abstract class PlayerGeneralScript : Photon.PunBehaviour
+    public abstract class PlayerGeneralScript : ScoreManager
     {
         #region Private Variables
 
-        //private string _textHealth;
+        //
 
         #endregion
 
@@ -17,19 +17,6 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 
         [Tooltip("Health value of current player")]
         protected byte health = 100;
-
-        /*protected byte Health
-        { 
-            get
-            {
-                return health;
-            }
-            set
-            {
-                health = value;
-                _textHealth = value.ToString();
-            }
-        }*/
 
         [Tooltip("Name of current player in hierarchy")]
         protected string playerName;
@@ -67,12 +54,12 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         }
 
         /// <summary>
-        /// Will invoke when player health reaches zero
+        /// Method which will invoke when player health reaches zero
         /// </summary>
         [PunRPC]
-        public virtual void Death()
+        public virtual void Death(string playerName)
         {
-            
+            Debug.Log(playerName + " is dead!");
         }
 
         /// <summary>
@@ -83,20 +70,18 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         {
 
         }
-        
-        
+                
         /// <summary>
         /// Sets the HUD for player
         /// </summary>
-        //[PunRPC]
+        [PunRPC]
         public virtual void SetHUD()
         {
             GameObject go = Instantiate(Resources.Load("CanvasPlayer") as GameObject, gameObject.transform.Find("Head"));
             go.transform.localPosition = new Vector3(0.03f, 1.010859f, 2.958178f);
-
             gameObject.transform.Find("Head/CanvasPlayerHealth/HealthGroup/TextHealth").GetComponent<Text>().text = health.ToString();
         }
-
+        
         #endregion
     }
 }

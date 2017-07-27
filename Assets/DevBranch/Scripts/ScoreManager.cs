@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class ScoreManager: Photon.PunBehaviour {
 
     #region Private Variables
-    
-    //private GameObject hill;
 
     private static string teamRobotName = "TeamRobot";
     private static string teamZombieName = "TeamZombie";
@@ -35,6 +33,17 @@ public class ScoreManager: Photon.PunBehaviour {
     [Tooltip("Determines if scores started to udate")]
     protected bool scoringBegan;
 
+    [Tooltip("Upper message content")]
+    protected string message;
+
+    #endregion
+
+    #region Public Variables
+
+    public Texture2D _purpleTex;
+    public Texture2D _blueTex;
+    public Texture2D _greenTex;
+
     #endregion
 
     #region MonoBehaviour CallBacks
@@ -43,7 +52,7 @@ public class ScoreManager: Photon.PunBehaviour {
     /// </summary>
     void Start()
     {
-        //hill = GameObject.Find("Hill (0)");
+
     }
 
     
@@ -58,36 +67,6 @@ public class ScoreManager: Photon.PunBehaviour {
     #endregion
 
     #region Public Methods
-    
-    /*
-    /// <summary>
-    /// Score update for specific team
-    /// </summary>
-    /// <param name="teamName"></param>
-    [PunRPC]
-    public void ScoreUpdate(string teamName)
-    {
-        if (teamName == teamRobotName)
-        {
-            if (robotsScore >= scoreLimit)
-            {
-                Win(teamRobotName);
-                return;
-            }
-
-            InvokeRepeating("ScoreRobotsUp", 0.0f, 5.0f);
-        }
-        else if (teamName == teamZombieName)
-        {
-            if (zombiesScore >= scoreLimit)
-            {
-                Win(teamZombieName);
-                return;
-            }
-
-            InvokeRepeating("ScoreZombiesUp", 0.0f, 5.0f);
-        }
-    }*/
 
     /// <summary>
     /// Win method for both teams
@@ -103,66 +82,24 @@ public class ScoreManager: Photon.PunBehaviour {
             GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
             for (int i = 0; i < GOs.Length; i++)
             {
-                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Robot team wins!";
+                message = "Robot team wins!";
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
             }
-
-            Debug.Log("Robot team wins!");
         }
         else if (teamName == teamZombieName)
         {
             GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
             for (int i = 0; i < GOs.Length; i++)
             {
-                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Zombie team wins!";
+                message = "Zombie team wins!";
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
             }
-
-            Debug.Log("Zombie team wins!");
         }
     }
 
-    /*
-    [PunRPC]
-    protected IEnumerator ScoreUpdate(string teamName, float timeRepeat)
-    {
-        if (teamName == teamRobotName)
-        {
-            if (robotsScore >= scoreLimit)
-            {
-                Win(teamRobotName);
-            }
-
-            robotsScore += 10;
-
-            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-            for (int i = 0; i < GOs.Length; i++)
-            {
-                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Robots on hill!";
-                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString();
-            }
-
-            yield return new WaitForSeconds(timeRepeat);
-        }
-        else if (teamName == teamZombieName)
-        {
-            if (zombiesScore >= scoreLimit)
-            {
-                Win(teamZombieName);
-            }
-
-            zombiesScore += 10;
-
-            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-            for (int i = 0; i < GOs.Length; i++)
-            {
-                GOs[i].transform.Find("Message").GetComponent<Text>().text = "Zombies on hill!";
-                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = zombiesScore.ToString();
-            }
-
-            yield return new WaitForSeconds(timeRepeat);
-        }
-    }
-    */
-
+    /// <summary>
+    /// Robots capturing behaviour
+    /// </summary>
     [PunRPC]
     public void RobotsCapture()
     {
@@ -172,6 +109,7 @@ public class ScoreManager: Photon.PunBehaviour {
 
             if (!scoringBegan)
             {
+                GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _blueTex);
                 InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
             }
         }
@@ -187,6 +125,7 @@ public class ScoreManager: Photon.PunBehaviour {
         }
         else
         {
+            GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _purpleTex);
             CancelInvoke("ScoreZombiesUpdate");
             scoringBegan = false;
             sliderRobotsVal++;
@@ -204,6 +143,9 @@ public class ScoreManager: Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Zombies capturing behaviour
+    /// </summary>
     [PunRPC]
     public void ZombiesCapture()
     {
@@ -213,6 +155,7 @@ public class ScoreManager: Photon.PunBehaviour {
 
             if (!scoringBegan)
             {
+                GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _greenTex);
                 InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
             }
         }
@@ -228,6 +171,7 @@ public class ScoreManager: Photon.PunBehaviour {
         }
         else
         {
+            GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _purpleTex);
             CancelInvoke("ScoreRobotsUpdate");
             scoringBegan = false;
             sliderZombiesVal++;
@@ -242,6 +186,9 @@ public class ScoreManager: Photon.PunBehaviour {
         }
     }
 
+    /// <summary>
+    /// Score update if Robots captured hill
+    /// </summary>
     [PunRPC]
     public void ScoreRobotsUpdate()
     {
@@ -258,11 +205,15 @@ public class ScoreManager: Photon.PunBehaviour {
         GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
         for (int i = 0; i < GOs.Length; i++)
         {
-            GOs[i].transform.Find("Message").GetComponent<Text>().text = "Robots on hill!";
+            message = "Robots captured hill!";
+            GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
             GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString();
         }
     }
 
+    /// <summary>
+    /// Score update if Zombies captured hill
+    /// </summary>
     [PunRPC]
     public void ScoreZombiesUpdate()
     {
@@ -279,7 +230,8 @@ public class ScoreManager: Photon.PunBehaviour {
         GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
         for (int i = 0; i < GOs.Length; i++)
         {
-            GOs[i].transform.Find("Message").GetComponent<Text>().text = "Zombies on hill!";
+            message = "Zombies captured hill!";
+            GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
             GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString();
         }
     }
