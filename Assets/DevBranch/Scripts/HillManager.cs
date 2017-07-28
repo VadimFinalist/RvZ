@@ -24,6 +24,7 @@ public class HillManager : ScoreManager
     #region Public Variables
 
     public GameObject[] hillsPositions;
+    public Slider slider;
     
     #endregion
 
@@ -33,7 +34,8 @@ public class HillManager : ScoreManager
     /// Use this for initialization
     /// </summary>
     void Start()
-    {        
+    {
+        scoreLimit = (int)slider.maxValue;
         InvokeRepeating("HillTeleport", 5.0f, 5.0f);
     }
 
@@ -112,12 +114,14 @@ public class HillManager : ScoreManager
             _countInHill++;
             isRobotInside = true;
             InvokeRepeating("RobotsCapture", 0.0f, 0.01f);
+            capturingBegan = true;
         }
         else if (headTag == headZombieTag)
         {
             _countInHill++;
             isZombieInside = true;
             InvokeRepeating("ZombiesCapture", 0.0f, 0.01f);
+            capturingBegan = true;
         }
 
     }
@@ -128,9 +132,11 @@ public class HillManager : ScoreManager
     /// <param name="headTag"></param>
     private void PlayerStayingHill(string headTag)
     {
+        GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
         if (isRobotInside && isZombieInside)
         {
-            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            capturingBegan = false;
+
             for (int i = 0; i < GOs.Length; i++)
             {
                 GOs[i].transform.Find("Message").GetComponent<Text>().text = "Duel!";
@@ -138,6 +144,34 @@ public class HillManager : ScoreManager
 
             CancelInvoke("RobotsCapture");
             CancelInvoke("ZombiesCapture");
+        }
+        else if (isRobotInside && !isZombieInside && !scoringBegan && !capturingBegan)
+        {
+            Debug.Log("Orki");
+            if (!capturingBegan)
+            {
+                InvokeRepeating("RobotsCapture", 0.0f, 0.01f);
+                capturingBegan = true;
+            }
+
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
+            }
+        }
+        else if (!isRobotInside && isZombieInside && !scoringBegan && !capturingBegan)
+        {
+            Debug.Log("Elfi");
+            if (!capturingBegan)
+            {
+                InvokeRepeating("ZombiesCapture", 0.0f, 0.01f);
+                capturingBegan = true;
+            }
+
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
+            }
         }
 
         if (headTag == headRobotTag)
@@ -164,6 +198,7 @@ public class HillManager : ScoreManager
             if (_countInHill == 0)
             {
                 CancelInvoke("RobotsCapture");
+                capturingBegan = false;
             }
         }
         else if (headTag == headZombieTag)
@@ -174,11 +209,7 @@ public class HillManager : ScoreManager
             if (_countInHill == 0)
             {
                 CancelInvoke("ZombiesCapture");
-                GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-                for (int i = 0; i < GOs.Length; i++)
-                {
-                    GOs[i].transform.Find("Message").GetComponent<Text>().text = " ";
-                }
+                capturingBegan = false;
             }
         }
     }

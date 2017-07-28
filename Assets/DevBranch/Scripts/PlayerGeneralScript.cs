@@ -16,7 +16,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         #region Protected Variables
 
         [Tooltip("Health value of current player")]
-        protected byte health = 100;
+        protected int health = 100;
 
         [Tooltip("Name of current player in hierarchy")]
         protected string playerName;

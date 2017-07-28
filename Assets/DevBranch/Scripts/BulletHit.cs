@@ -33,7 +33,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         {
             if (other.gameObject.tag == "Bullet")
             {
-                health -= (byte)Random.Range(30.0f, 70.0f);
+                health -= 55; //(int)Random.Range(30.0f, 70.0f)
                 gameObject.transform.Find("CanvasPlayerHealth/HealthGroup/TextHealth").GetComponent<Text>().text = health.ToString();
                 if (health <= 0)
                 {
