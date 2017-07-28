@@ -91,7 +91,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _RimPower: 3
-    - _SeeThru: 0
+    - _SeeThru: 0.5
     - _Shininess: 0.063348874
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

@@ -132,6 +132,15 @@ public class HillManager : ScoreManager
     /// <param name="headTag"></param>
     private void PlayerStayingHill(string headTag)
     {
+        if (headTag == headRobotTag)
+        {
+            isRobotInside = true;
+        }
+        else if (headTag == headZombieTag)
+        {
+            isZombieInside = true;
+        }
+
         GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
         if (isRobotInside && isZombieInside)
         {
@@ -145,13 +154,14 @@ public class HillManager : ScoreManager
             CancelInvoke("RobotsCapture");
             CancelInvoke("ZombiesCapture");
         }
-        else if (isRobotInside && !isZombieInside && !scoringBegan && !capturingBegan)
+        else if (isRobotInside && !isZombieInside && !capturingBegan)
         {
             Debug.Log("Orki");
-            if (!capturingBegan)
+            if (!capturingBegan || sliderZombiesVal == scoreLimit)
             {
                 InvokeRepeating("RobotsCapture", 0.0f, 0.01f);
                 capturingBegan = true;
+                Debug.Log("TOKYO");
             }
 
             for (int i = 0; i < GOs.Length; i++)
@@ -159,28 +169,20 @@ public class HillManager : ScoreManager
                 GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
             }
         }
-        else if (!isRobotInside && isZombieInside && !scoringBegan && !capturingBegan)
+        else if (!isRobotInside && isZombieInside && !capturingBegan)
         {
             Debug.Log("Elfi");
-            if (!capturingBegan)
+            if (!capturingBegan || sliderRobotsVal == scoreLimit)
             {
                 InvokeRepeating("ZombiesCapture", 0.0f, 0.01f);
                 capturingBegan = true;
+                Debug.Log("GHOUL");
             }
 
             for (int i = 0; i < GOs.Length; i++)
             {
                 GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
             }
-        }
-
-        if (headTag == headRobotTag)
-        {
-            isRobotInside = true;
-        }
-        else if (headTag == headZombieTag)
-        {
-            isZombieInside = true;
         }
     }
 
@@ -195,6 +197,15 @@ public class HillManager : ScoreManager
             isRobotInside = false;
             _countInHill--;
 
+            /*if (isRobotInside && !isZombieInside)
+            {
+                if (!capturingBegan)
+                {
+                    InvokeRepeating("RobotsCapture", 0.0f, 0.01f);
+                    capturingBegan = true;
+                }
+            }*/
+
             if (_countInHill == 0)
             {
                 CancelInvoke("RobotsCapture");
@@ -205,6 +216,15 @@ public class HillManager : ScoreManager
         {
             isZombieInside = false;
             _countInHill--;
+
+            /*if (!isRobotInside && isZombieInside)
+            {
+                if (!capturingBegan)
+                {
+                    InvokeRepeating("ZombiesCapture", 0.0f, 0.01f);
+                    capturingBegan = true;
+                }
+            }*/
 
             if (_countInHill == 0)
             {

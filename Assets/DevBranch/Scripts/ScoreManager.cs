@@ -106,49 +106,46 @@ public class ScoreManager: Photon.PunBehaviour {
     [PunRPC]
     public void RobotsCapture()
     {
-        //if (!capturingBegan)
-        //{
-            if (sliderRobotsVal >= scoreLimit)
-            {
-                CancelInvoke("RobotsCapture");
+        if (sliderRobotsVal >= scoreLimit)
+        {
+            CancelInvoke("RobotsCapture");
 
-                if (!scoringBegan)
+            if (!scoringBegan)
+            {
+                GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _blueTex);
+                InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
+            }
+        }
+        else if (sliderZombiesVal > 0)
+        {
+            sliderZombiesVal--;
+
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderZombiesVal;
+            }
+        }
+        else
+        {
+            GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _purpleTex);
+            CancelInvoke("ScoreZombiesUpdate");
+            scoringBegan = false;
+            sliderRobotsVal++;
+
+            message = "";
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                if (sliderZombiesVal == 0)
                 {
-                    GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _blueTex);
-                    InvokeRepeating("ScoreRobotsUpdate", 0.0f, 1.0f);
+                    GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().SetDirection(Slider.Direction.LeftToRight, true);
+                    GOs[i].transform.Find("SliderCapture").transform.Find("Fill Area/Fill").GetComponent<Image>().color = new Color32(64, 97, 255, 255);
+                    GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderRobotsVal;
+                    GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
                 }
             }
-            else if (sliderZombiesVal > 0)
-            {
-                sliderZombiesVal--;
-
-                GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-                for (int i = 0; i < GOs.Length; i++)
-                {
-                    GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderZombiesVal;
-                }
-            }
-            else
-            {
-                GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _purpleTex);
-                CancelInvoke("ScoreZombiesUpdate");
-                scoringBegan = false;
-                sliderRobotsVal++;
-
-                message = "";
-                GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-                for (int i = 0; i < GOs.Length; i++)
-                {
-                    if (sliderZombiesVal == 0)
-                    {
-                        GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().SetDirection(Slider.Direction.LeftToRight, true);
-                        GOs[i].transform.Find("SliderCapture").transform.Find("Fill Area/Fill").GetComponent<Image>().color = new Color32(64, 97, 255, 255);
-                        GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderRobotsVal;
-                        GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
-                    }
-                }
-            }
-        //}
+        }
     }
 
     /// <summary>
@@ -157,46 +154,43 @@ public class ScoreManager: Photon.PunBehaviour {
     [PunRPC]
     public void ZombiesCapture()
     {
-        //if (!capturingBegan)
-        //{
-            if (sliderZombiesVal >= scoreLimit)
-            {
-                CancelInvoke("ZombiesCapture");
+        if (sliderZombiesVal >= scoreLimit)
+        {
+            CancelInvoke("ZombiesCapture");
 
-                if (!scoringBegan)
-                {
-                    GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _greenTex);
-                    InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
-                }
-            }
-            else if (sliderRobotsVal > 0)
+            if (!scoringBegan)
             {
-                sliderRobotsVal--;
-
-                GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-                for (int i = 0; i < GOs.Length; i++)
-                {
-                    GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderRobotsVal;
-                }
+                GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _greenTex);
+                InvokeRepeating("ScoreZombiesUpdate", 0.0f, 1.0f);
             }
-            else
+        }
+        else if (sliderRobotsVal > 0)
+        {
+            sliderRobotsVal--;
+
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
             {
-                GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _purpleTex);
-                CancelInvoke("ScoreRobotsUpdate");
-                scoringBegan = false;
-                sliderZombiesVal++;
-
-                message = "";
-                GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-                for (int i = 0; i < GOs.Length; i++)
-                {
-                    GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().SetDirection(Slider.Direction.RightToLeft, true);
-                    GOs[i].transform.Find("SliderCapture").transform.Find("Fill Area/Fill").GetComponent<Image>().color = new Color32(64, 255, 97, 255);
-                    GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderZombiesVal;
-                    GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
-                }
+                GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderRobotsVal;
             }
-        //}
+        }
+        else
+        {
+            GameObject.Find("Hill").GetComponent<Renderer>().material.SetTexture("_MainTex", _purpleTex);
+            CancelInvoke("ScoreRobotsUpdate");
+            scoringBegan = false;
+            sliderZombiesVal++;
+
+            message = "";
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().SetDirection(Slider.Direction.RightToLeft, true);
+                GOs[i].transform.Find("SliderCapture").transform.Find("Fill Area/Fill").GetComponent<Image>().color = new Color32(64, 255, 97, 255);
+                GOs[i].transform.Find("SliderCapture").GetComponent<Slider>().value = sliderZombiesVal;
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
+            }
+        }
     }
 
     /// <summary>
@@ -210,17 +204,25 @@ public class ScoreManager: Photon.PunBehaviour {
             Win(teamRobotName);
             return;
         }
-
+        
         scoringBegan = true;
-
-        robotsScore += 10;
-
-        GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-        for (int i = 0; i < GOs.Length; i++)
+        if (sliderRobotsVal < scoreLimit)
         {
-            message = "Robots captured hill!";
-            GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
-            GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString();
+            scoringBegan = false;
+        }
+        
+        //Fix
+        if (scoringBegan)
+        {
+            robotsScore += 10;
+
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                message = "Robots captured hill!";
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
+                GOs[i].transform.Find("ScoreRobots").GetComponent<Text>().text = robotsScore.ToString();
+            }
         }
     }
 
@@ -235,17 +237,25 @@ public class ScoreManager: Photon.PunBehaviour {
             Win(teamZombieName);
             return;
         }
-
+        
+        //Fix
         scoringBegan = true;
-
-        zombiesScore += 10;
-
-        GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
-        for (int i = 0; i < GOs.Length; i++)
+        if (sliderZombiesVal < scoreLimit)
         {
-            message = "Zombies captured hill!";
-            GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
-            GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString();
+            scoringBegan = false;
+        }
+
+        if (scoringBegan)
+        {
+            zombiesScore += 10;
+
+            GameObject[] GOs = GameObject.FindGameObjectsWithTag("UI");
+            for (int i = 0; i < GOs.Length; i++)
+            {
+                message = "Zombies captured hill!";
+                GOs[i].transform.Find("Message").GetComponent<Text>().text = message;
+                GOs[i].transform.Find("ScoreZombies").GetComponent<Text>().text = zombiesScore.ToString();
+            }
         }
     }
 
