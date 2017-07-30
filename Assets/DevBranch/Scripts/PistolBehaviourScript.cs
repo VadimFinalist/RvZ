@@ -4,61 +4,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRTK;
 
-public class PistolBehaviourScript : MonoBehaviour {
-
-    private bool isPistolGrabbed;
-
-	// Use this for initialization
-	void Start ()
+namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
+{
+    public class PistolBehaviourScript : MonoBehaviour
     {
 
-    }
+        private bool isPistolGrabbed;
 
-    // Update is called once per frame
-    //void Update ()
-    //   {
-
-    //   }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.name == "PistolHolster" && !gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+        // Use this for initialization
+        void Start()
         {
-            //gameObject.transform.position = other.gameObject.transform.position;
-            //gameObject.transform.rotation = other.gameObject.transform.rotation;
-            //gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
-            //GameObject.Find("Slide").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
 
-            isPistolGrabbed = false;
         }
-        else if (other.gameObject.name == "PistolHolster" && gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+
+        // Update is called once per frame
+        //void Update ()
+        //   {
+
+        //   }
+
+        private void OnTriggerEnter(Collider other)
         {
-            isPistolGrabbed = true;
-        }
-    }
+            if (other.gameObject.name == "PistolHolster" && !gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                //gameObject.transform.position = other.gameObject.transform.position;
+                //gameObject.transform.rotation = other.gameObject.transform.rotation;
+                //gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+                //GameObject.Find("Slide").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.name == "PistolHolster" && isPistolGrabbed && !gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+                isPistolGrabbed = false;
+            }
+            else if (other.gameObject.name == "PistolHolster" && gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                isPistolGrabbed = true;
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
         {
-            gameObject.transform.position = other.gameObject.transform.position;
-            gameObject.transform.rotation = other.gameObject.transform.rotation;
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
-            GameObject.Find("Slide").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+            if (other.gameObject.name == "PistolHolster" && isPistolGrabbed && !gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                gameObject.transform.position = other.gameObject.transform.position;
+                gameObject.transform.rotation = other.gameObject.transform.rotation;
+                gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+                GameObject.Find("Slide").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
 
-            Debug.Log("Staying!");
+                Debug.Log("Staying!");
+            }
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.name == "PistolHolster" && gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+        private void OnTriggerExit(Collider other)
         {
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            GameObject.Find("Slide").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            if (other.gameObject.name == "PistolHolster" && gameObject.GetComponent<VRTK_InteractableObject>().IsGrabbed())
+            {
+                gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                GameObject.Find("Slide").GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
-            Debug.Log("Exited!");
+                Debug.Log("Exited!");
+            }
         }
+
     }
-    
 }

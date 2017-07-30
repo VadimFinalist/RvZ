@@ -38,7 +38,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
                 if (health <= 0)
                 {
                     gameObject.transform.Find("CanvasPlayerHealth/HealthGroup/TextHealth").GetComponent<Text>().text = "0";
-                    Death(transform.parent.gameObject.name);
+                    //Death(transform.parent.gameObject.name);
                 }
             }
         }

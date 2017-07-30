@@ -57,9 +57,11 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
         /// Method which will invoke when player health reaches zero
         /// </summary>
         [PunRPC]
-        public virtual void Death(string playerName)
+        public virtual void Death() //string playerName
         {
-            Debug.Log(playerName + " is dead!");
+            gameObject.transform.position = GameObject.Find("DeathSpawn (1)").transform.position;
+
+            Debug.Log(/*playerName + */" is dead!");
         }
 
         /// <summary>
