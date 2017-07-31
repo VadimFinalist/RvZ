@@ -91,4 +91,5 @@ MonoBehaviour:
   - ScoreZombiesUpdate
   - RobotsCapture
   - ZombiesCapture
+  - ToggleHUD
   DisableAutoOpenWizard: 1

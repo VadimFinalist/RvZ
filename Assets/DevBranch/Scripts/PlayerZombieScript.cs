@@ -5,22 +5,22 @@ using UnityEngine;
 
 namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 {
-    public class PlayerZombieScript : PlayerGeneralScript
+  public class PlayerZombieScript : PlayerGeneralScript
+  {
+    /// <summary>
+    /// Use this for initialization
+    /// </summary>
+    void Start()
     {
-        /// <summary>
-        /// Use this for initialization
-        /// </summary>
-        void Start()
-        {
-            playerName = "PlayerZombie";
+      playerName = "PlayerZombie";
 
-            teamTag = "TeamZombie";
-            headTag = "ZombieHead";
+      teamTag = "TeamZombie";
+      headTag = "ZombieHead";
 
-            photonView.RPC("SetTags", PhotonTargets.All, new object[] { teamTag, headTag });
-            photonView.RPC("SetName", PhotonTargets.All, playerName + " ");
+      photonView.RPC("SetTags", PhotonTargets.All, new object[] { teamTag, headTag });
+      photonView.RPC("SetName", PhotonTargets.All, playerName + " ");
 
-            SetHUD();
-        }
+      SetHUD();
     }
+  }
 }
