@@ -64,6 +64,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
       }
       else if (other.gameObject.tag == headZombieTag)
       {
+        Death(other.gameObject);
         PlayerEnterHill(headZombieTag);
       }
     }

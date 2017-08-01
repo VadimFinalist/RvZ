@@ -12,9 +12,9 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
     private bool isRespawned;
 
     private int respawnTime = 3;
-    private Vector3 startPosition;
+    //private Vector3 startPosition;
 
-    private Vector3 startRotation;
+    //private Vector3 startRotation;
 
 
     #endregion
@@ -35,6 +35,8 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 
     public GameObject[] hillsPositions;
 
+    public GameObject[] playerSpawns;
+
     #endregion
 
     #region Private Methods
@@ -42,9 +44,15 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
     private void Start()
     {
       // FIX IT
-      startPosition = GameObject.Find("[CameraRig]").transform.position;
+      /*startPosition = GameObject.Find("[CameraRig]").transform.position;
       Debug.Log(startPosition.ToString());
       startRotation = GameObject.Find("[CameraRig]").transform.eulerAngles;
+      Debug.Log(startRotation.ToString());*/
+    }
+
+    private void Update()
+    {
+
     }
 
     #endregion
@@ -93,10 +101,55 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
     [PunRPC]
     public virtual void Respawn(GameObject playerHead)
     {
-      health = 85;
+      health = 100;
       ToggleHUD(playerHead, false);
-      GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = startPosition;
-      GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.eulerAngles = startRotation;
+      switch (playerHead.transform.parent.gameObject.name)
+      {
+        case "PlayerRobot 1":
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = playerSpawns[0].transform.position;
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.rotation = playerSpawns[0].transform.rotation;
+
+          /*playerHead.transform.parent.position = playerSpawns[0].transform.position;
+          playerHead.transform.parent.rotation = playerSpawns[0].transform.rotation;*/
+          break;
+        case "PlayerZombie 1":
+          Debug.Log("Cake");
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = playerSpawns[1].transform.position;
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.rotation = playerSpawns[1].transform.rotation;
+
+          /*playerHead.transform.parent.position = playerSpawns[1].transform.position;
+          playerHead.transform.parent.rotation = playerSpawns[1].transform.rotation;*/
+          break;
+        case "PlayerRobot 2":
+          playerHead.transform.parent.position = playerSpawns[2].transform.position;
+          playerHead.transform.rotation = playerSpawns[2].transform.rotation;
+          break;
+        case "PlayerZombie 2":
+          playerHead.transform.position = playerSpawns[3].transform.position;
+          playerHead.transform.rotation = playerSpawns[3].transform.rotation;
+          break;
+        case "PlayerRobot 3":
+          playerHead.transform.position = playerSpawns[4].transform.position;
+          playerHead.transform.rotation = playerSpawns[4].transform.rotation;
+          break;
+        case "PlayerZombie 3":
+          playerHead.transform.position = playerSpawns[5].transform.position;
+          playerHead.transform.rotation = playerSpawns[5].transform.rotation;
+          break;
+        case "PlayerRobot 4":
+          playerHead.transform.position = playerSpawns[6].transform.position;
+          playerHead.transform.rotation = playerSpawns[6].transform.rotation;
+          break;
+        case "PlayerZombie 4":
+          playerHead.transform.position = playerSpawns[7].transform.position;
+          playerHead.transform.rotation = playerSpawns[7].transform.rotation;
+          break;
+        default:
+          Debug.Log("Unknown player!");
+          break;
+      }
+      //GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = startPosition;
+      //GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.eulerAngles = startRotation;
       //GameObject.Find("[CameraRig]").transform.rotation = startPosition.rotation;
       Debug.Log("Respawn!");
     }
@@ -178,6 +231,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
           {
             Respawn(playerHead);
             isRespawned = true;
+            respawnTime = 4;
           }
 
           playerHead.transform.Find("CanvasPlayerDead/DeathGroup/TextRespawn").GetComponent<Text>().text = "Respawn: " + respawnTime;
