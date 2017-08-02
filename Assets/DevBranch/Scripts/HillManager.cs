@@ -59,12 +59,12 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
     {
       if (other.gameObject.tag == headRobotTag)
       {
-        Death(other.gameObject);
+        //Death(other.gameObject);
         PlayerEnterHill(headRobotTag);
       }
       else if (other.gameObject.tag == headZombieTag)
       {
-        Death(other.gameObject);
+        //Death(other.gameObject);
         PlayerEnterHill(headZombieTag);
       }
     }

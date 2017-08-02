@@ -91,7 +91,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
       GameObject.Find("[CameraRig]").transform.position = GameObject.Find("CameraSky").transform.position;
       GameObject.Find("[CameraRig]").transform.rotation = GameObject.Find("CameraSky").transform.rotation;
 
-      ToggleHUD(playerHead, true);
+      ToggleHUD(playerHead, false);
       StartCoroutine(RespawnStart(playerHead, 1.0f));
     }
 
@@ -102,47 +102,47 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
     public virtual void Respawn(GameObject playerHead)
     {
       health = 100;
-      ToggleHUD(playerHead, false);
+      ToggleHUD(playerHead, true);
       switch (playerHead.transform.parent.gameObject.name)
       {
         case "PlayerRobot 1":
-          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = playerSpawns[0].transform.position;
-          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.rotation = playerSpawns[0].transform.rotation;
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[0].transform.position;
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[0].transform.rotation;
 
           /*playerHead.transform.parent.position = playerSpawns[0].transform.position;
           playerHead.transform.parent.rotation = playerSpawns[0].transform.rotation;*/
           break;
         case "PlayerZombie 1":
           Debug.Log("Cake");
-          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = playerSpawns[1].transform.position;
-          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.rotation = playerSpawns[1].transform.rotation;
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[1].transform.position;
+          GameObject.Find("[VRTK]").transform.Find("SDKSetups/SteamVR/[CameraRig]").transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[1].transform.rotation;
 
           /*playerHead.transform.parent.position = playerSpawns[1].transform.position;
           playerHead.transform.parent.rotation = playerSpawns[1].transform.rotation;*/
           break;
         case "PlayerRobot 2":
-          playerHead.transform.parent.position = playerSpawns[2].transform.position;
-          playerHead.transform.rotation = playerSpawns[2].transform.rotation;
+          playerHead.transform.parent.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[2].transform.position;
+          playerHead.transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[2].transform.rotation;
           break;
         case "PlayerZombie 2":
-          playerHead.transform.position = playerSpawns[3].transform.position;
-          playerHead.transform.rotation = playerSpawns[3].transform.rotation;
+          playerHead.transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[3].transform.position;
+          playerHead.transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[3].transform.rotation;
           break;
         case "PlayerRobot 3":
-          playerHead.transform.position = playerSpawns[4].transform.position;
-          playerHead.transform.rotation = playerSpawns[4].transform.rotation;
+          playerHead.transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[4].transform.position;
+          playerHead.transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[4].transform.rotation;
           break;
         case "PlayerZombie 3":
-          playerHead.transform.position = playerSpawns[5].transform.position;
-          playerHead.transform.rotation = playerSpawns[5].transform.rotation;
+          playerHead.transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[5].transform.position;
+          playerHead.transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[5].transform.rotation;
           break;
         case "PlayerRobot 4":
-          playerHead.transform.position = playerSpawns[6].transform.position;
-          playerHead.transform.rotation = playerSpawns[6].transform.rotation;
+          playerHead.transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[6].transform.position;
+          playerHead.transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[6].transform.rotation;
           break;
         case "PlayerZombie 4":
-          playerHead.transform.position = playerSpawns[7].transform.position;
-          playerHead.transform.rotation = playerSpawns[7].transform.rotation;
+          playerHead.transform.position = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[7].transform.position;
+          playerHead.transform.rotation = GameObject.Find("Hill").GetComponent<HillManager>().playerSpawns[7].transform.rotation;
           break;
         default:
           Debug.Log("Unknown player!");
@@ -172,11 +172,11 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
     /// Toggles Death and Live HUDs
     /// </summary>
     /// <param name="playerHead"></param>
-    /// <param name="isDead"></param>
+    /// <param name="value"></param>
     [PunRPC]
-    private void ToggleHUD(GameObject playerHead, bool isDead)
+    private void ToggleHUD(GameObject playerHead, bool value)
     {
-      if (isDead)
+      if (!value)
       {
         playerHead.GetComponent<MeshRenderer>().enabled = false;
         playerHead.transform.Find("Visor").GetComponent<MeshRenderer>().enabled = false;
