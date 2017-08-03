@@ -21,16 +21,16 @@ public class SteamVR_UpdatePoses : MonoBehaviour
 		camera.depth = -9999;
 	}
 #endif
-	void OnPreCull()
-	{
-		var compositor = OpenVR.Compositor;
-		if (compositor != null)
-		{
-			var render = SteamVR_Render.instance;
-			compositor.GetLastPoses(render.poses, render.gamePoses);
-			SteamVR_Events.NewPoses.Send(render.poses);
-			SteamVR_Events.NewPosesApplied.Send();
-		}
-	}
+    void OnPreCull()
+    {
+        var compositor = OpenVR.Compositor;
+        if (compositor != null)
+        {
+            var render = SteamVR_Render.instance;
+            compositor.GetLastPoses(render.poses, render.gamePoses);
+            SteamVR_Events.NewPoses.Send(render.poses);
+            SteamVR_Events.NewPosesApplied.Send();
+        }
+    }
 }
 

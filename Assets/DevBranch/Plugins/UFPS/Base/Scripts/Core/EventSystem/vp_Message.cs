@@ -1,7 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////////
 //
 //	vp_Message.cs
-//	� Opsive. All Rights Reserved.
+//	© Opsive. All Rights Reserved.
 //	https://twitter.com/Opsive
 //	http://www.opsive.com
 //
@@ -29,62 +29,62 @@ using System.Collections.Generic;
 public class vp_Message : vp_Event			// non-generic version for 0 arguments
 {
 
-	public delegate void Sender();
-	public Sender Send;
+    public delegate void Sender();
+    public Sender Send;
 
 #if (!AOT)
-	protected static void Empty() { }
+    protected static void Empty() { }
 #endif
 
-	/// <summary>
-	///
-	/// </summary>
-	public vp_Message(string name) : base(name)
-	{
-		InitFields();
-	}
+    /// <summary>
+    ///
+    /// </summary>
+    public vp_Message(string name) : base(name)
+    {
+        InitFields();
+    }
 
 
-	/// <summary>
-	/// initializes the standard fields of this event type and
-	/// signature
-	/// </summary>
-	protected override void InitFields()
-	{
+    /// <summary>
+    /// initializes the standard fields of this event type and
+    /// signature
+    /// </summary>
+    protected override void InitFields()
+    {
 
-		m_Fields = new FieldInfo[]{Type.GetField("Send")};
+        m_Fields = new FieldInfo[] { Type.GetField("Send") };
 
-		StoreInvokerFieldNames();
-		
-		m_DelegateTypes = new Type[] { typeof(vp_Message.Sender) };
-		Prefixes = new Dictionary<string, int>() { { "OnMessage_", 0 } };
+        StoreInvokerFieldNames();
+
+        m_DelegateTypes = new Type[] { typeof(vp_Message.Sender) };
+        Prefixes = new Dictionary<string, int>() { { "OnMessage_", 0 } };
 
 #if (!AOT)
-		m_DefaultMethods = new MethodInfo[] { Type.GetMethod("Empty") };
-		Send = Empty;
+        m_DefaultMethods = new MethodInfo[] { Type.GetMethod("Empty") };
+        Send = Empty;
 #endif
 
-	}
+    }
 
 
-	/// <summary>
-	/// registers an external method to this event
-	/// </summary>
-	public override void Register(object t, string m, int v)
-	{
-		Send += (vp_Message.Sender)vp_Message.Sender.CreateDelegate(m_DelegateTypes[v], t, m);
-		Refresh();
-	}
+    /// <summary>
+    /// registers an external method to this event
+    /// </summary>
+    public override void Register(object t, string m, int v)
+    {
+        Send += (vp_Message.Sender)vp_Message.Sender.CreateDelegate(m_DelegateTypes[v], t, m);
+        Refresh();
+    }
 
 
-	/// <summary>
-	/// unregisters an external method from this event
-	/// </summary>
-	public override void Unregister(object t)
-	{
-		RemoveExternalMethodFromField(t, m_Fields[0]);
-		Refresh();
-	}
+    /// <summary>
+    /// unregisters an external method from this event
+    /// </summary>
+    public override void Unregister(object t)
+    {
+        RemoveExternalMethodFromField(t, m_Fields[0]);
+        Refresh();
+    }
 
 
 }
@@ -101,72 +101,72 @@ public class vp_Message<V> : vp_Message			// generic version with 1 argument
 {
 
 #if (!AOT)
-	protected static void Empty<T>(T value) { }
+    protected static void Empty<T>(T value) { }
 #endif
 
-	public delegate void Sender<T>(T value);
-	public new Sender<V> Send;
+    public delegate void Sender<T>(T value);
+    public new Sender<V> Send;
 
 
-	/// <summary>
-	///
-	/// </summary>
-	public vp_Message(string name) : base(name) { }
+    /// <summary>
+    ///
+    /// </summary>
+    public vp_Message(string name) : base(name) { }
 
 
-	/// <summary>
-	/// initializes the standard fields of this event type and
-	/// signature
-	/// </summary>
-	protected override void InitFields()
-	{
+    /// <summary>
+    /// initializes the standard fields of this event type and
+    /// signature
+    /// </summary>
+    protected override void InitFields()
+    {
 
-		m_Fields = new FieldInfo[] { Type.GetField("Send") };
+        m_Fields = new FieldInfo[] { Type.GetField("Send") };
 
-		StoreInvokerFieldNames();
-		
-#if (!AOT)
-		m_DefaultMethods = new MethodInfo[] { GetStaticGenericMethod(Type, "Empty", m_ArgumentType, typeof(void)) };
-#endif
-
-		m_DelegateTypes = new Type[] { typeof(vp_Message<>.Sender<>) };
-		Prefixes = new Dictionary<string, int>() { { "OnMessage_", 0 } };
+        StoreInvokerFieldNames();
 
 #if (!AOT)
-		Send = Empty;
+        m_DefaultMethods = new MethodInfo[] { GetStaticGenericMethod(Type, "Empty", m_ArgumentType, typeof(void)) };
 #endif
 
-		if (m_DefaultMethods != null && m_DefaultMethods[0] != null)
-			SetFieldToLocalMethod(m_Fields[0], m_DefaultMethods[0], MakeGenericType(m_DelegateTypes[0]));
+        m_DelegateTypes = new Type[] { typeof(vp_Message<>.Sender<>) };
+        Prefixes = new Dictionary<string, int>() { { "OnMessage_", 0 } };
 
-	}
+#if (!AOT)
+        Send = Empty;
+#endif
 
+        if (m_DefaultMethods != null && m_DefaultMethods[0] != null)
+            SetFieldToLocalMethod(m_Fields[0], m_DefaultMethods[0], MakeGenericType(m_DelegateTypes[0]));
 
-	/// <summary>
-	/// registers an external method to this event
-	/// </summary>
-	public override void Register(object t, string m, int v)
-	{
-
-		if (m == null)
-			return;
-
-		AddExternalMethodToField(t, m_Fields[v], m, MakeGenericType(m_DelegateTypes[v]));
-		Refresh();
-
-	}
+    }
 
 
-	/// <summary>
-	/// unregisters an external method from this event
-	/// </summary>
-	public override void Unregister(object t)
-	{
+    /// <summary>
+    /// registers an external method to this event
+    /// </summary>
+    public override void Register(object t, string m, int v)
+    {
 
-		RemoveExternalMethodFromField(t, m_Fields[0]);
-		Refresh();
+        if (m == null)
+            return;
 
-	}
+        AddExternalMethodToField(t, m_Fields[v], m, MakeGenericType(m_DelegateTypes[v]));
+        Refresh();
+
+    }
+
+
+    /// <summary>
+    /// unregisters an external method from this event
+    /// </summary>
+    public override void Unregister(object t)
+    {
+
+        RemoveExternalMethodFromField(t, m_Fields[0]);
+        Refresh();
+
+    }
 
 
 }
@@ -184,66 +184,66 @@ public class vp_Message<V, VResult> : vp_Message			// generic version with 1 arg
 {
 
 #if (!AOT)
-	protected static TResult Empty<T, TResult>(T value) { return default(TResult); }
+    protected static TResult Empty<T, TResult>(T value) { return default(TResult); }
 #endif
 
-	public delegate TResult Sender<T, TResult>(T value);
-	public new Sender<V, VResult> Send;
-
-	
-	/// <summary>
-	///
-	/// </summary>
-	public vp_Message(string name) : base(name) { }
+    public delegate TResult Sender<T, TResult>(T value);
+    public new Sender<V, VResult> Send;
 
 
-	/// <summary>
-	/// initializes the standard fields of this event type and
-	/// signature
-	/// </summary>
-	protected override void InitFields()
-	{
+    /// <summary>
+    ///
+    /// </summary>
+    public vp_Message(string name) : base(name) { }
 
-		m_Fields = new FieldInfo[] { Type.GetField("Send") };
 
-		StoreInvokerFieldNames();
+    /// <summary>
+    /// initializes the standard fields of this event type and
+    /// signature
+    /// </summary>
+    protected override void InitFields()
+    {
+
+        m_Fields = new FieldInfo[] { Type.GetField("Send") };
+
+        StoreInvokerFieldNames();
 
 #if (!AOT)
-		m_DefaultMethods = new MethodInfo[] { GetStaticGenericMethod(Type, "Empty", m_ArgumentType, m_ReturnType) };
+        m_DefaultMethods = new MethodInfo[] { GetStaticGenericMethod(Type, "Empty", m_ArgumentType, m_ReturnType) };
 #endif
 
-		m_DelegateTypes = new Type[] { typeof(vp_Message<,>.Sender<,>) };
-		Prefixes = new Dictionary<string, int>() { { "OnMessage_", 0 } };
+        m_DelegateTypes = new Type[] { typeof(vp_Message<,>.Sender<,>) };
+        Prefixes = new Dictionary<string, int>() { { "OnMessage_", 0 } };
 
-		if ((m_DefaultMethods != null) && (m_DefaultMethods[0] != null))
-			SetFieldToLocalMethod(m_Fields[0], m_DefaultMethods[0], MakeGenericType(m_DelegateTypes[0]));
-		
-	}
+        if ((m_DefaultMethods != null) && (m_DefaultMethods[0] != null))
+            SetFieldToLocalMethod(m_Fields[0], m_DefaultMethods[0], MakeGenericType(m_DelegateTypes[0]));
 
-
-	/// <summary>
-	/// registers an external method to this event
-	/// </summary>
-	public override void Register(object t, string m, int v)
-	{
-
-		if (m == null)
-			return;
-
-		AddExternalMethodToField(t, m_Fields[0], m, MakeGenericType(m_DelegateTypes[0]));
-		Refresh();
-
-	}
+    }
 
 
-	/// <summary>
-	/// unregisters an external method from this event
-	/// </summary>
-	public override void Unregister(object t)
-	{
-		RemoveExternalMethodFromField(t, m_Fields[0]);
-		Refresh();
-	}
+    /// <summary>
+    /// registers an external method to this event
+    /// </summary>
+    public override void Register(object t, string m, int v)
+    {
+
+        if (m == null)
+            return;
+
+        AddExternalMethodToField(t, m_Fields[0], m, MakeGenericType(m_DelegateTypes[0]));
+        Refresh();
+
+    }
+
+
+    /// <summary>
+    /// unregisters an external method from this event
+    /// </summary>
+    public override void Unregister(object t)
+    {
+        RemoveExternalMethodFromField(t, m_Fields[0]);
+        Refresh();
+    }
 
 
 }

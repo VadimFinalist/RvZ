@@ -10,9 +10,11 @@
 using UnityEngine;
 using System.Collections;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class IVR_HandMovementsBase : IVR_Movements {
+    public class IVR_HandMovementsBase : IVR_Movements
+    {
         [HideInInspector]
         public IVR_HandController selectedController;
         [HideInInspector]
@@ -24,16 +26,21 @@ namespace IVR {
         public Vector3 grabLocation;
         public GameObject grabbedObject = null;
 
-        public override void StartMovements(InstantVR _ivr) {
+        public override void StartMovements(InstantVR _ivr)
+        {
             base.StartMovements(_ivr);
             Animator animator = ivr.GetComponentInChildren<Animator>();
 
-            if (animator != null) {
+            if (animator != null)
+            {
                 GameObject hand;
-                if (this.transform == ivr.leftHandTarget) {
+                if (this.transform == ivr.leftHandTarget)
+                {
                     hand = animator.GetBoneTransform(HumanBodyBones.LeftHand).gameObject;
 
-                } else {
+                }
+                else
+                {
                     hand = animator.GetBoneTransform(HumanBodyBones.RightHand).gameObject;
                 }
                 handRigidbody = hand.GetComponentInChildren<Rigidbody>();
@@ -51,7 +58,8 @@ namespace IVR {
         }
         public virtual void UpdateAnimation() { }
         public virtual void MoveTo(IVR_HandController handController, Vector3 position, Quaternion rotation) { }
-        public virtual IEnumerator LetGoAnimation(IVR_HandController handController) {
+        public virtual IEnumerator LetGoAnimation(IVR_HandController handController)
+        {
             yield return null;
         }
         public virtual void NetworkingGrab(GameObject obj) { }

@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BulletHit : MonoBehaviour {
+public class BulletHit : MonoBehaviour
+{
 
     public GameObject PF_OnHit;
     public bool isPlayer = false;
     public AudioClip[] Gun_Ricochets;
-    
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         Destroy(gameObject, 3.0f);
-        Invoke("TurnOnCollider",0.1f);
-	}
+        Invoke("TurnOnCollider", 0.1f);
+    }
 
     void TurnOnCollider()
     {
@@ -21,9 +22,10 @@ public class BulletHit : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-	
-	}
+    void Update()
+    {
+
+    }
 
     public void PlayHitSound()
     {
@@ -37,7 +39,7 @@ public class BulletHit : MonoBehaviour {
     {
         Debug.Log("BHIT : " + collision.gameObject.name);
 
-        if ( isPlayer && collision.gameObject.tag == "Enemy" )
+        if (isPlayer && collision.gameObject.tag == "Enemy")
         {
             //collision.gameObject.GetComponent<EnemyLogic>().GetHit();
 
@@ -46,12 +48,12 @@ public class BulletHit : MonoBehaviour {
 
         if (isPlayer && PF_OnHit != null)
         {
-           GameObject iHit = Instantiate(PF_OnHit, transform.position, Quaternion.identity) as GameObject;
+            GameObject iHit = Instantiate(PF_OnHit, transform.position, Quaternion.identity) as GameObject;
 
-           Destroy(iHit, 2f);
+            Destroy(iHit, 2f);
         }
 
-        if ( !isPlayer && collision.gameObject.tag != "Enemy_Drone")
+        if (!isPlayer && collision.gameObject.tag != "Enemy_Drone")
         {
             Destroy(gameObject);
         }

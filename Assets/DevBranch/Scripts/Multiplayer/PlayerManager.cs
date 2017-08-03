@@ -136,22 +136,22 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
                 }
             }
 
-            #if UNITY_MIN_5_4
+#if UNITY_MIN_5_4
             // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, loadingMode) =>
             {
                 this.CalledOnLevelWasLoaded(scene.buildIndex);
             };
-            #endif
+#endif
         }
 
-        #if !UNITY_MIN_5_4
+#if !UNITY_MIN_5_4
         /// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>
         void OnLevelWasLoaded(int level)
         {
             this.CalledOnLevelWasLoaded(level);
         }
-        #endif
+#endif
 
         void CalledOnLevelWasLoaded(int level)
         {
@@ -185,9 +185,9 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
             }
         }
 
-#endregion
+        #endregion
 
-#region Custom
+        #region Custom
 
         /// <summary>
         /// Processes the inputs. Maintain a flag representing when the user is pressing Fire.
@@ -212,9 +212,9 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
             }
         }
 
-#endregion
+        #endregion
 
-#region IPunObservable implementation
+        #region IPunObservable implementation
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -232,7 +232,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
             }
         }
 
-#endregion
+        #endregion
 
     }
 }

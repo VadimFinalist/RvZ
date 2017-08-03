@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using VRTK;
 
-public class SetupPlayerAvatar : Photon.MonoBehaviour {
+public class SetupPlayerAvatar : Photon.MonoBehaviour
+{
 
-	void Awake () {
-        if (!photonView.isMine) {
+    void Awake()
+    {
+        if (!photonView.isMine)
+        {
             return;
         }
         // Move the camera rig to where the player was spawned

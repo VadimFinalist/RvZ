@@ -3,7 +3,7 @@
 /// <summary>
 /// Component representing remote audio stream in local scene. Automatically attached to the PUN object which owner's instance has streaming Recorder attached.
 /// </summary>
-[RequireComponent(typeof (AudioSource))]
+[RequireComponent(typeof(AudioSource))]
 [DisallowMultipleComponent]
 public class PhotonVoiceSpeaker : Photon.MonoBehaviour
 {

@@ -69,14 +69,14 @@ public class WPN_Decal_Manager : Singleton<WPN_Decal_Manager>
 
         physMaterials = new Hashtable();
 
-        for (int i=0; i< Materials.Length; i++)
+        for (int i = 0; i < Materials.Length; i++)
         {
             physMaterials.Add(i, Materials[i].name);
         }
     }
 
     public void SpawnBulletHitEffects(Vector3 position, Vector3 normal, PhysicMaterial pMat, GameObject hGo)
-    {        
+    {
         int decalIndex = 0;
         int cIndex = 0;
         bool bFound = false;
@@ -93,7 +93,7 @@ public class WPN_Decal_Manager : Singleton<WPN_Decal_Manager>
         }
 
         //Decal
-        if ( bFound && m_DecalInfo[decalIndex].m_PFDecals.Length > 0 )
+        if (bFound && m_DecalInfo[decalIndex].m_PFDecals.Length > 0)
         {
             cDecalIndex[decalIndex] = (cDecalIndex[decalIndex] + 1) % PoolSize;
 
@@ -121,7 +121,7 @@ public class WPN_Decal_Manager : Singleton<WPN_Decal_Manager>
                 SpawnAmmo.transform.localScale = new Vector3(scaleFact / hGo.transform.localScale.x, scaleFact / hGo.transform.localScale.y, 1f) / 10f;
             }
         }
-        
+
         if (m_DecalInfo[decalIndex].PS_HitEffects.Length > 0)
         {
             int maxEff = m_DecalInfo[decalIndex].PS_HitEffects.Length;
@@ -131,16 +131,16 @@ public class WPN_Decal_Manager : Singleton<WPN_Decal_Manager>
 
             ParticleSystem vfxPS = vFXEff.GetComponent<ParticleSystem>();
 
-            if (vfxPS !=null)
+            if (vfxPS != null)
             {
                 vfxPS.randomSeed = (uint)Random.Range(0f, 100f);
 
                 ParticleSystem[] PChilds = vFXEff.GetComponentsInChildren<ParticleSystem>();
 
-                foreach(ParticleSystem ps in PChilds)
+                foreach (ParticleSystem ps in PChilds)
                 {
                     ps.randomSeed = (uint)Random.Range(0f, 100f);
-					ps.Play(true);
+                    ps.Play(true);
                 }
 
 
@@ -149,6 +149,6 @@ public class WPN_Decal_Manager : Singleton<WPN_Decal_Manager>
 
             Destroy(vFXEff, 3.0f);
         }
-        
+
     }
 }

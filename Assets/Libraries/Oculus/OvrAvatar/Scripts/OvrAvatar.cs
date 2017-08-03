@@ -39,7 +39,8 @@ public class PacketRecordSettings
     public float AccumulatedTime = 0.0f;
 };
 
-public class OvrAvatar : MonoBehaviour {
+public class OvrAvatar : MonoBehaviour
+{
 
     public OvrAvatarDriver Driver;
     public OvrAvatarBase Base;
@@ -97,7 +98,7 @@ public class OvrAvatar : MonoBehaviour {
 
     void OnDestroy()
     {
-        if( sdkAvatar != IntPtr.Zero)
+        if (sdkAvatar != IntPtr.Zero)
         {
             CAPI.ovrAvatar_Destroy(sdkAvatar);
         }
@@ -105,11 +106,13 @@ public class OvrAvatar : MonoBehaviour {
 
     public EventHandler<PacketEventArgs> PacketRecorded;
 
-    public void AssetLoadedCallback(OvrAvatarAsset asset) {
+    public void AssetLoadedCallback(OvrAvatarAsset asset)
+    {
         assetLoadingIds.Remove(asset.assetID);
     }
 
-    private void AddAvatarComponent(GameObject componentObject, ovrAvatarComponent component) {
+    private void AddAvatarComponent(GameObject componentObject, ovrAvatarComponent component)
+    {
         OvrAvatarComponent ovrComponent = componentObject.AddComponent<OvrAvatarComponent>();
         trackedComponents.Add(component.name, ovrComponent);
 
@@ -216,14 +219,16 @@ public class OvrAvatar : MonoBehaviour {
 
     public static ovrAvatarTransform CreateOvrAvatarTransform(Vector3 position, Quaternion orientation)
     {
-        return new ovrAvatarTransform {
+        return new ovrAvatarTransform
+        {
             position = new Vector3(position.x, position.y, -position.z),
             orientation = new Quaternion(-orientation.x, -orientation.y, orientation.z, orientation.w),
             scale = Vector3.one
         };
     }
 
-    private void RemoveAvatarComponent(string name) {
+    private void RemoveAvatarComponent(string name)
+    {
         OvrAvatarComponent componentObject;
         trackedComponents.TryGetValue(name, out componentObject);
         Destroy(componentObject.gameObject);
@@ -235,7 +240,8 @@ public class OvrAvatar : MonoBehaviour {
         //Iterate through all the render components
         UInt32 componentCount = CAPI.ovrAvatarComponent_Count(sdkAvatar);
         HashSet<string> componentsThisRun = new HashSet<string>();
-        for (UInt32 i = 0; i < componentCount; i++) {
+        for (UInt32 i = 0; i < componentCount; i++)
+        {
             IntPtr ptr = CAPI.ovrAvatarComponent_Get_Native(sdkAvatar, i);
             ovrAvatarComponent component = (ovrAvatarComponent)Marshal.PtrToStructure(ptr, typeof(ovrAvatarComponent));
             componentsThisRun.Add(component.name);
@@ -312,7 +318,7 @@ public class OvrAvatar : MonoBehaviour {
                     }
                 }
 
-                    // If this is an unknown type, just create an object for the rendering
+                // If this is an unknown type, just create an object for the rendering
                 if (componentObject == null && specificType == null)
                 {
                     componentObject = new GameObject();
@@ -321,7 +327,7 @@ public class OvrAvatar : MonoBehaviour {
                 }
                 if (componentObject != null)
                 {
-                    AddAvatarComponent(componentObject, component); 
+                    AddAvatarComponent(componentObject, component);
                 }
             }
             UpdateAvatarComponent(component);
@@ -441,7 +447,8 @@ public class OvrAvatar : MonoBehaviour {
         }
     }
 
-    void Start() {
+    void Start()
+    {
         ShowLeftController(StartWithControllers);
         ShowRightController(StartWithControllers);
         OvrAvatarSDKManager.Instance.RequestAvatarSpecification(

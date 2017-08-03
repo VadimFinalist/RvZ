@@ -58,7 +58,7 @@ namespace Com.VadimUnityDev.MP_Test
             {
                 v = 0;
             }
-            
+
             animator.SetFloat("Speed", h * h + v * v);
             animator.SetFloat("Direction", h, DirectionDampTime, Time.deltaTime);
         }

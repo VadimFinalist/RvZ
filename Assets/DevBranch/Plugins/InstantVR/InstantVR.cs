@@ -1,4 +1,4 @@
-/* InstantVR
+﻿/* InstantVR
  * author: Pascal Serrarens
  * email: support@passervr.com
  * version: 3.8.2
@@ -9,11 +9,13 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
     [System.Serializable]
     [HelpURL("http://serrarens.nl/passervr/support/vr-component-functions/instantvr-function/")]
-    public class InstantVR : MonoBehaviour {
+    public class InstantVR : MonoBehaviour
+    {
 
         [Tooltip("Target Transform for the head")]
         public Transform headTarget;
@@ -28,7 +30,8 @@ namespace IVR {
         [Tooltip("Target Transform for the right foot")]
         public Transform rightFootTarget;
 
-        public enum BodySide {
+        public enum BodySide
+        {
             Unknown = 0,
             Left = 1,
             Right = 2,
@@ -84,7 +87,8 @@ namespace IVR {
         [HideInInspector]
         public Vector3 inputDirection;
 
-        protected virtual void Awake() {
+        protected virtual void Awake()
+        {
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             extensions = this.GetComponents<IVR_Extension>();
@@ -144,8 +148,10 @@ namespace IVR {
             InitGroundcheck();
         }
 
-        private IVR_Controller FindActiveController(IVR_Controller[] controllers) {
-            for (int i = 0; i < controllers.Length; i++) {
+        private IVR_Controller FindActiveController(IVR_Controller[] controllers)
+        {
+            for (int i = 0; i < controllers.Length; i++)
+            {
                 if (controllers[i].isTracking())
                     return (controllers[i]);
             }
@@ -153,14 +159,18 @@ namespace IVR {
         }
 
         #region Avatar
-        private void DetermineAvatar() {
+        private void DetermineAvatar()
+        {
             Animator[] animators = GetComponentsInChildren<Animator>();
-            for (int i = 0; i < animators.Length; i++) {
+            for (int i = 0; i < animators.Length; i++)
+            {
                 Avatar avatar = animators[i].avatar;
-                if (avatar.isValid && avatar.isHuman) {
+                if (avatar.isValid && avatar.isHuman)
+                {
                     characterTransform = animators[i].transform;
 
-                    if (collisions) {
+                    if (collisions)
+                    {
                         AddRigidbody(characterTransform.gameObject);
                     }
                 }
@@ -173,10 +183,11 @@ namespace IVR {
                 AddCharacterColliders(this, proximitySpeed);
         }
 
-        private float GetAvatarNeckHeight() {
+        private float GetAvatarNeckHeight()
+        {
             if (characterTransform == null)
                 return headTarget.transform.localPosition.y;
-       
+
             Animator avatarRig = characterTransform.GetComponent<Animator>();
             Transform avatarNeck = avatarRig.GetBoneTransform(HumanBodyBones.Neck);
             if (avatarNeck != null)
@@ -187,7 +198,8 @@ namespace IVR {
 
         #endregion
 
-        public void Update() {
+        public void Update()
+        {
             Controllers.Clear();
             UpdateExtensions();
             UpdateControllers();
@@ -195,23 +207,27 @@ namespace IVR {
             UpdateMovements();
         }
 
-        public void LateUpdate() {
+        public void LateUpdate()
+        {
             LateUpdateExtensions();
             Controllers.EndFrame();
             inputDirection = Vector3.zero;
         }
 
-        private void UpdateExtensions() {
+        private void UpdateExtensions()
+        {
             foreach (IVR_Extension extension in extensions)
                 extension.UpdateExtension();
         }
 
-        private void LateUpdateExtensions() {
+        private void LateUpdateExtensions()
+        {
             foreach (IVR_Extension extension in extensions)
                 extension.LateUpdateExtension();
         }
 
-        private void UpdateControllers() {
+        private void UpdateControllers()
+        {
             if (leftHandMovements != null)
                 leftHandMovements.selectedController = (IVR_HandController)UpdateController(leftHandControllers, leftHandMovements.selectedController);
             if (rightHandMovements != null)
@@ -224,19 +240,25 @@ namespace IVR {
             headController = UpdateController(headControllers, headController);
         }
 
-        private IVR_Controller UpdateController(IVR_Controller[] controllers, IVR_Controller lastActiveController) {
-            if (controllers != null) {
+        private IVR_Controller UpdateController(IVR_Controller[] controllers, IVR_Controller lastActiveController)
+        {
+            if (controllers != null)
+            {
                 int lastIndex = 0, newIndex = 0;
 
                 IVR_Controller activeController = null;
-                for (int i = 0; i < controllers.Length; i++) {
-                    if (controllers[i] != null) {
+                for (int i = 0; i < controllers.Length; i++)
+                {
+                    if (controllers[i] != null)
+                    {
                         controllers[i].UpdateController();
-                        if (activeController == null && controllers[i].isTracking()) {
+                        if (activeController == null && controllers[i].isTracking())
+                        {
                             activeController = controllers[i];
                             controllers[i].SetSelection(true);
                             newIndex = i;
-                        } else
+                        }
+                        else
                             controllers[i].SetSelection(false);
 
                         if (controllers[i] == lastActiveController)
@@ -244,17 +266,21 @@ namespace IVR {
                     }
                 }
 
-                if (lastIndex < newIndex && lastActiveController != null) { // we are degrading
+                if (lastIndex < newIndex && lastActiveController != null)
+                { // we are degrading
                     activeController.TransferCalibration(lastActiveController);
                 }
 
                 return activeController;
-            } else
+            }
+            else
                 return null;
         }
 
-        private void UpdateMovements() {
-            if (characterTransform != null) {
+        private void UpdateMovements()
+        {
+            if (characterTransform != null)
+            {
                 if (headMovements && headMovements.enabled)
                     headMovements.UpdateMovements();
                 if (leftHandMovements && leftHandMovements.enabled)
@@ -275,25 +301,30 @@ namespace IVR {
         #region groundCheck
         //private float soleThickness;
 
-        private void InitGroundcheck() {
+        private void InitGroundcheck()
+        {
             //float leftSoleThickness = leftFootTarget.position.y - transform.position.y;
             //float rightSoleThickness = rightFootTarget.position.y - transform.position.y;
             //soleThickness = Mathf.Min(leftSoleThickness, rightSoleThickness);
         }
 
-        private void groundCheck() {
-            if (!GrabbedStaticObject()) {
+        private void groundCheck()
+        {
+            if (!GrabbedStaticObject())
+            {
                 Vector3 middleFootPosition = (leftFootTarget.transform.position + rightFootTarget.transform.position) / 2;
                 Vector3 rayStart = new Vector3(middleFootPosition.x, transform.position.y + stepOffset, middleFootPosition.z);
 
                 RaycastHit[] hits;
                 hits = Physics.RaycastAll(rayStart, Vector3.down, stepOffset + 0.1F);
-                for (int i = 0; i < hits.Length; i++) {
+                for (int i = 0; i < hits.Length; i++)
+                {
                     RaycastHit hit = hits[i];
-                    if (hit.distance < stepOffset + 0.1F && !hit.collider.isTrigger && 
+                    if (hit.distance < stepOffset + 0.1F && !hit.collider.isTrigger &&
                         (hit.rigidbody == null ||
                         (hit.rigidbody != null && hit.rigidbody != leftHandMovements.handRigidbody && hit.rigidbody != rightHandMovements.handRigidbody))
-                        ) {
+                        )
+                    {
                         gravitationalVelocity = Vector3.zero;
                         transform.position += Vector3.up * (stepOffset - hit.distance);
                         return;
@@ -305,28 +336,34 @@ namespace IVR {
 
         Vector3 gravitationalVelocity;
 
-        private void Fall() {
+        private void Fall()
+        {
             gravitationalVelocity += Physics.gravity * Time.deltaTime;
             transform.Translate(gravitationalVelocity * Time.deltaTime);
         }
 
         #endregion
 
-        private bool GrabbedStaticObject() {
+        private bool GrabbedStaticObject()
+        {
             if (leftHandMovements != null &&
                 leftHandMovements.grabbedObject != null &&
-                leftHandMovements.grabbedObject.isStatic) {
+                leftHandMovements.grabbedObject.isStatic)
+            {
                 return true;
-            } else
+            }
+            else
             if (rightHandMovements != null &&
                 rightHandMovements.grabbedObject != null &&
-                rightHandMovements.grabbedObject.isStatic) {
+                rightHandMovements.grabbedObject.isStatic)
+            {
                 return true;
-            }            
+            }
             return false;
         }
 
-        public void SetPlayerHeight(float height) {
+        public void SetPlayerHeight(float height)
+        {
             if (height <= 0)
                 return;
 
@@ -334,8 +371,10 @@ namespace IVR {
             ScaleTracking(avatarNeckHeight - neckHeight);
         }
 
-        public void Calibrate() {
-            foreach (Transform t in headTarget.parent) {
+        public void Calibrate()
+        {
+            foreach (Transform t in headTarget.parent)
+            {
                 t.gameObject.SendMessage("OnTargetReset", SendMessageOptions.DontRequireReceiver);
             }
 
@@ -343,15 +382,18 @@ namespace IVR {
             ScaleTracking(avatarNeckHeight - neckHeight);
         }
 
-        private void ScaleTracking(float deltaY) {
+        private void ScaleTracking(float deltaY)
+        {
             IVR_UnityVRHead unityVRhead = headTarget.GetComponent<IVR_UnityVRHead>();
             if (unityVRhead.cameraRoot != null)
                 unityVRhead.extension.trackerPosition += new Vector3(0, deltaY, 0);
         }
 
-        protected void AddRigidbody(GameObject gameObject) {
+        protected void AddRigidbody(GameObject gameObject)
+        {
             Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-            if (rb != null) {
+            if (rb != null)
+            {
                 rb.mass = 75;
                 rb.useGravity = false;
                 rb.isKinematic = true;
@@ -371,34 +413,43 @@ namespace IVR {
         [HideInInspector]
         private CapsuleCollider bodyCollider;
 
-        public void Move(float x, float y, float z) {
+        public void Move(float x, float y, float z)
+        {
             Move(new Vector3(x, y, z));
         }
 
-        public void Move(Vector3 translationVector) {
+        public void Move(Vector3 translationVector)
+        {
             Move(translationVector, false);
         }
 
-        public void Move(Vector3 translationVector, bool allowUp) {
+        public void Move(Vector3 translationVector, bool allowUp)
+        {
             translationVector = CheckMovement(translationVector);// does not support body pull
-            if (translationVector.magnitude > 0) {
+            if (translationVector.magnitude > 0)
+            {
                 Vector3 translation = translationVector * Time.deltaTime;
-                if (allowUp) {
+                if (allowUp)
+                {
                     transform.position += translation;
-                } else {
+                }
+                else
+                {
                     transform.position += new Vector3(translation.x, 0, translation.z);
                 }
             }
         }
 
-        public void Rotate(float angle) {
+        public void Rotate(float angle)
+        {
             transform.RotateAround(headTarget.position, Vector3.up, angle * rotationSpeed * Time.deltaTime);
         }
 
         private float curProximitySpeed = 1;
         private Vector3 directionVector = Vector3.zero;
 
-        public Vector3 CheckMovement(Vector3 inputMovement) {
+        public Vector3 CheckMovement(Vector3 inputMovement)
+        {
             float maxAcceleration = 0;
             float sidewardSpeed = 0;
             float forwardSpeed = inputMovement.z;
@@ -406,7 +457,8 @@ namespace IVR {
             if (proximitySpeed)
                 curProximitySpeed = CalculateProximitySpeed(bodyCapsule, curProximitySpeed);
 
-            if (forwardSpeed != 0 || directionVector.z != 0) {
+            if (forwardSpeed != 0 || directionVector.z != 0)
+            {
                 if (inputMovement.z < 0)
                     forwardSpeed *= 0.6f;
 
@@ -424,7 +476,8 @@ namespace IVR {
 
             sidewardSpeed = inputMovement.x;
 
-            if (sidewardSpeed != 0 || directionVector.x != 0) {
+            if (sidewardSpeed != 0 || directionVector.x != 0)
+            {
 
                 sidewardSpeed *= walkingSpeed;
 
@@ -441,9 +494,11 @@ namespace IVR {
             Vector3 worldDirectionVector = hipTarget.TransformDirection(directionVector);
             inputDirection = worldDirectionVector;
 
-            if (collisions && (collided || (!proximitySpeed && triggerEntered))) {
+            if (collisions && (collided || (!proximitySpeed && triggerEntered)))
+            {
                 float angle = Vector3.Angle(worldDirectionVector, hitNormal);
-                if (angle > 90) {
+                if (angle > 90)
+                {
                     directionVector = Vector3.zero;
                     worldDirectionVector = Vector3.zero;
                 }
@@ -455,25 +510,32 @@ namespace IVR {
         public Vector3 velocity;
         private Vector3 lastRootPosition;
 
-        private void CalculateSpeed() {
-            if (lastRootPosition.magnitude > 0) {
+        private void CalculateSpeed()
+        {
+            if (lastRootPosition.magnitude > 0)
+            {
                 Vector3 deltaHip = hipTarget.position - lastRootPosition;
                 velocity = new Vector3(deltaHip.x, 0, deltaHip.z) / Time.deltaTime;
             }
             lastRootPosition = hipTarget.position;
         }
 
-        private float CalculateProximitySpeed(CapsuleCollider cc, float curProximitySpeed) {
+        private float CalculateProximitySpeed(CapsuleCollider cc, float curProximitySpeed)
+        {
             float proximitySpeedStep = 0.05F / proximitySpeedRate;
 
-            if (triggerEntered) {
-                if (cc.radius > 0.25f) {
+            if (triggerEntered)
+            {
+                if (cc.radius > 0.25f)
+                {
                     // Do we need to decrease the proximity speed?
                     cc.radius -= proximitySpeedStep;
                     cc.height += proximitySpeedStep;
                     curProximitySpeed = GetProximitySpeed(cc);
                 }
-            } else if (curProximitySpeed < 1) {
+            }
+            else if (curProximitySpeed < 1)
+            {
                 // Can we increase the proximity speed?
 #if UNITY_5_3
                 Vector3 extents = new Vector3(cc.radius + proximitySpeedStep, (cc.height - proximitySpeedStep) / 2, cc.radius + proximitySpeedStep);
@@ -488,16 +550,19 @@ namespace IVR {
                 bool staticCollision = false;
                 Rigidbody ivrRigidbody = transform.GetComponent<Rigidbody>();
                 Rigidbody characterRigidbody = characterTransform.GetComponent<Rigidbody>();
-                for (int i = 0; i < results.Length; i++) {
+                for (int i = 0; i < results.Length; i++)
+                {
                     if (!results[i].isTrigger && results[i].attachedRigidbody != characterRigidbody &&
                         results[i].attachedRigidbody != leftHandMovements.handRigidbody && results[i].attachedRigidbody != rightHandMovements.handRigidbody &&
-                        results[i].attachedRigidbody != ivrRigidbody) {
+                        results[i].attachedRigidbody != ivrRigidbody)
+                    {
 
                         staticCollision = true;
                     }
                 }
 
-                if (!staticCollision) {
+                if (!staticCollision)
+                {
                     cc.radius += proximitySpeedStep;
                     cc.height -= proximitySpeedStep;
                     curProximitySpeed = GetProximitySpeed(cc);
@@ -507,11 +572,13 @@ namespace IVR {
             return curProximitySpeed;
         }
 
-        private static float GetProximitySpeed(CapsuleCollider cc) {
+        private static float GetProximitySpeed(CapsuleCollider cc)
+        {
             return EaseIn(1, (-0.80f), 1 - cc.radius, 0.75f);
         }
 
-        private static float EaseIn(float start, float distance, float elapsedTime, float duration) {
+        private static float EaseIn(float start, float distance, float elapsedTime, float duration)
+        {
             // clamp elapsedTime so that it cannot be greater than duration
             elapsedTime = (elapsedTime > duration) ? 1.0f : elapsedTime / duration;
             //return distance * elapsedTime * elapsedTime * elapsedTime * elapsedTime + start;
@@ -520,7 +587,8 @@ namespace IVR {
 
         private float colliderRadius = 0.4F;
 
-        public void AddCharacterColliders(InstantVR ivr, bool proximitySpeed) {
+        public void AddCharacterColliders(InstantVR ivr, bool proximitySpeed)
+        {
             // HMM. this should be done by AddRigidbody on the characterTransform....
             //Rigidbody rb = ivr.gameObject.AddComponent<Rigidbody>();
             //if (rb != null) {
@@ -531,9 +599,10 @@ namespace IVR {
 
             float avatarHeight = (ivr.headTarget.position.y - ivr.transform.position.y) + 0.3F;
             Vector3 colliderCenter = Vector3.up * (avatarHeight + ivr.stepOffset) / 2;
-            
+
             ivr.bodyCollider = ivr.gameObject.AddComponent<CapsuleCollider>();
-            if (ivr.bodyCollider != null) {
+            if (ivr.bodyCollider != null)
+            {
                 ivr.bodyCollider.isTrigger = false;
                 ivr.bodyCollider.height = avatarHeight - ivr.stepOffset;
                 ivr.bodyCollider.radius = colliderRadius - 0.05F;
@@ -541,12 +610,16 @@ namespace IVR {
             }
 
             ivr.bodyCapsule = ivr.gameObject.AddComponent<CapsuleCollider>();
-            if (ivr.bodyCapsule != null) {
+            if (ivr.bodyCapsule != null)
+            {
                 ivr.bodyCapsule.isTrigger = true;
-                if (proximitySpeed) {
+                if (proximitySpeed)
+                {
                     ivr.bodyCapsule.height = 0.80F;
                     ivr.bodyCapsule.radius = 1F;
-                } else {
+                }
+                else
+                {
                     ivr.bodyCapsule.height = avatarHeight - ivr.stepOffset;
                     ivr.bodyCapsule.radius = colliderRadius;
                 }
@@ -554,8 +627,10 @@ namespace IVR {
             }
         }
 
-        private void PlaceBodyCapsule() {
-            if (collisions) {
+        private void PlaceBodyCapsule()
+        {
+            if (collisions)
+            {
                 Vector3 colliderPosition = Quaternion.Inverse(transform.rotation) * (hipTarget.position - transform.position);
                 if (bodyCapsule != null)
                     bodyCapsule.center = new Vector3(colliderPosition.x, bodyCapsule.center.y, colliderPosition.z);
@@ -563,34 +638,46 @@ namespace IVR {
             }
         }
 
-        private void DetermineCollision() {
-            if (proximitySpeed) {
-                if (triggerEntered && bodyCapsule.radius <= 0.25f) {
+        private void DetermineCollision()
+        {
+            if (proximitySpeed)
+            {
+                if (triggerEntered && bodyCapsule.radius <= 0.25f)
+                {
                     collided = true;
-                    if (velocity.sqrMagnitude > 0.01F) {
+                    if (velocity.sqrMagnitude > 0.01F)
+                    {
                         hitNormal = DetermineHitNormal(velocity);
                     }
-                } else {
+                }
+                else
+                {
                     collided = false;
                 }
-            } else {
-                if (triggerEntered) {
+            }
+            else
+            {
+                if (triggerEntered)
+                {
                     collided = true;
                     if (velocity.sqrMagnitude > 0.01F)
                         hitNormal = DetermineHitNormal(velocity);
-                } else if (collided) {
+                }
+                else if (collided)
+                {
                     collided = false;
                 }
             }
         }
 
-        private Vector3 DetermineHitNormal(Vector3 inputDirection) {
+        private Vector3 DetermineHitNormal(Vector3 inputDirection)
+        {
             Vector3 hitNormal = Vector3.zero;
 
             CapsuleCollider cc = bodyCapsule;
             Vector3 capsuleCenter = transform.position + cc.center;
             Vector3 capsuleOffset = ((cc.height - cc.radius) / 2) * Vector3.up;
-            
+
             Vector3 top = capsuleCenter + capsuleOffset;
             Vector3 bottom = capsuleCenter - capsuleOffset;
 
@@ -601,13 +688,16 @@ namespace IVR {
             return hitNormal;
         }
 
-        private bool RaycastAllNormal(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitNormal) {
+        private bool RaycastAllNormal(Vector3 origin, Vector3 direction, float maxDistance, out Vector3 hitNormal)
+        {
             RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance);
 
             hitNormal = Vector3.zero;
             bool foundHit = false;
-            for (int i = 0; i < hits.Length && !foundHit; i++) {
-                if (!hits[i].collider.isTrigger) {
+            for (int i = 0; i < hits.Length && !foundHit; i++)
+            {
+                if (!hits[i].collider.isTrigger)
+                {
                     foundHit = true;
                     hitNormal = hits[i].normal;
                 }
@@ -615,18 +705,21 @@ namespace IVR {
             return foundHit;
         }
 
-        public void OnTriggerStay(Collider otherCollider) {
+        public void OnTriggerStay(Collider otherCollider)
+        {
             Rigidbody rigidbody = otherCollider.attachedRigidbody;
             if (!otherCollider.isTrigger &&
                 rigidbody != gameObject.GetComponent<Rigidbody>() && rigidbody != null
                 && rigidbody != leftHandMovements.handRigidbody && rigidbody != rightHandMovements.handRigidbody
-                ) {
+                )
+            {
 
                 triggerEntered = true;
             }
         }
 
-        public void OnTriggerExit() {
+        public void OnTriggerExit()
+        {
             triggerEntered = false;
         }
     }

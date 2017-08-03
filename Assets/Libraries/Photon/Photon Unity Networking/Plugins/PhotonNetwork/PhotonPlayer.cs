@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------
 // <copyright file="PhotonPlayer.cs" company="Exit Games GmbH">
 //   PhotonNetwork Framework for Unity - Copyright (C) 2011 Exit Games GmbH
 // </copyright>
@@ -40,7 +40,8 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
 
     /// <summary>Nickname of this player.</summary>
     /// <remarks>Set the PhotonNetwork.playerName to make the name synchronized in a room.</remarks>
-    public string name {
+    public string name
+    {
         get
         {
             return this.nameField;
@@ -333,43 +334,43 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
         return (nextHigherId != int.MaxValue) ? players[nextHigherId] : players[lowestId];
     }
 
-	#region IComparable implementation
+    #region IComparable implementation
 
-	public int CompareTo (PhotonPlayer other)
-	{
-		if ( other == null)
-		{
-			return 0;
-		}
+    public int CompareTo(PhotonPlayer other)
+    {
+        if (other == null)
+        {
+            return 0;
+        }
 
-		return this.GetHashCode().CompareTo(other.GetHashCode());
-	}
+        return this.GetHashCode().CompareTo(other.GetHashCode());
+    }
 
-	public int CompareTo (int other)
-	{
-		return this.GetHashCode().CompareTo(other);
-	}
+    public int CompareTo(int other)
+    {
+        return this.GetHashCode().CompareTo(other);
+    }
 
-	#endregion
+    #endregion
 
-	#region IEquatable implementation
+    #region IEquatable implementation
 
-	public bool Equals (PhotonPlayer other)
-	{
-		if ( other == null)
-		{
-			return false;
-		}
-		
-		return this.GetHashCode().Equals(other.GetHashCode());
-	}
+    public bool Equals(PhotonPlayer other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
 
-	public bool Equals (int other)
-	{	
-		return this.GetHashCode().Equals(other);
-	}
+        return this.GetHashCode().Equals(other.GetHashCode());
+    }
 
-	#endregion
+    public bool Equals(int other)
+    {
+        return this.GetHashCode().Equals(other);
+    }
+
+    #endregion
 
     /// <summary>
     /// Brief summary string of the PhotonPlayer. Includes name or player.ID and if it's the Master Client.
@@ -378,7 +379,7 @@ public class PhotonPlayer : IComparable<PhotonPlayer>, IComparable<int>, IEquata
     {
         if (string.IsNullOrEmpty(this.name))
         {
-            return string.Format("#{0:00}{1}{2}",  this.ID, this.isInactive ? " (inactive)" : " ", this.isMasterClient ? "(master)":"");
+            return string.Format("#{0:00}{1}{2}", this.ID, this.isInactive ? " (inactive)" : " ", this.isMasterClient ? "(master)" : "");
         }
 
         return string.Format("'{0}'{1}{2}", this.name, this.isInactive ? " (inactive)" : " ", this.isMasterClient ? "(master)" : "");

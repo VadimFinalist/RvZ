@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(InputToEvent))]
-public class PointedAtGameObjectInfo : MonoBehaviour 
+public class PointedAtGameObjectInfo : MonoBehaviour
 {
     void OnGUI()
     {

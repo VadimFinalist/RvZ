@@ -294,7 +294,7 @@ namespace VRTK
             }
             else
             {
-                if(oldState == 1)
+                if (oldState == 1)
                 {
                     value = 0;
                     OnReleased(SetControlEvent());

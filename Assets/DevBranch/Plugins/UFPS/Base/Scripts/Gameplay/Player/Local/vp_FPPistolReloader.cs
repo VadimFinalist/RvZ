@@ -23,97 +23,97 @@ using System;
 public class vp_FPPistolReloader : vp_FPWeaponReloader
 {
 
-	vp_Timer.Handle m_Timer = new vp_Timer.Handle();
-		
+    vp_Timer.Handle m_Timer = new vp_Timer.Handle();
 
-	/// <summary>
-	/// this callback is triggered right after the 'Reload activity
-	/// has been approved for activation. it reloads the current
-	/// weapon and performs a hardcoded spring-and-timer based
-	/// pistol reload animation on it
-	/// </summary>
-	protected override void OnStart_Reload()
-	{
 
-		// NOTE: this method assumes that a 'Reload' state has
-		// already been triggered and tilted the weapon to the side
-		// it also requires a 'Reload2' state, where the pistol
-		// should be low and pointed upwards
+    /// <summary>
+    /// this callback is triggered right after the 'Reload activity
+    /// has been approved for activation. it reloads the current
+    /// weapon and performs a hardcoded spring-and-timer based
+    /// pistol reload animation on it
+    /// </summary>
+    protected override void OnStart_Reload()
+    {
 
-		if (m_Weapon.gameObject != gameObject)
-			return;
+        // NOTE: this method assumes that a 'Reload' state has
+        // already been triggered and tilted the weapon to the side
+        // it also requires a 'Reload2' state, where the pistol
+        // should be low and pointed upwards
 
-		// always abort if the timer is running, to avoid potential
-		// hiccups caused by button spamming
-		if (m_Timer.Active)
-			return;
+        if (m_Weapon.gameObject != gameObject)
+            return;
 
-		// call the base event listener manually when overriding it, since
-		// the event system will hide base members in derived classes
-		base.OnStart_Reload();
-		
-		// after 0.4 seconds, simulate replacing the clip
-		vp_Timer.In(0.4f, delegate()
-		{
+        // always abort if the timer is running, to avoid potential
+        // hiccups caused by button spamming
+        if (m_Timer.Active)
+            return;
 
-			// but first make sure we're still reloading since the player
-			// may have switched weapons
-			if (!vp_Utility.IsActive(m_Weapon.gameObject))
-				return;
+        // call the base event listener manually when overriding it, since
+        // the event system will hide base members in derived classes
+        base.OnStart_Reload();
 
-			if (!m_Weapon.StateEnabled("Reload"))
-				return;
+        // after 0.4 seconds, simulate replacing the clip
+        vp_Timer.In(0.4f, delegate ()
+        {
 
-			// apply a force as if slapping a clip into the gun from below
-			m_Weapon.AddForce2(new Vector3(0, 0.05f, 0), new Vector3(0, 0, 0));
+            // but first make sure we're still reloading since the player
+            // may have switched weapons
+            if (!vp_Utility.IsActive(m_Weapon.gameObject))
+                return;
 
-			// 0.15 seconds later, twist the gun backwards
-			vp_Timer.In(0.15f, delegate()
-			{
+            if (!m_Weapon.StateEnabled("Reload"))
+                return;
 
-				if (!vp_Utility.IsActive(m_Weapon.gameObject))
-					return;
+            // apply a force as if slapping a clip into the gun from below
+            m_Weapon.AddForce2(new Vector3(0, 0.05f, 0), new Vector3(0, 0, 0));
 
-				if (!m_Weapon.StateEnabled("Reload"))
-					return;
+            // 0.15 seconds later, twist the gun backwards
+            vp_Timer.In(0.15f, delegate ()
+            {
 
-				// to do this, switch from the pistol 'Reload' state to
-				// its 'Reload2' state
-				m_Weapon.SetState("Reload", false);
-				m_Weapon.SetState("Reload2", true);
-				m_Weapon.RotationOffset.z = 0;
-				m_Weapon.Refresh();
+                if (!vp_Utility.IsActive(m_Weapon.gameObject))
+                    return;
 
-				// after 0.35 seconds, pull the slide
-				vp_Timer.In(0.35f, delegate()
-				{
+                if (!m_Weapon.StateEnabled("Reload"))
+                    return;
 
-					if (!vp_Utility.IsActive(m_Weapon.gameObject))
-						return;
+                // to do this, switch from the pistol 'Reload' state to
+                // its 'Reload2' state
+                m_Weapon.SetState("Reload", false);
+                m_Weapon.SetState("Reload2", true);
+                m_Weapon.RotationOffset.z = 0;
+                m_Weapon.Refresh();
 
-					if (!m_Weapon.StateEnabled("Reload2"))
-						return;
+                // after 0.35 seconds, pull the slide
+                vp_Timer.In(0.35f, delegate ()
+                {
 
-					// apply a force pulling the whole gun backwards briefly
-					m_Weapon.AddForce2(new Vector3(0, 0, -0.05f), new Vector3(5, 0, 0));
+                    if (!vp_Utility.IsActive(m_Weapon.gameObject))
+                        return;
 
-					// 0.1 seconds later, disable the reload state to point
-					// the gun forward again
-					vp_Timer.In(0.1f, delegate()
-					{
+                    if (!m_Weapon.StateEnabled("Reload2"))
+                        return;
 
-						m_Weapon.SetState("Reload2", false);
+                    // apply a force pulling the whole gun backwards briefly
+                    m_Weapon.AddForce2(new Vector3(0, 0, -0.05f), new Vector3(5, 0, 0));
 
-					});
+                    // 0.1 seconds later, disable the reload state to point
+                    // the gun forward again
+                    vp_Timer.In(0.1f, delegate ()
+                    {
 
-				});
-			});
+                        m_Weapon.SetState("Reload2", false);
 
-			// NOTE: the below hook to a 'vp_Timer.Handle' object is what allows us
-			// to check whether the timer is active at the beginning of the method
-		}, m_Timer);
+                    });
 
-	}
+                });
+            });
+
+            // NOTE: the below hook to a 'vp_Timer.Handle' object is what allows us
+            // to check whether the timer is active at the beginning of the method
+        }, m_Timer);
+
+    }
 
 }
 

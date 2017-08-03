@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class OnClickLoadSomething : MonoBehaviour
 {
-    public enum  ResourceTypeOption : byte
+    public enum ResourceTypeOption : byte
     {
         Scene,
         Web

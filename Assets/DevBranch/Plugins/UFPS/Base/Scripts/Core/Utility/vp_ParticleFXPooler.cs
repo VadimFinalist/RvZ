@@ -44,7 +44,7 @@ using System.Collections;
 public class vp_ParticleFXPooler : MonoBehaviour
 {
 
-	ParticleSystem m_ShurikenParticleSystem = null;
+    ParticleSystem m_ShurikenParticleSystem = null;
 #if UNITY_5_2 || UNITY_5_3
     ParticleAnimator m_LegacyParticleAnimator = null;
 	ParticleEmitter m_LegacyParticleEmitter = null;
@@ -56,17 +56,17 @@ public class vp_ParticleFXPooler : MonoBehaviour
     bool m_IsShuriken = false;
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	void Awake()
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    void Awake()
+    {
 
-		m_ShurikenParticleSystem = GetComponent<ParticleSystem>();
-		if (m_ShurikenParticleSystem != null)
-		{
-			// detected a Shuriken particle system
-			m_IsShuriken = true;
+        m_ShurikenParticleSystem = GetComponent<ParticleSystem>();
+        if (m_ShurikenParticleSystem != null)
+        {
+            // detected a Shuriken particle system
+            m_IsShuriken = true;
 #if UNITY_5_2 || UNITY_5_3
 			m_IsLegacy = false;
 #endif
@@ -95,18 +95,18 @@ public class vp_ParticleFXPooler : MonoBehaviour
         if (!m_IsShuriken)
 #endif
         {
-			enabled = false;
-			GameObject.Destroy(this);
-		}
+            enabled = false;
+            GameObject.Destroy(this);
+        }
 
-	}
+    }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	void OnEnable()
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    void OnEnable()
+    {
 
 #if UNITY_5_2 || UNITY_5_3
 		StopCoroutine(TimedDestroy());
@@ -127,16 +127,16 @@ public class vp_ParticleFXPooler : MonoBehaviour
     /// 
     /// </summary>
     void Update()
-	{
+    {
 
-		// despawn when Shuriken says it's ready
-		if (m_IsShuriken)
-		{
-			if (!m_ShurikenParticleSystem.IsAlive())
-				vp_Utility.Destroy(gameObject);
-		}
+        // despawn when Shuriken says it's ready
+        if (m_IsShuriken)
+        {
+            if (!m_ShurikenParticleSystem.IsAlive())
+                vp_Utility.Destroy(gameObject);
+        }
 
-	}
+    }
 
 
 #if UNITY_5_2 || UNITY_5_3

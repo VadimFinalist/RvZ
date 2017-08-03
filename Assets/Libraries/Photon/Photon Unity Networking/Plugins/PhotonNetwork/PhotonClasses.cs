@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------
 // <copyright file="PhotonClasses.cs" company="Exit Games GmbH">
 //   PhotonNetwork Framework for Unity - Copyright (C) 2011 Exit Games GmbH
 // </copyright>
@@ -463,7 +463,7 @@ namespace Photon
             }
         }
 
-        #if !UNITY_MIN_5_3
+#if !UNITY_MIN_5_3
         /// <summary>
         /// This property is only here to notify developers when they use the outdated value.
         /// </summary>
@@ -486,7 +486,7 @@ namespace Photon
                 return PhotonView.Get(this);
             }
         }
-        #endif
+#endif
     }
 
 
@@ -1302,12 +1302,12 @@ public class SceneManagerHelper
     {
         get
         {
-            #if UNITY_MIN_5_3
+#if UNITY_MIN_5_3
             UnityEngine.SceneManagement.Scene s = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             return s.name;
-            #else
+#else
             return Application.loadedLevelName;
-            #endif
+#endif
         }
     }
 
@@ -1315,11 +1315,11 @@ public class SceneManagerHelper
     {
         get
         {
-            #if UNITY_MIN_5_3
+#if UNITY_MIN_5_3
             return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-            #else
+#else
             return Application.loadedLevel;
-            #endif
+#endif
         }
     }
 
@@ -1329,11 +1329,11 @@ public class SceneManagerHelper
     {
         get
         {
-            #if UNITY_MIN_5_3
+#if UNITY_MIN_5_3
             return UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().name;
-            #else
+#else
             return System.IO.Path.GetFileNameWithoutExtension(UnityEditor.EditorApplication.currentScene);
-            #endif
+#endif
         }
     }
 #endif

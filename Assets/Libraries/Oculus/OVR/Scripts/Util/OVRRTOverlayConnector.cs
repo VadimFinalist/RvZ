@@ -1,4 +1,4 @@
-/************************************************************************************
+﻿/************************************************************************************
 
 Copyright   :   Copyright 2014 Oculus VR, LLC. All Rights reserved.
 
@@ -37,61 +37,69 @@ using System.Runtime.InteropServices;
 /// </summary>
 public class OVRRTOverlayConnector : MonoBehaviour
 {
-	/// <summary>
-	/// OVROverlay texture required alpha = 0 border for avoiding artifacts
-	/// </summary>
-	public int alphaBorderSizePixels = 3;
+    /// <summary>
+    /// OVROverlay texture required alpha = 0 border for avoiding artifacts
+    /// </summary>
+    public int alphaBorderSizePixels = 3;
 
-	/// <summary>
-	/// Triple buffer the render target
-	/// </summary>
-	const int overlayRTChainSize = 3;
-	private int overlayRTIndex = 0;
-	private IntPtr[] overlayTexturePtrs = new IntPtr[overlayRTChainSize]; 
-	private RenderTexture[] overlayRTChain = new RenderTexture[overlayRTChainSize];
+    /// <summary>
+    /// Triple buffer the render target
+    /// </summary>
+    const int overlayRTChainSize = 3;
+    private int overlayRTIndex = 0;
+    private IntPtr[] overlayTexturePtrs = new IntPtr[overlayRTChainSize];
+    private RenderTexture[] overlayRTChain = new RenderTexture[overlayRTChainSize];
 
-	/// <summary>
-	/// Destination OVROverlay target object
-	/// </summary>
-	public GameObject ovrOverlayObj;
-	private RenderTexture srcRT;
-	private Camera ownerCamera;
-
-	/// <summary>
-	///  Reconstruct render texture chain if ownerCamera's targetTexture was changed
-	/// </summary>
-	public void RefreshRenderTextureChain()
-	{
-		srcRT = ownerCamera.targetTexture;
-		Debug.Assert(srcRT);
-		ConstructRenderTextureChain();
-	}
-
-/// <summary>
-/// Triple buffer the textures applying to overlay
-/// </summary>
-	void ConstructRenderTextureChain()
-	{
-		for (int i = 0; i < overlayRTChainSize; i++)
-		{
-			overlayRTChain[i] = new RenderTexture(srcRT.width, srcRT.height, 1, srcRT.format, RenderTextureReadWrite.sRGB);
-			overlayRTChain[i].antiAliasing = 1;
-			overlayRTChain[i].depth = 0;
-			overlayRTChain[i].wrapMode = TextureWrapMode.Clamp;
-			overlayRTChain[i].hideFlags = HideFlags.HideAndDontSave;
-			overlayRTChain[i].Create();
-			overlayTexturePtrs[i] = overlayRTChain[i].GetNativeTexturePtr();
-		}
-	}
+    /// <summary>
+    /// Destination OVROverlay target object
+    /// </summary>
+    public GameObject ovrOverlayObj;
+    private RenderTexture srcRT;
+    private Camera ownerCamera;
 
-	void Start ()
-	{
-		ownerCamera = GetComponent<Camera>();
-		Debug.Assert(ownerCamera);
-		srcRT = ownerCamera.targetTexture;
-		Debug.Assert(srcRT);
-		ConstructRenderTextureChain();
-	}
+
+
+    /// <summary>
+    ///  Reconstruct render texture chain if ownerCamera's targetTexture was changed
+    /// </summary>
+    public void RefreshRenderTextureChain()
+    {
+
+        srcRT = ownerCamera.targetTexture;
+
+        Debug.Assert(srcRT);
+
+        ConstructRenderTextureChain();
+
+    }
+
+
+
+    /// <summary>
+    /// Triple buffer the textures applying to overlay
+    /// </summary>
+    void ConstructRenderTextureChain()
+    {
+        for (int i = 0; i < overlayRTChainSize; i++)
+        {
+            overlayRTChain[i] = new RenderTexture(srcRT.width, srcRT.height, 1, srcRT.format, RenderTextureReadWrite.sRGB);
+            overlayRTChain[i].antiAliasing = 1;
+            overlayRTChain[i].depth = 0;
+            overlayRTChain[i].wrapMode = TextureWrapMode.Clamp;
+            overlayRTChain[i].hideFlags = HideFlags.HideAndDontSave;
+            overlayRTChain[i].Create();
+            overlayTexturePtrs[i] = overlayRTChain[i].GetNativeTexturePtr();
+        }
+    }
+
+    void Start()
+    {
+        ownerCamera = GetComponent<Camera>();
+        Debug.Assert(ownerCamera);
+        srcRT = ownerCamera.targetTexture;
+        Debug.Assert(srcRT);
+        ConstructRenderTextureChain();
+    }
 
 #if UNITY_ANDROID
 	/// <summary>
@@ -110,19 +118,19 @@ public class OVRRTOverlayConnector : MonoBehaviour
 	}
 #endif
 
-	/// <summary>
-	/// Copy camera's render target to triple buffered texture array and send it to OVROverlay object
-	/// </summary>
-	void OnPostRender()
-	{
-		if (srcRT)
-		{
-			Graphics.Blit(srcRT, overlayRTChain[overlayRTIndex]);
-			OVROverlay ovrOverlay = ovrOverlayObj.GetComponent<OVROverlay>();
-			Debug.Assert(ovrOverlay);
-			ovrOverlay.OverrideOverlayTextureInfo(overlayRTChain[overlayRTIndex], overlayTexturePtrs[overlayRTIndex], UnityEngine.VR.VRNode.LeftEye);
-			overlayRTIndex++;
-			overlayRTIndex = overlayRTIndex % overlayRTChainSize;
-		}
-	}
+    /// <summary>
+    /// Copy camera's render target to triple buffered texture array and send it to OVROverlay object
+    /// </summary>
+    void OnPostRender()
+    {
+        if (srcRT)
+        {
+            Graphics.Blit(srcRT, overlayRTChain[overlayRTIndex]);
+            OVROverlay ovrOverlay = ovrOverlayObj.GetComponent<OVROverlay>();
+            Debug.Assert(ovrOverlay);
+            ovrOverlay.OverrideOverlayTextureInfo(overlayRTChain[overlayRTIndex], overlayTexturePtrs[overlayRTIndex], UnityEngine.VR.VRNode.LeftEye);
+            overlayRTIndex++;
+            overlayRTIndex = overlayRTIndex % overlayRTChainSize;
+        }
+    }
 }

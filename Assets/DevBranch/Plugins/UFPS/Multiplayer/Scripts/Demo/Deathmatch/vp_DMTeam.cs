@@ -23,8 +23,8 @@ using System.Collections.Generic;
 public class vp_DMTeam : vp_MPTeam
 {
 
-	public vp_DMTeam(string name, Color color, vp_MPPlayerType playerType = null) : base(name, color, playerType) { }
+    public vp_DMTeam(string name, Color color, vp_MPPlayerType playerType = null) : base(name, color, playerType) { }
 
-	public int Score = 0;
-	
+    public int Score = 0;
+
 }

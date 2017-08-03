@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using UnityEngine;
@@ -15,12 +15,12 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PunTeams : MonoBehaviour
 {
     /// <summary>Enum defining the teams available. First team should be neutral (it's the default value any field of this enum gets).</summary>
-    public enum Team : byte {none, red, blue};
+    public enum Team : byte { none, red, blue };
 
     /// <summary>The main list of teams with their player-lists. Automatically kept up to date.</summary>
     /// <remarks>Note that this is static. Can be accessed by PunTeam.PlayersPerTeam. You should not modify this.</remarks>
     public static Dictionary<Team, List<PhotonPlayer>> PlayersPerTeam;
-    
+
     /// <summary>Defines the player custom property name to use for team affinity of "this" player.</summary>
     public const string TeamPlayerProp = "team";
 
@@ -30,30 +30,30 @@ public class PunTeams : MonoBehaviour
     public void Start()
     {
         PlayersPerTeam = new Dictionary<Team, List<PhotonPlayer>>();
-        Array enumVals = Enum.GetValues(typeof (Team));
+        Array enumVals = Enum.GetValues(typeof(Team));
         foreach (var enumVal in enumVals)
         {
             PlayersPerTeam[(Team)enumVal] = new List<PhotonPlayer>();
         }
     }
 
-	public void OnDisable()
-	{
-		PlayersPerTeam = new Dictionary<Team, List<PhotonPlayer>>();
-	}
+    public void OnDisable()
+    {
+        PlayersPerTeam = new Dictionary<Team, List<PhotonPlayer>>();
+    }
 
     /// <summary>Needed to update the team lists when joining a room.</summary>
     /// <remarks>Called by PUN. See enum PhotonNetworkingMessage for an explanation.</remarks>
     public void OnJoinedRoom()
     {
-        
+
         this.UpdateTeams();
     }
 
-	public void OnLeftRoom()
-	{
-		Start();
-	}
+    public void OnLeftRoom()
+    {
+        Start();
+    }
 
     /// <summary>Refreshes the team lists. It could be a non-team related property change, too.</summary>
     /// <remarks>Called by PUN. See enum PhotonNetworkingMessage for an explanation.</remarks>
@@ -61,23 +61,23 @@ public class PunTeams : MonoBehaviour
     {
         this.UpdateTeams();
     }
-    
-	public void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
-	{
-		this.UpdateTeams();
-	}
 
-	public void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
-	{
-		this.UpdateTeams();
-	}
+    public void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    {
+        this.UpdateTeams();
+    }
+
+    public void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        this.UpdateTeams();
+    }
 
     #endregion
-    
+
 
     public void UpdateTeams()
     {
-		//Debug.Log("PunTeams : UpdateTeams");
+        //Debug.Log("PunTeams : UpdateTeams");
         Array enumVals = Enum.GetValues(typeof(Team));
         foreach (var enumVal in enumVals)
         {
@@ -124,7 +124,7 @@ public static class TeamExtensions
         PunTeams.Team currentTeam = player.GetTeam();
         if (currentTeam != team)
         {
-            player.SetCustomProperties(new Hashtable() {{PunTeams.TeamPlayerProp, (byte) team}});
+            player.SetCustomProperties(new Hashtable() { { PunTeams.TeamPlayerProp, (byte)team } });
         }
     }
 }

@@ -39,10 +39,10 @@
         private static void Init()
         {
             VRTK_ObjectSetup window = (VRTK_ObjectSetup)EditorWindow.GetWindow(typeof(VRTK_ObjectSetup));
-            
-            window.minSize = new Vector2( 300f, 370f );
-            window.maxSize = new Vector2( 400f, 400f );
-            
+
+            window.minSize = new Vector2(300f, 370f);
+            window.maxSize = new Vector2(400f, 400f);
+
             window.autoRepaintOnSceneChange = true;
             window.titleContent.text = "Setup Object";
             window.Show();
@@ -75,7 +75,7 @@
             addHaptics = EditorGUILayout.Toggle("Add Haptics", addHaptics);
             EditorGUILayout.Space();
 
-            if(GUILayout.Button("Setup selected object", GUILayout.Height(40)))
+            if (GUILayout.Button("Setup selected object", GUILayout.Height(40)))
             {
                 SetupObject();
             }
@@ -84,10 +84,10 @@
         private void SetupObject()
         {
             GameObject go = Selection.activeGameObject;
-            if(go)
+            if (go)
             {
                 VRTK_InteractableObject intObj = go.GetComponent<VRTK_InteractableObject>();
-                if(intObj == null)
+                if (intObj == null)
                 {
                     intObj = go.AddComponent<VRTK_InteractableObject>();
                 }
@@ -99,11 +99,11 @@
                 intObj.grabOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
                 intObj.useOverrideButton = VRTK_ControllerEvents.ButtonAlias.Undefined;
                 VRTK_BaseGrabAttach grab = go.GetComponent<VRTK_BaseGrabAttach>();
-                if(grab != null)
+                if (grab != null)
                 {
                     DestroyImmediate(grab);
                 }
-                switch(primGrab)
+                switch (primGrab)
                 {
                     case PrimaryGrab.ChildOfController:
                         grab = go.AddComponent<VRTK_ChildOfControllerGrabAttach>();
@@ -132,11 +132,11 @@
                 }
                 intObj.grabAttachMechanicScript = grab;
                 VRTK_BaseGrabAction grab2 = go.GetComponent<VRTK_BaseGrabAction>();
-                if(grab2 != null)
+                if (grab2 != null)
                 {
                     DestroyImmediate(grab2);
                 }
-                switch(secGrab)
+                switch (secGrab)
                 {
                     case SecondaryGrab.SwapControllers:
                         grab2 = go.AddComponent<VRTK_SwapControllerGrabAction>();
@@ -152,18 +152,18 @@
                         break;
                 }
                 intObj.secondaryGrabActionScript = grab2;
-                if(addrb)
+                if (addrb)
                 {
                     Rigidbody rb = go.GetComponent<Rigidbody>();
-                    if(rb == null)
+                    if (rb == null)
                     {
                         go.AddComponent<Rigidbody>();
                     }
                 }
-                if(addHaptics)
+                if (addHaptics)
                 {
                     VRTK_InteractHaptics haptics = go.GetComponent<VRTK_InteractHaptics>();
-                    if(haptics == null)
+                    if (haptics == null)
                     {
                         go.AddComponent<VRTK_InteractHaptics>();
                     }

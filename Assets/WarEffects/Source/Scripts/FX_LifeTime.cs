@@ -3,30 +3,35 @@ using System.Collections;
 
 namespace WarEffects
 {
-	public class FX_LifeTime : MonoBehaviour
-	{
+    public class FX_LifeTime : MonoBehaviour
+    {
 
-		public float LifeTime = 3;
-		public GameObject SpawnAfterDead;
-		private float timeTemp;
+        public float LifeTime = 3;
+        public GameObject SpawnAfterDead;
+        private float timeTemp;
 
-		void Start ()
-		{
-			if (SpawnAfterDead == null) {
-				GameObject.Destroy (this.gameObject, LifeTime);
-			} else {
-				timeTemp = Time.time;
-			}
-		}
+        void Start()
+        {
+            if (SpawnAfterDead == null)
+            {
+                GameObject.Destroy(this.gameObject, LifeTime);
+            }
+            else
+            {
+                timeTemp = Time.time;
+            }
+        }
 
-		void Update ()
-		{
-			if (SpawnAfterDead != null) {
-				if (Time.time > timeTemp + LifeTime) {
-					GameObject.Destroy (this.gameObject);
-					GameObject.Instantiate (SpawnAfterDead, this.transform.position, SpawnAfterDead.transform.rotation);
-				}
-			}
-		}
-	}
+        void Update()
+        {
+            if (SpawnAfterDead != null)
+            {
+                if (Time.time > timeTemp + LifeTime)
+                {
+                    GameObject.Destroy(this.gameObject);
+                    GameObject.Instantiate(SpawnAfterDead, this.transform.position, SpawnAfterDead.transform.rotation);
+                }
+            }
+        }
+    }
 }

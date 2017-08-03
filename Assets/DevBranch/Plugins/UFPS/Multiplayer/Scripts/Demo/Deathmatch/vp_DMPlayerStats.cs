@@ -29,39 +29,39 @@ using System;
 public class vp_DMPlayerStats : vp_MPPlayerStats
 {
 
-	protected int Frags = 0;
-	protected int Deaths = 0;
-	protected int Score = 0;
-	
-	public override void InitStats()
-	{
+    protected int Frags = 0;
+    protected int Deaths = 0;
+    protected int Score = 0;
 
-		base.InitStats();
+    public override void InitStats()
+    {
 
-		Getters.Add("Deaths", delegate() { return Deaths; });
-		Getters.Add("Frags", delegate() { return Frags; });
-		Getters.Add("Score", delegate() { return Score; });
+        base.InitStats();
 
-		Setters.Add("Deaths", delegate(object val) { Deaths = (int)val; });
-		Setters.Add("Frags", delegate(object val) { Frags = (int)val; });
-		Setters.Add("Score", delegate(object val) { Score = (int)val; });
+        Getters.Add("Deaths", delegate () { return Deaths; });
+        Getters.Add("Frags", delegate () { return Frags; });
+        Getters.Add("Score", delegate () { return Score; });
 
-	}
+        Setters.Add("Deaths", delegate (object val) { Deaths = (int)val; });
+        Setters.Add("Frags", delegate (object val) { Frags = (int)val; });
+        Setters.Add("Score", delegate (object val) { Score = (int)val; });
+
+    }
 
 
-	/// <summary>
-	/// resets health, shots and inventory to default + resurrects
-	/// this player (if dead)
-	/// </summary>
-	public override void FullReset()
-	{
+    /// <summary>
+    /// resets health, shots and inventory to default + resurrects
+    /// this player (if dead)
+    /// </summary>
+    public override void FullReset()
+    {
 
-		base.FullReset();		// always remember to call base in subsequent overrides
-		
-		Frags = 0;
-		Deaths = 0;
-		Score = 0;
+        base.FullReset();       // always remember to call base in subsequent overrides
 
-	}	
+        Frags = 0;
+        Deaths = 0;
+        Score = 0;
+
+    }
 
 }

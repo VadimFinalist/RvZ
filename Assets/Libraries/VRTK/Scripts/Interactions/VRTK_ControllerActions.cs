@@ -388,7 +388,7 @@ namespace VRTK
             {
                 if (state)
                 {
-                    controllerHighlighter.HighlightElement(elementType, (Color) (color == null ? Color.white : color), fadeDuration);
+                    controllerHighlighter.HighlightElement(elementType, (Color)(color == null ? Color.white : color), fadeDuration);
                 }
                 else
                 {

@@ -1,4 +1,4 @@
-/* InstantVR Unity VR head controller
+﻿/* InstantVR Unity VR head controller
  * Copyright (c) 2017 by Passer VR
  * author: Pascal Serrarens
  * email: support@passervr.com
@@ -11,9 +11,11 @@
 using UnityEngine;
 using UnityEngine.VR;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class IVR_UnityVRHead : IVR_Controller {
+    public class IVR_UnityVRHead : IVR_Controller
+    {
         [HideInInspector]
         public GameObject cameraRoot;
         [HideInInspector]
@@ -36,24 +38,28 @@ namespace IVR {
 #endif
 #endif
 
-        public void Start() {
+        public void Start()
+        {
             // This dummy code is here to ensure the checkbox is present in editor
         }
 
-        public override void StartController(InstantVR ivr) {
+        public override void StartController(InstantVR ivr)
+        {
             if (extension == null)
                 extension = ivr.GetComponent<IVR_UnityVR>();
 
             extension.present = VRDevice.isPresent;
 
             Camera camera = CheckCamera();
-            if (camera != null) {
+            if (camera != null)
+            {
                 cameraTransform = camera.transform;
                 neck2eyes = HeadUtils.GetNeckEyeDelta(ivr);
 
                 DeterminePlatform();
 
-                if (vrTracking) {
+                if (vrTracking)
+                {
                     if (!originOnFloor)
                         cameraRoot.transform.position = transform.position;
                     cameraRoot.transform.rotation = ivr.transform.rotation;
@@ -71,9 +77,11 @@ namespace IVR {
             }
         }
 
-        private Camera CheckCamera() {
+        private Camera CheckCamera()
+        {
             Camera camera = transform.GetComponentInChildren<Camera>();
-            if (camera == null) {
+            if (camera == null)
+            {
                 GameObject cameraObj = new GameObject("First Person Camera");
                 cameraObj.transform.SetParent(transform);
                 camera = cameraObj.AddComponent<Camera>();
@@ -83,14 +91,17 @@ namespace IVR {
             return camera;
         }
 
-        private void DeterminePlatform() {
-            if (!VRSettings.enabled) {
+        private void DeterminePlatform()
+        {
+            if (!VRSettings.enabled)
+            {
                 vrTracking = false;
                 return;
             }
 
             vrTracking = true;
-            switch (VRSettings.loadedDeviceName) {
+            switch (VRSettings.loadedDeviceName)
+            {
                 case "Oculus":
                     positionalTracking = true;
                     originOnFloor = false;
@@ -105,7 +116,8 @@ namespace IVR {
             }
         }
 
-        public override void UpdateController() {
+        public override void UpdateController()
+        {
             if (!extension.present || !enabled)
                 return;
 
@@ -113,21 +125,24 @@ namespace IVR {
             UpdateUnityVR();
         }
 
-        private void UpdateUnityVR() {
+        private void UpdateUnityVR()
+        {
             CalculateCameraRoot();
             SetHeadTargets();
         }
 
 
-        private void CalculateCameraRoot() {
+        private void CalculateCameraRoot()
+        {
             if (positionalTracking && originOnFloor)
                 cameraRoot.transform.localPosition = extension.trackerPosition;
         }
 
-        private void SetHeadTargets() {
-                transform.rotation = cameraTransform.rotation;
-                if (positionalTracking)
-                    transform.position = cameraTransform.position + cameraTransform.rotation * -neck2eyes;
+        private void SetHeadTargets()
+        {
+            transform.rotation = cameraTransform.rotation;
+            if (positionalTracking)
+                transform.position = cameraTransform.position + cameraTransform.rotation * -neck2eyes;
 #if INSTANTVR_ADVANCED
 #if IVR_KINECT
                 else {
@@ -139,7 +154,8 @@ namespace IVR {
 #endif
         }
 
-        public override void OnTargetReset() {
+        public override void OnTargetReset()
+        {
             InputTracking.Recenter();
         }
     }

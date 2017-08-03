@@ -8,7 +8,7 @@ public class CullAreaEditor : Editor
     private bool alignEditorCamera;
 
     private CullArea cullArea;
-    
+
     private enum UP_AXIS_OPTIONS
     {
         SideScrollerMode = 0,
@@ -19,7 +19,7 @@ public class CullAreaEditor : Editor
 
     public void OnEnable()
     {
-        cullArea = (CullArea) target;
+        cullArea = (CullArea)target;
 
         // Destroying the newly created cull area if there is already one existing
         if (FindObjectsOfType<CullArea>().Length > 1)
@@ -37,11 +37,11 @@ public class CullAreaEditor : Editor
             upAxisOptions = cullArea.YIsUpAxis ? UP_AXIS_OPTIONS.SideScrollerMode : UP_AXIS_OPTIONS.TopDownOr3DMode;
         }
     }
-    
+
     public override void OnInspectorGUI()
     {
         EditorGUILayout.BeginVertical();
-        
+
         if (Application.isEditor && !Application.isPlaying)
         {
             OnInspectorGUIEditMode();
@@ -66,7 +66,7 @@ public class CullAreaEditor : Editor
         {
             EditorGUILayout.BeginVertical();
             EditorGUILayout.LabelField("Select game type", EditorStyles.boldLabel);
-            upAxisOptions = (UP_AXIS_OPTIONS) EditorGUILayout.EnumPopup("Game type", upAxisOptions);
+            upAxisOptions = (UP_AXIS_OPTIONS)EditorGUILayout.EnumPopup("Game type", upAxisOptions);
             cullArea.YIsUpAxis = (upAxisOptions == UP_AXIS_OPTIONS.SideScrollerMode);
             EditorGUILayout.EndVertical();
         }
@@ -190,7 +190,7 @@ public class CullAreaEditor : Editor
                 float scaleX = (cullArea.transform.localScale.x < 1.0f) ? 1.0f : cullArea.transform.localScale.x;
                 float scaleY = (cullArea.transform.localScale.y < 1.0f) ? 1.0f : cullArea.transform.localScale.y;
                 float scaleZ = (cullArea.transform.localScale.z < 1.0f) ? 1.0f : cullArea.transform.localScale.z;
-                
+
                 cullArea.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
 
                 Debug.LogWarning("Scaling on a single axis can not be lower than 1. Resetting...");
@@ -201,7 +201,7 @@ public class CullAreaEditor : Editor
             AlignEditorView();
         }
     }
-    
+
     /// <summary>
     ///     Aligns the editor view with the created grid.
     /// </summary>

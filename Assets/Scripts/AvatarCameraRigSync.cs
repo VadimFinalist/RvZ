@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using VRTK;
 
-public sealed class AvatarCameraRigSync : MonoBehaviour {
+public sealed class AvatarCameraRigSync : MonoBehaviour
+{
     public GameObject AvatarHead;
     public GameObject LeftHand;
     public GameObject RightHand;
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         SetUpTransformFollow(AvatarHead, VRTK_DeviceFinder.Devices.Headset);
         SetUpTransformFollow(LeftHand, VRTK_DeviceFinder.Devices.LeftController);
         SetUpTransformFollow(RightHand, VRTK_DeviceFinder.Devices.RightController);
@@ -14,14 +16,17 @@ public sealed class AvatarCameraRigSync : MonoBehaviour {
         SetUpControllerHandLink(RightHand, VRTK_DeviceFinder.Devices.RightController);
     }
 
-    private static void SetUpTransformFollow(GameObject avatarComponent, VRTK_DeviceFinder.Devices device) {
+    private static void SetUpTransformFollow(GameObject avatarComponent, VRTK_DeviceFinder.Devices device)
+    {
         var photonView = avatarComponent.GetComponent<PhotonView>();
-        if (photonView == null) {
+        if (photonView == null)
+        {
             Debug.LogError(string.Format("The network representation '{0}' has no {1} component on it.", avatarComponent.name, typeof(PhotonView).Name));
             return;
         }
 
-        if (!photonView.isMine) {
+        if (!photonView.isMine)
+        {
             return;
         }
 
@@ -30,14 +35,17 @@ public sealed class AvatarCameraRigSync : MonoBehaviour {
         transformFollow.followsScale = false;
     }
 
-    private static void SetUpControllerHandLink(GameObject avatarComponent, VRTK_DeviceFinder.Devices device) {
+    private static void SetUpControllerHandLink(GameObject avatarComponent, VRTK_DeviceFinder.Devices device)
+    {
         var photonView = avatarComponent.GetComponent<PhotonView>();
-        if (photonView == null) {
+        if (photonView == null)
+        {
             Debug.LogError(string.Format("The network representation '{0}' has no {1} component on it.", avatarComponent.name, typeof(PhotonView).Name));
             return;
         }
 
-        if (!photonView.isMine) {
+        if (!photonView.isMine)
+        {
             return;
         }
 

@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace ExitGames.Client.Photon.Voice
 {
-    class UnsupportedSampleTypeException : Exception 
+    class UnsupportedSampleTypeException : Exception
     {
         public UnsupportedSampleTypeException(object o) : base("PhotonVoice: unsupported sample type: " + o.GetType()) { }
     }
@@ -57,7 +57,7 @@ namespace ExitGames.Client.Photon.Voice
         /// </summary>
         bool GetData(T[] buffer);
     }
-    
+
     /// <summary>
     /// Interface to feed LocalVoice with audio data.
     /// Implement it in class wrapping platform-specific autio source.
@@ -172,10 +172,10 @@ namespace ExitGames.Client.Photon.Voice
         /// <summary>Sent frames bytes counter.</summary>
         public int FramesSentBytes { get; private set; }
 
-		/// <summary>Use to enable or disable voice detector and set its parameters.</summary>
+        /// <summary>Use to enable or disable voice detector and set its parameters.</summary>
         abstract public VoiceDetector VoiceDetector { get; }
 
-		/// <summary>
+        /// <summary>
         /// Level meter utility.
         /// </summary>
         abstract public LevelMeter LevelMeter { get; }
@@ -203,8 +203,8 @@ namespace ExitGames.Client.Photon.Voice
         internal byte evNumber = 0; // sequence used by receivers to detect loss. will overflow.
         private VoiceClient voiceClient;
         protected int sourceSamplingRateHz;
-        internal int sourceFrameSize = 0;        
-       
+        internal int sourceFrameSize = 0;
+
         internal LocalVoice()
         {
 
@@ -234,7 +234,7 @@ namespace ExitGames.Client.Photon.Voice
         {
             while (processStream()) ;
         }
-       
+
         internal Dictionary<byte, int> eventTimestamps = new Dictionary<byte, int>();
 
         abstract internal bool readStream();
@@ -274,7 +274,7 @@ namespace ExitGames.Client.Photon.Voice
             {
                 return false;
             }
-        }        
+        }
 
         public void RemoveSelf()
         {
@@ -297,7 +297,7 @@ namespace ExitGames.Client.Photon.Voice
     {
         private IAudioStream<T> audioStream;
         private T[] frameBuffer = null;
-        private T[] sourceFrameBuffer = null;        
+        private T[] sourceFrameBuffer = null;
         public override VoiceDetector VoiceDetector { get { return voiceDetector; } }
         protected VoiceDetector<T> voiceDetector;
         public override LevelMeter LevelMeter { get { return levelMeter; } }
@@ -307,7 +307,7 @@ namespace ExitGames.Client.Photon.Voice
         {
             get { return this.Transmit && (!this.VoiceDetector.On || this.VoiceDetector.Detected); }
         }
-        
+
         internal LocalVoice()
         {
 
@@ -353,7 +353,8 @@ namespace ExitGames.Client.Photon.Voice
                 }
             }
 
-            if (this.VoiceDetector.On) {
+            if (this.VoiceDetector.On)
+            {
                 this.voiceDetector.process(this.sourceFrameBuffer);
                 if (!this.VoiceDetector.Detected)
                 {
@@ -371,13 +372,13 @@ namespace ExitGames.Client.Photon.Voice
             return this.compress(this.frameBuffer);
         }
         abstract protected ArraySegment<byte> compress(T[] buffer);
-        
+
     }
 
     public class LocalVoiceFloat : LocalVoice<float>
     {
-        internal LocalVoiceFloat() 
-        { 
+        internal LocalVoiceFloat()
+        {
             this.levelMeter = new LevelMeterFloat(0, 0);
             this.voiceDetector = new VoiceDetectorFloat(0, 0);
         }
@@ -396,7 +397,7 @@ namespace ExitGames.Client.Photon.Voice
 
     public class LocalVoiceShort : LocalVoice<short>
     {
-        internal LocalVoiceShort() 
+        internal LocalVoiceShort()
         {
             this.levelMeter = new LevelMeterShort(0, 0);
             this.voiceDetector = new VoiceDetectorShort(0, 0);
@@ -423,8 +424,8 @@ namespace ExitGames.Client.Photon.Voice
         private int channelId;
         private int playerId;
         private byte voiceId;
-        internal object LocalUserObject  { get; set; }
-    internal RemoteVoice(VoiceClient client, int channelId, int playerId, byte voiceId, VoiceInfo info, byte lastEventNumber)
+        internal object LocalUserObject { get; set; }
+        internal RemoteVoice(VoiceClient client, int channelId, int playerId, byte voiceId, VoiceInfo info, byte lastEventNumber)
         {
             this.opusDecoder = new OpusDecoder((SamplingRate)info.SamplingRate, (Channels)info.Channels);
             this.voiceClient = client;
@@ -438,7 +439,7 @@ namespace ExitGames.Client.Photon.Voice
         internal byte lastEvNumber = 0;
         private OpusDecoder opusDecoder;
         private VoiceClient voiceClient;
-        
+
         internal void receiveBytes(byte[] receivedBytes, byte evNumber)
         {
             // receive-gap detection and compensation
@@ -524,7 +525,7 @@ namespace ExitGames.Client.Photon.Voice
         void LogWarning(string fmt, params object[] args);
         void LogInfo(string fmt, params object[] args);
         void LogDebug(string fmt, params object[] args);
-                
+
         bool IsChannelJoined(int channelId);
         void SendVoicesInfo(object content, int channelId, int targetPlayerId);
         void SendVoiceRemove(object content, int channelId);
@@ -532,7 +533,7 @@ namespace ExitGames.Client.Photon.Voice
         string ChannelIdStr(int channelId);
         string PlayerIdStr(int playerId);
         bool SupportsArraySegmentSerialization { get; }
-    }    
+    }
 
     /// <summary>
     /// Base class for Voice clients implamantations
@@ -540,7 +541,7 @@ namespace ExitGames.Client.Photon.Voice
     public class VoiceClient : IDisposable
     {
         internal IVoiceFrontend frontend;
-        
+
         /// <summary>Lost frames counter.</summary>
         public int FramesLost { get; internal set; }
 
@@ -630,11 +631,11 @@ namespace ExitGames.Client.Photon.Voice
 
         /// <summary>Iterates through all remote voices infos.</summary>
         public IEnumerable<RemoteVoiceInfo> RemoteVoiceInfos
-        { 
+        {
             get
             {
                 foreach (var channelVoices in this.remoteVoices)
-                { 
+                {
                     foreach (var playerVoices in channelVoices.Value)
                     {
                         foreach (var voice in playerVoices.Value)
@@ -643,7 +644,7 @@ namespace ExitGames.Client.Photon.Voice
                         }
                     }
                 }
-            } 
+            }
         }
 
         /// <summary>Iterates through all local objects set by user in remote voices.</summary>
@@ -699,7 +700,7 @@ namespace ExitGames.Client.Photon.Voice
             {
                 // try to reuse id
                 var ids = new bool[256];
-                foreach (var v in localVoices) 
+                foreach (var v in localVoices)
                 {
                     ids[v.Value.id] = true;
                 }
@@ -812,7 +813,7 @@ namespace ExitGames.Client.Photon.Voice
                 }
             }
             else
-            {                
+            {
                 byte voiceId = (byte)content[0];
                 byte evNumber = (byte)content[1];
                 byte[] receivedBytes = (byte[])content[2];
@@ -829,7 +830,7 @@ namespace ExitGames.Client.Photon.Voice
                             prevRtt = rtt;
                             if (rttvar < 0) rttvar = -rttvar;
                             this.RoundTripTimeVariance = (rttvar + RoundTripTimeVariance * 19) / 20;
-                            this.RoundTripTime = (rtt + RoundTripTime*19) / 20;
+                            this.RoundTripTime = (rtt + RoundTripTime * 19) / 20;
                         }
                     }
                     //internal Dictionary<byte, DateTime> localEventTimestamps = new Dictionary<byte, DateTime>();
@@ -837,7 +838,7 @@ namespace ExitGames.Client.Photon.Voice
                 this.onFrame(channelId, playerId, voiceId, evNumber, receivedBytes);
             }
         }
-        
+
         internal byte GlobalAudioGroup
         {
             get { return this.globalAudioGroup; }
@@ -868,12 +869,12 @@ namespace ExitGames.Client.Photon.Voice
             int i = 0;
             foreach (var v in voicesToSend)
             {
-                infos[i] = new Hashtable() { 
+                infos[i] = new Hashtable() {
                     { (byte)EventParam.VoiceId, v.id },
                     { (byte)EventParam.SamplingRate, v.info.SamplingRate },
                     { (byte)EventParam.Channels, v.info.Channels },
                     { (byte)EventParam.FrameDurationUs, v.info.FrameDurationUs },
-                    { (byte)EventParam.Bitrate, v.info.Bitrate },                    
+                    { (byte)EventParam.Bitrate, v.info.Bitrate },
                     { (byte)EventParam.UserData, v.info.UserData },
                     { (byte)EventParam.EventNumber, v.evNumber }
                 };
@@ -888,7 +889,7 @@ namespace ExitGames.Client.Photon.Voice
         }
 
         private object[] buildVoiceRemoveMessage(List<LocalVoice> voicesToSend)
-        {            
+        {
             byte[] ids = new byte[voicesToSend.Count];
             object[] content = new object[] { (byte)0, EventSubcode.VoiceRemove, ids };
 
@@ -897,7 +898,7 @@ namespace ExitGames.Client.Photon.Voice
             {
                 ids[i] = v.id;
                 i++;
-                this.frontend.LogInfo("[PV] Voice #" + v.id + " at channel " + this.channelStr(v.channelId) + " remove sent");                
+                this.frontend.LogInfo("[PV] Voice #" + v.id + " at channel " + this.channelStr(v.channelId) + " remove sent");
             }
 
             return content;
@@ -956,7 +957,7 @@ namespace ExitGames.Client.Photon.Voice
                 playerVoices = new Dictionary<byte, RemoteVoice>();
                 channelVoices[playerId] = playerVoices;
             }
-            
+
             foreach (var el in (object[])payload)
             {
                 var h = (Hashtable)el;
@@ -975,7 +976,7 @@ namespace ExitGames.Client.Photon.Voice
 
                     var info = new VoiceInfo((int)samplingRate, (int)channels, frameDurationUs, bitrate, userData);
                     playerVoices[voiceId] = new RemoteVoice(this, channelId, playerId, voiceId, info, eventNumber);
-                    object localUserObject = null;                    
+                    object localUserObject = null;
                     if (this.OnRemoteVoiceInfoAction != null) this.OnRemoteVoiceInfoAction(channelId, playerId, voiceId, info, out localUserObject);
                     playerVoices[voiceId].LocalUserObject = localUserObject;
                 }
@@ -1030,7 +1031,7 @@ namespace ExitGames.Client.Photon.Voice
         Random rnd = new Random();
         private void onFrame(int channelId, int playerId, byte voiceId, byte evNumber, byte[] receivedBytes)
         {
-            
+
             if (this.DebugLostPercent > 0 && rnd.Next(100) < this.DebugLostPercent)
             {
                 this.frontend.LogWarning("[PV] Debug Lost Sim: 1 packet dropped");
@@ -1066,7 +1067,7 @@ namespace ExitGames.Client.Photon.Voice
                 this.frontend.LogWarning("[PV] Frame event for voice #" + voiceId + " of not inited channel " + this.channelStr(channelId));
             }
         }
-        
+
         internal bool removePlayerVoices(int channelId, int playerId)
         {
             Dictionary<int, Dictionary<byte, RemoteVoice>> channelVoices = null;
@@ -1076,7 +1077,7 @@ namespace ExitGames.Client.Photon.Voice
                 if (channelVoices.TryGetValue(playerId, out playerVoices))
                 {
                     channelVoices.Remove(playerId);
-					
+
                     foreach (var v in playerVoices)
                     {
                         if (this.OnRemoteVoiceRemoveAction != null)
@@ -1131,21 +1132,21 @@ namespace ExitGames.Client.Photon.Voice
 
 
         public void Dispose()
-        { 
-             foreach (var v in this.localVoices)
-             {
-                 v.Value.Dispose();
-             }
-             foreach (var channelVoices in this.remoteVoices)
-             {
-                 foreach (var playerVoices in channelVoices.Value)
-                 {
-                     foreach (var voice in playerVoices.Value)
-                     {
-                         voice.Value.Dispose();
-                     }
-                 }
-             }
+        {
+            foreach (var v in this.localVoices)
+            {
+                v.Value.Dispose();
+            }
+            foreach (var channelVoices in this.remoteVoices)
+            {
+                foreach (var playerVoices in channelVoices.Value)
+                {
+                    foreach (var voice in playerVoices.Value)
+                    {
+                        voice.Value.Dispose();
+                    }
+                }
+            }
         }
     }
 
@@ -1350,12 +1351,14 @@ namespace ExitGames.Client.Photon.Voice
         public bool On { get; set; }
         public float Threshold { get; set; }
         public bool Detected { get; protected set; }
-        public int ActivityDelayMs {
+        public int ActivityDelayMs
+        {
             get { return this.activityDelay; }
-            set {
+            set
+            {
                 this.activityDelay = value;
                 this.activityDelayValuesCount = value * valuesCountPerSec / 1000;
-            } 
+            }
         }
 
         protected int activityDelay;
@@ -1372,7 +1375,7 @@ namespace ExitGames.Client.Photon.Voice
 
         public abstract void process(T[] buf);
     }
-    
+
     public class VoiceDetectorFloat : VoiceDetector<float>
     {
         internal VoiceDetectorFloat(int samplingRate, int numChannels) : base(samplingRate, numChannels) { }

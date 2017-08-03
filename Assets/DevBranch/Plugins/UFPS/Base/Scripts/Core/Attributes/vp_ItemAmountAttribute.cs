@@ -23,9 +23,9 @@ using UnityEngine;
 public class vp_ItemAmountAttribute : PropertyAttribute
 {
 
-	public vp_ItemAmountAttribute()
-	{
-	}
+    public vp_ItemAmountAttribute()
+    {
+    }
 
 }
 
@@ -37,41 +37,41 @@ public class vp_ItemAmountAttribute : PropertyAttribute
 public class vp_ItemAmountDrawer : PropertyDrawer
 {
 
-	// these two variables get set from the 'vp_ItemTypeAttribute'
-	// when another property changes
-	public static object ItemAmountTargetObject = null;
-	public static int ItemAmountValue = -999999;
+    // these two variables get set from the 'vp_ItemTypeAttribute'
+    // when another property changes
+    public static object ItemAmountTargetObject = null;
+    public static int ItemAmountValue = -999999;
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public override float GetPropertyHeight(SerializedProperty prop, GUIContent label)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    public override float GetPropertyHeight(SerializedProperty prop, GUIContent label)
+    {
 
-		return 0;
+        return 0;
 
-	}
+    }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+    {
 
-		if ((ItemAmountValue == -999999) || ItemAmountTargetObject == null)
-			ItemAmountValue = prop.intValue;
+        if ((ItemAmountValue == -999999) || ItemAmountTargetObject == null)
+            ItemAmountValue = prop.intValue;
 
-		//prop.intValue = EditorGUI.IntField(pos, "Amount", prop.intValue);	// uncomment to debug
+        //prop.intValue = EditorGUI.IntField(pos, "Amount", prop.intValue);	// uncomment to debug
 
-		if (ItemAmountTargetObject != null && ItemAmountTargetObject == prop.serializedObject)
-		{
-			prop.intValue = ItemAmountValue;
-			ItemAmountTargetObject = null;
-		}
-				
-	}
+        if (ItemAmountTargetObject != null && ItemAmountTargetObject == prop.serializedObject)
+        {
+            prop.intValue = ItemAmountValue;
+            ItemAmountTargetObject = null;
+        }
+
+    }
 
 }
 

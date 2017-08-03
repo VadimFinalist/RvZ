@@ -20,10 +20,10 @@ namespace ExitGames.Client.Photon.LoadBalancing
     using System.Collections.Generic;
     using System.Diagnostics;
 
-    #if UNITY || NETFX_CORE
+#if UNITY || NETFX_CORE
     using Hashtable = ExitGames.Client.Photon.Hashtable;
     using SupportClass = ExitGames.Client.Photon.SupportClass;
-    #endif
+#endif
 
 
     #region Enums
@@ -464,7 +464,8 @@ namespace ExitGames.Client.Photon.LoadBalancing
         /// By convention, set this ID before you connect, not while being connected.
         /// There is no error but the ID won't change while being connected.
         /// </remarks>
-        public string UserId {
+        public string UserId
+        {
             get
             {
                 if (this.AuthValues != null)
@@ -608,10 +609,10 @@ namespace ExitGames.Client.Photon.LoadBalancing
                 case ConnectionProtocol.Udp:
                 case ConnectionProtocol.Tcp:
                     return string.Format("{0}:{1}", NameServerHost, protocolPort);
-                #if RHTTP
+#if RHTTP
                 case ConnectionProtocol.RHttp:
                     return NameServerHttp;
-                #endif
+#endif
                 case ConnectionProtocol.WebSocket:
                     return string.Format("ws://{0}:{1}", NameServerHost, protocolPort);
                 case ConnectionProtocol.WebSocketSecure:
@@ -2264,9 +2265,9 @@ namespace ExitGames.Client.Photon.LoadBalancing
 
                         default:
                             string stacktrace = "";
-                            #if DEBUG && !NETFX_CORE
+#if DEBUG && !NETFX_CORE
                             stacktrace = new System.Diagnostics.StackTrace(true).ToString();
-                            #endif
+#endif
                             this.DebugReturn(DebugLevel.WARNING, "Got a unexpected Disconnect in LoadBalancingClient State: " + this.State + ". " + stacktrace);
 
                             if (this.AuthValues != null)
@@ -2389,7 +2390,7 @@ namespace ExitGames.Client.Photon.LoadBalancing
 
                 case EventCode.Leave:
                     {
-                        int actorID = (int) photonEvent[ParameterCode.ActorNr];
+                        int actorID = (int)photonEvent[ParameterCode.ActorNr];
 
                         bool isInactive = false;
                         if (photonEvent.Parameters.ContainsKey(ParameterCode.IsInactive))

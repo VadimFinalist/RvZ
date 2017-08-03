@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="InRoomtime.cs" company="Exit Games GmbH">
 //   Part of: Photon Unity Networking
 // </copyright>
@@ -36,7 +36,7 @@ public class InRoomTime : MonoBehaviour
         {
             uint u = (uint)this.RoomTimestamp;
             double t = u;
-            return t/1000;
+            return t / 1000;
         }
     }
 

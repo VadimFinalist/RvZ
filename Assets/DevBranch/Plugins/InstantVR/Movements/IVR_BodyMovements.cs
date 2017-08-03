@@ -9,10 +9,12 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
     [ExecuteInEditMode]
-    public class IVR_BodyMovements : MonoBehaviour {
+    public class IVR_BodyMovements : MonoBehaviour
+    {
         [HideInInspector]
         private InstantVR ivr;
 
@@ -47,17 +49,20 @@ namespace IVR {
 
         private bool fromNormCalculated = false;
 
-        public void SetRightHandTarget(Transform newTarget) {
+        public void SetRightHandTarget(Transform newTarget)
+        {
             rightHandOTarget = newTarget;
             rightHandTarget = newTarget;
         }
 
-        public void SetLeftHandTarget(Transform newTarget) {
+        public void SetLeftHandTarget(Transform newTarget)
+        {
             leftHandOTarget = newTarget;
             leftHandTarget = newTarget;
         }
 
-        public void StartMovements() {
+        public void StartMovements()
+        {
             ivr = this.GetComponent<InstantVR>();
 
             headTarget = ivr.headTarget;
@@ -68,9 +73,12 @@ namespace IVR {
             rightFootTarget = ivr.rightFootTarget;
 
             animator = ivr.transform.GetComponentInChildren<Animator>();
-            if (animator == null) {
+            if (animator == null)
+            {
                 StopMovements();
-            } else {
+            }
+            else
+            {
 
                 characterRigidbody = animator.GetComponent<Rigidbody>();
 
@@ -88,9 +96,11 @@ namespace IVR {
                 Transform neck, spine, hips;
 
                 neck = animator.GetBoneTransform(HumanBodyBones.Neck);
-                if (neck == null) {
+                if (neck == null)
+                {
                     neck = animator.GetBoneTransform(HumanBodyBones.Head);
-                    if (neck == null) {
+                    if (neck == null)
+                    {
                         StopMovements();
                         return;
                     }
@@ -102,15 +112,18 @@ namespace IVR {
                 leftLeg = new LegMovements(ArmMovements.BodySide.Left, animator, hipTarget);
                 rightLeg = new LegMovements(ArmMovements.BodySide.Right, animator, hipTarget);
 
-                if (rightHandTarget != null) {
+                if (rightHandTarget != null)
+                {
                     rightHandOTarget = rightHandTarget;
                 }
 
-                if (leftHandTarget != null) {
+                if (leftHandTarget != null)
+                {
                     leftHandOTarget = leftHandTarget;
                 }
 
-                if (headTarget == null && enableTorso) {
+                if (headTarget == null && enableTorso)
+                {
                     GameObject neckTargetGO = new GameObject("Neck_Target");
                     headTarget = neckTargetGO.transform;
                     headTarget.parent = characterTransform;
@@ -118,8 +131,10 @@ namespace IVR {
                     headTarget.rotation = characterTransform.rotation;
                 }
 
-                if (enableLegs) {
-                    if (rightFootTarget == null) {
+                if (enableLegs)
+                {
+                    if (rightFootTarget == null)
+                    {
                         GameObject rightFootTargetGO = new GameObject("Foot_R_Target");
                         rightFootTarget = rightFootTargetGO.transform;
                         rightFootTarget.parent = characterTransform;
@@ -127,7 +142,8 @@ namespace IVR {
                         rightFootTarget.rotation = characterTransform.rotation;
                     }
 
-                    if (leftFootTarget == null) {
+                    if (leftFootTarget == null)
+                    {
                         GameObject leftFootTargetGO = new GameObject("Foot_L_Target");
                         leftFootTarget = leftFootTargetGO.transform;
                         leftFootTarget.parent = characterTransform;
@@ -137,9 +153,12 @@ namespace IVR {
                 }
 
 
-                if (IsInTPose(leftArm, rightArm)) {
+                if (IsInTPose(leftArm, rightArm))
+                {
                     CalculateFromNormTPose(leftArm, rightArm);
-                } else {
+                }
+                else
+                {
                     CalculateFromNormTracking(leftArm, rightArm, leftHandTarget, rightHandTarget);
                 }
 
@@ -155,15 +174,18 @@ namespace IVR {
             }
         }
 
-        public void StopMovements() {
+        public void StopMovements()
+        {
             fromNormCalculated = false;
         }
 
         bool crouching = false;
         float bendAngle = 0;
-        
-        void Update() {
-            if (!Application.isPlaying) {
+
+        void Update()
+        {
+            if (!Application.isPlaying)
+            {
                 if (!fromNormCalculated || torso == null || leftArm == null || rightArm == null)
                     StartMovements();
 
@@ -173,9 +195,11 @@ namespace IVR {
                     UpdateBodyMovements();
             }
         }
-        
-        public void UpdateBodyMovements() {
-            if (torso.userNeckTarget) {
+
+        public void UpdateBodyMovements()
+        {
+            if (torso.userNeckTarget)
+            {
                 if (enableTorso)
                     torso.CalculateHorizontal(headTarget);
 
@@ -186,8 +210,11 @@ namespace IVR {
                 rightArm.Calculate(rightHandTarget);
 
                 CalculateHeadOrientation(torso.neck, headTarget);
-            } else {
-                if (bendAngle <= 0 && !crouching) {
+            }
+            else
+            {
+                if (bendAngle <= 0 && !crouching)
+                {
                     leftArm.Calculate(leftHandTarget);
                     rightArm.Calculate(rightHandTarget);
                 }
@@ -199,7 +226,8 @@ namespace IVR {
                     crouching = torso.AutoVertical(rightHandOTarget, rightHandTarget, rightArm, leftHandOTarget, leftHandTarget, leftArm, headTarget);
             }
 
-            if (enableLegs) {
+            if (enableLegs)
+            {
                 rightLeg.Calculate(rightFootTarget.transform);
                 leftLeg.Calculate(leftFootTarget.transform);
             }
@@ -208,13 +236,15 @@ namespace IVR {
         private Vector3 minHeadAngles = new Vector3(-60, -90, -45);
         private Vector3 maxHeadAngles = new Vector3(70, 90, 45);
 
-        void CalculateHeadOrientation(Transform neck, Transform neckTarget) {
+        void CalculateHeadOrientation(Transform neck, Transform neckTarget)
+        {
             Vector3 localHeadAngles = (Quaternion.Inverse(hipTarget.rotation) * neckTarget.rotation).eulerAngles;
             localHeadAngles = Angles.ClampVector3(localHeadAngles, minHeadAngles, maxHeadAngles);
             neck.rotation = hipTarget.rotation * Quaternion.Euler(localHeadAngles) * torso.fromNormNeck;
         }
 
-        public bool IsInTPose(ArmMovements leftArm, ArmMovements rightArm) {
+        public bool IsInTPose(ArmMovements leftArm, ArmMovements rightArm)
+        {
             float d;
             Ray hand2hand = new Ray(leftArm.hand.position, rightArm.hand.position - leftArm.hand.position);
 
@@ -242,27 +272,34 @@ namespace IVR {
             return true;
         }
 
-        public static float DistanceToRay(Ray ray, Vector3 point) {
+        public static float DistanceToRay(Ray ray, Vector3 point)
+        {
             return Vector3.Cross(ray.direction, point - ray.origin).magnitude;
         }
 
-        public void CalculateFromNormTPose(ArmMovements leftArm, ArmMovements rightArm) {
-            if (leftArm != null) {
+        public void CalculateFromNormTPose(ArmMovements leftArm, ArmMovements rightArm)
+        {
+            if (leftArm != null)
+            {
                 leftArm.CalculateFromNormTPose();
             }
 
-            if (rightArm != null) {
+            if (rightArm != null)
+            {
                 rightArm.CalculateFromNormTPose();
             }
             fromNormCalculated = true;
         }
 
-        public void CalculateFromNormTracking(ArmMovements leftArm, ArmMovements rightArm, Transform leftHandTarget, Transform rightHandTarget) {
-            if (leftArm != null) {
+        public void CalculateFromNormTracking(ArmMovements leftArm, ArmMovements rightArm, Transform leftHandTarget, Transform rightHandTarget)
+        {
+            if (leftArm != null)
+            {
                 leftArm.CalculateFromNormTracking(leftHandTarget);
             }
 
-            if (rightArm != null) {
+            if (rightArm != null)
+            {
                 rightArm.CalculateFromNormTracking(rightHandTarget);
             }
             fromNormCalculated = true;
@@ -270,7 +307,8 @@ namespace IVR {
     }
 
     [System.Serializable]
-    public class Torso {
+    public class Torso
+    {
         private Transform hipTarget;
 
         public Transform neck;
@@ -291,7 +329,8 @@ namespace IVR {
         public bool userNeckTarget;
         private Vector3 spineAxis;
 
-        public Torso(Transform neck, Transform spine, Transform hips, Transform hipTarget, Transform neckTarget, ArmMovements arm) {
+        public Torso(Transform neck, Transform spine, Transform hips, Transform hipTarget, Transform neckTarget, ArmMovements arm)
+        {
             this.hipTarget = hipTarget;
 
             this.neck = neck;
@@ -307,7 +346,8 @@ namespace IVR {
             Vector3 neckAtUpperArm = new Vector3(neck.position.x, arm.upperArm.position.y, neck.position.z);
             length = Vector3.Distance(spine.position, neckAtUpperArm);
 
-            if (neckTarget != null) {
+            if (neckTarget != null)
+            {
                 fromNormNeck = Quaternion.Inverse(Quaternion.LookRotation(neckTarget.forward)) * neck.rotation;
                 fromNormTorso = Quaternion.Inverse(Quaternion.LookRotation(neck.position - spine.position, hipTarget.forward)) * spine.rotation;
                 fromNormHips = Quaternion.Inverse(Quaternion.LookRotation(hipTarget.forward)) * hips.rotation;
@@ -316,7 +356,8 @@ namespace IVR {
             spineAxis = spine.InverseTransformDirection(hipTarget.right);
         }
 
-        public void CalculateHorizontal(Transform neckTarget) {
+        public void CalculateHorizontal(Transform neckTarget)
+        {
             if (hipTarget.gameObject.activeSelf)
                 hips.position = new Vector3(hipTarget.position.x, hips.position.y, hipTarget.position.z);
             hips.rotation = Quaternion.LookRotation(hipTarget.forward, Vector3.up) * fromNormHips;
@@ -325,7 +366,8 @@ namespace IVR {
             spine.rotation *= fromNormTorso;
         }
 
-        public float AutoHorizontal(Transform rightHandOTarget, Transform rightHandTarget, ArmMovements rightArm, Transform leftHandOTarget, Transform leftHandTarget, ArmMovements leftArm, Transform neckTarget) {
+        public float AutoHorizontal(Transform rightHandOTarget, Transform rightHandTarget, ArmMovements rightArm, Transform leftHandOTarget, Transform leftHandTarget, ArmMovements leftArm, Transform neckTarget)
+        {
             float bendAngle = 0;
             Vector3 torsoTarget = Vector3.zero;
             Vector3 dShoulderNeck = (leftArm.upperArm.position - rightArm.upperArm.position) / 2;
@@ -335,8 +377,10 @@ namespace IVR {
             float leftOver = leftToTarget.magnitude - leftArm.length;
             float rightOver = rightToTarget.magnitude - rightArm.length;
 
-            if (leftOver > 0) {
-                if (rightOver > 0) {
+            if (leftOver > 0)
+            {
+                if (rightOver > 0)
+                {
                     Vector3 torsoTargetR = rightHandOTarget.position + dShoulderNeck;
                     Vector3 torsoTargetL = leftHandOTarget.position - dShoulderNeck;
                     float bendAngleR = BendAngle(torsoTargetR, rightArm);
@@ -346,15 +390,19 @@ namespace IVR {
                         torsoTarget = torsoTargetR;
                     else
                         torsoTarget = torsoTargetL;
-                } else
+                }
+                else
                     torsoTarget = leftHandOTarget.position - dShoulderNeck;
-            } else if (rightOver > 0)
+            }
+            else if (rightOver > 0)
                 torsoTarget = rightHandOTarget.position + dShoulderNeck;
 
-            if (rightOver > 0 || leftOver > 0) {
+            if (rightOver > 0 || leftOver > 0)
+            {
                 bendAngle = BendAngle(torsoTarget, rightArm); // arm should be left or right
                 spine.rotation = spineStartRotation * Quaternion.AngleAxis(bendAngle, spineAxis);
-            } else
+            }
+            else
                 spine.rotation = spineStartRotation;
 
             rightArm.Calculate(rightHandTarget);
@@ -363,7 +411,8 @@ namespace IVR {
             return bendAngle;
         }
 
-        public float BendAngle(Vector3 torsoTarget, ArmMovements arm) {
+        public float BendAngle(Vector3 torsoTarget, ArmMovements arm)
+        {
             float baseAngle = Vector3.Angle(spineStartOrientation, torsoTarget - spine.position);
 
             float dSpine2Target = Vector3.Distance(spine.position, torsoTarget);
@@ -373,32 +422,39 @@ namespace IVR {
             return Mathf.Min(baseAngle - spineAngle, IVR_BodyMovements.maxHipAngle);
         }
 
-        public void CalculateVertical(Transform neckTarget) {
+        public void CalculateVertical(Transform neckTarget)
+        {
             float dY = hipTarget.position.y - hipStartPosition.y;
             hips.position = new Vector3(hips.position.x, hipStartPosition.y + dY, hips.position.z);
         }
 
-        public bool AutoVertical(Transform rightHandOTarget, Transform rightHandTarget, ArmMovements rightArm, Transform leftHandOTarget, Transform leftHandTarget, ArmMovements leftArm, Transform neckTarget) {
+        public bool AutoVertical(Transform rightHandOTarget, Transform rightHandTarget, ArmMovements rightArm, Transform leftHandOTarget, Transform leftHandTarget, ArmMovements leftArm, Transform neckTarget)
+        {
             Vector3 neckDelta = Vector3.zero;
 
             Vector3 leftToTarget = leftHandOTarget.position - leftArm.upperArmStartPosition;
             Vector3 rightToTarget = rightHandOTarget.position - rightArm.upperArmStartPosition;
             float leftOver = leftToTarget.magnitude - leftArm.length;
             float rightOver = rightToTarget.magnitude - rightArm.length;
-            if (leftOver > 0) {
+            if (leftOver > 0)
+            {
                 if (rightOver > leftOver)
                     neckDelta = rightToTarget.normalized * rightOver;
                 else
                     neckDelta = leftToTarget.normalized * leftOver;
-            } else if (rightOver > 0)
+            }
+            else if (rightOver > 0)
                 neckDelta = rightToTarget.normalized * rightOver;
 
             neckTarget.position = neckStartPosition + new Vector3(0, neckDelta.y, 0);
 
             float dY = neckTarget.transform.position.y - neck.position.y;
-            if (hips.position.y + dY < hipStartPosition.y) {
+            if (hips.position.y + dY < hipStartPosition.y)
+            {
                 hips.Translate(0, dY, 0, Space.World);
-            } else if (hips.position.y + dY > hipStartPosition.y) {
+            }
+            else if (hips.position.y + dY > hipStartPosition.y)
+            {
                 hips.position = new Vector3(hips.position.x, hipStartPosition.y, hips.position.z);
             }
 
@@ -408,14 +464,16 @@ namespace IVR {
             return (hips.position.y < hipStartPosition.y);
         }
     }
-    public abstract class Digit {
+    public abstract class Digit
+    {
         public abstract void Init(Transform hand, Vector3 handRightAxis, Vector3 axis2, bool bodySideLeft, int fingerIndex);
 
         public abstract void Update(float inputValue);
     }
 
     [System.Serializable]
-    public class Finger : Digit {
+    public class Finger : Digit
+    {
         public Transform transform;
         private int fingerIndex;
         public float input;
@@ -425,8 +483,10 @@ namespace IVR {
         public int nPhalanges;
         private Phalanx[] phalanges;
 
-        public override void Init(Transform hand, Vector3 fingerAxis, Vector3 armAxis, bool bodySideLeft, int fingerIndex) {
-            if (transform != null) {
+        public override void Init(Transform hand, Vector3 fingerAxis, Vector3 armAxis, bool bodySideLeft, int fingerIndex)
+        {
+            if (transform != null)
+            {
                 this.fingerIndex = fingerIndex;
                 curlAxis = fingerAxis;
                 swingAxis = Vector3.Cross(fingerAxis, armAxis);
@@ -436,17 +496,20 @@ namespace IVR {
                 if (phalanges == null || phalanges.Length == 0)
                     phalanges = new Phalanx[3];
 
-                if (phalanges[0] == null || phalanges[0].transform == null) {
+                if (phalanges[0] == null || phalanges[0].transform == null)
+                {
                     phalanges[0] = new Phalanx(transform);
                     nPhalanges = 1;
                 }
 
-                if ((phalanges[1] == null || phalanges[1].transform == null) && phalanges[0].transform.childCount == 1) {
+                if ((phalanges[1] == null || phalanges[1].transform == null) && phalanges[0].transform.childCount == 1)
+                {
                     phalanges[1] = new Phalanx(phalanges[0].transform.GetChild(0).transform);
                     nPhalanges = 2;
                 }
 
-                if ((phalanges[2] == null || phalanges[2].transform == null) && phalanges[1].transform.childCount == 1) {
+                if ((phalanges[2] == null || phalanges[2].transform == null) && phalanges[1].transform.childCount == 1)
+                {
                     phalanges[2] = new Phalanx(phalanges[1].transform.GetChild(0).transform);
                     nPhalanges = 3;
                 }
@@ -454,12 +517,15 @@ namespace IVR {
         }
 
         private float grabSpeed = 0.4f;
-        public override void Update(float inputValue) {
-            if (transform != null) {
+        public override void Update(float inputValue)
+        {
+            if (transform != null)
+            {
                 input = inputValue;
                 if (grabAmount > 0)
                     val = grabAmount;
-                else {
+                else
+                {
                     float d = input - val;
                     if (d > grabSpeed)
                         val += grabSpeed;
@@ -472,8 +538,10 @@ namespace IVR {
                 val2 *= (fingerIndex - 2);
                 Bend(val, val2);
 
-                if (grabAmount > 0) {
-                    if (input < grabAmount) {
+                if (grabAmount > 0)
+                {
+                    if (input < grabAmount)
+                    {
                         // drop the object
                         grabAmount = 0f;
                     }
@@ -481,9 +549,12 @@ namespace IVR {
             }
         }
 
-        private void Bend(float val1, float val2) {
-            if (phalanges != null) {
-                switch (nPhalanges) {
+        private void Bend(float val1, float val2)
+        {
+            if (phalanges != null)
+            {
+                switch (nPhalanges)
+                {
                     case 3:
                         phalanges[0].Bend(val1 * 45, curlAxis, val2, -swingAxis);
                         phalanges[1].Bend(val1 * 90, curlAxis, val2, -swingAxis);
@@ -500,25 +571,30 @@ namespace IVR {
             }
         }
 
-        public bool hasGrabbed() {
+        public bool hasGrabbed()
+        {
             return (grabAmount > 0);
         }
 
-        public void Grab() {
+        public void Grab()
+        {
             grabAmount = val;
         }
 
-        public void GrabAt(float amount) {
+        public void GrabAt(float amount)
+        {
             grabAmount = amount;
         }
 
-        public void UnGrab() {
+        public void UnGrab()
+        {
             grabAmount = 0;
         }
     }
 
     [System.Serializable]
-    public class Thumb : Digit {
+    public class Thumb : Digit
+    {
         public Transform transform;
         public float input;
         public Transform characterTransform;
@@ -529,35 +605,47 @@ namespace IVR {
         private Phalanx phalanx1;
         private Phalanx phalanx2;
 
-        public override void Init(Transform hand, Vector3 fingerBendAxis, Vector3 forearmAxis, bool bodySideLeft, int fingerIndex) {
-            if (transform != null) {
+        public override void Init(Transform hand, Vector3 fingerBendAxis, Vector3 forearmAxis, bool bodySideLeft, int fingerIndex)
+        {
+            if (transform != null)
+            {
                 curlAxis = fingerBendAxis;
-                if (bodySideLeft) {
+                if (bodySideLeft)
+                {
                     swingAxis = -Vector3.Cross(fingerBendAxis, forearmAxis);
-                } else {
+                }
+                else
+                {
                     swingAxis = Vector3.Cross(fingerBendAxis, forearmAxis);
                 }
 
-                if (phalanx0 == null || phalanx0.transform == null) {
+                if (phalanx0 == null || phalanx0.transform == null)
+                {
                     phalanx0 = new Phalanx(transform);
                 }
-                if ((phalanx1 == null || phalanx1.transform == null) && phalanx0.transform.childCount == 1) {
+                if ((phalanx1 == null || phalanx1.transform == null) && phalanx0.transform.childCount == 1)
+                {
                     phalanx1 = new Phalanx(phalanx0.transform.GetChild(0).transform);
                 }
-                if ((phalanx2 == null || phalanx2.transform == null) && phalanx1.transform.childCount == 1) {
+                if ((phalanx2 == null || phalanx2.transform == null) && phalanx1.transform.childCount == 1)
+                {
                     phalanx2 = new Phalanx(phalanx1.transform.GetChild(0).transform);
                 }
             }
         }
 
         private float grabSpeed = 0.4f;
-        public override void Update(float inputValue) {
-            if (phalanx1 != null) {
-                if (transform != null) {
+        public override void Update(float inputValue)
+        {
+            if (phalanx1 != null)
+            {
+                if (transform != null)
+                {
                     input = inputValue;
                     if (grabAmount > 0)
                         curlValue = grabAmount;
-                    else {
+                    else
+                    {
                         float d = input - curlValue;
                         if (d > grabSpeed)
                             curlValue += grabSpeed;
@@ -577,7 +665,8 @@ namespace IVR {
             }
         }
 
-        private void DrawAxis(Vector3 position, Quaternion rotation) {
+        private void DrawAxis(Vector3 position, Quaternion rotation)
+        {
             Debug.DrawRay(position, rotation * Vector3.right * 0.1F, Color.red);
             Debug.DrawRay(position, rotation * Vector3.up * 0.1F, Color.green);
             Debug.DrawRay(position, rotation * Vector3.forward * 0.1F, Color.blue);
@@ -585,23 +674,27 @@ namespace IVR {
     }
 
     [System.Serializable]
-    public class Phalanx {
+    public class Phalanx
+    {
         public Transform transform;
         public Quaternion z;
 
-        public Phalanx(Transform newTransform) {
+        public Phalanx(Transform newTransform)
+        {
             transform = newTransform;
             z = transform.localRotation;
         }
 
-        public void Bend(float bendFactor1, Vector3 axis1, float bendFactor2, Vector3 axis2) {
+        public void Bend(float bendFactor1, Vector3 axis1, float bendFactor2, Vector3 axis2)
+        {
             transform.localRotation = z * Quaternion.AngleAxis(bendFactor1, axis1) * Quaternion.AngleAxis(bendFactor2, axis2);
 
         }
     }
 
     [System.Serializable]
-    public class ArmMovements {
+    public class ArmMovements
+    {
         private InstantVR ivr;
 
         private Animator animator;
@@ -620,7 +713,8 @@ namespace IVR {
         [HideInInspector]
         public Vector3 upperArmStartPosition;
 
-        public enum BodySide {
+        public enum BodySide
+        {
             Left,
             Right
         };
@@ -633,17 +727,20 @@ namespace IVR {
         [HideInInspector]
         public Quaternion fromNormHand = Quaternion.identity;
 
-        public ArmMovements(InstantVR ivr, BodySide bodySide, IVR_BodyMovements bodyMovements) {
+        public ArmMovements(InstantVR ivr, BodySide bodySide, IVR_BodyMovements bodyMovements)
+        {
             Initialize(ivr, bodySide, bodyMovements);
         }
 
-        public void Initialize(InstantVR ivr, BodySide bodySide, IVR_BodyMovements bodyMovements) {
+        public void Initialize(InstantVR ivr, BodySide bodySide, IVR_BodyMovements bodyMovements)
+        {
             this.ivr = ivr;
 
             this.bodySide = bodySide;
             animator = ivr.GetComponentInChildren<Animator>();
 
-            if (bodySide == BodySide.Left) {
+            if (bodySide == BodySide.Left)
+            {
                 upperArm = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
                 forearm = animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
                 hand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
@@ -651,7 +748,9 @@ namespace IVR {
 #if INSTANTVR_ADVANCED
                 handMovements = ivr.leftHandMovements;
 #endif
-            } else {
+            }
+            else
+            {
                 upperArm = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
                 forearm = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
                 hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
@@ -661,7 +760,8 @@ namespace IVR {
 #endif
             }
 
-            if (upperArm != null) {
+            if (upperArm != null)
+            {
                 upperArmLength = Vector3.Distance(upperArm.position, forearm.position);
                 forearmLength = Vector3.Distance(forearm.position, hand.position);
                 length = upperArmLength + forearmLength;
@@ -675,13 +775,15 @@ namespace IVR {
             }
         }
 
-        public void CalculateFromNormTPose() {
+        public void CalculateFromNormTPose()
+        {
             fromNormUpperArm = Quaternion.Inverse(Quaternion.LookRotation(forearm.position - upperArm.position)) * upperArm.rotation;
             fromNormForearm = Quaternion.Inverse(Quaternion.LookRotation(hand.position - forearm.position)) * forearm.rotation;
             fromNormHand = Quaternion.Inverse(Quaternion.LookRotation(hand.position - forearm.position)) * hand.rotation;
         }
 
-        public void CalculateFromNormTracking(Transform handTarget) {
+        public void CalculateFromNormTracking(Transform handTarget)
+        {
             fromNormUpperArm = Quaternion.Inverse(CalculateUpperArmNorm(handTarget)) * upperArm.rotation;
             fromNormForearm = Quaternion.Inverse(CalculateForearmNorm(handTarget)) * forearm.rotation;
             fromNormHand = Quaternion.Inverse(handTarget.rotation) * hand.rotation;
@@ -689,7 +791,8 @@ namespace IVR {
 
         Quaternion upperArmNormRotation;
 
-        protected Quaternion CalculateUpperArmNorm(Transform handTarget) {
+        protected Quaternion CalculateUpperArmNorm(Transform handTarget)
+        {
             float dShoulderTarget = Vector3.Distance(upperArm.position, handTarget.position);
             float shoulderAngle = Mathf.Acos((dShoulderTarget * dShoulderTarget + upperArmLength2 - forearmLength2) / (2 * dShoulderTarget * upperArmLength)) * Mathf.Rad2Deg;
             if (float.IsNaN(shoulderAngle)) shoulderAngle = 0;
@@ -706,11 +809,14 @@ namespace IVR {
 
             Vector3 dHandUpper = ivr.hipTarget.InverseTransformDirection(handTarget.position - upperArm.position);
 
-            if (bodySide == BodySide.Right) {
+            if (bodySide == BodySide.Right)
+            {
                 if (dHandUpper.x < 0)
                     upperArmUpZ -= dHandUpper.x * 10;
                 upperArmUpX = Mathf.Clamp(upperArmUpX, 0.3F, 1);
-            } else {
+            }
+            else
+            {
                 if (dHandUpper.x > 0)
                     upperArmUpZ += dHandUpper.x * 10;
                 upperArmUpX = Mathf.Clamp(upperArmUpX, -0.3F, 1);
@@ -733,7 +839,8 @@ namespace IVR {
             return upperArmNormRotation;
         }
 
-        protected Quaternion CalculateForearmNorm(Transform handTarget) {
+        protected Quaternion CalculateForearmNorm(Transform handTarget)
+        {
             Vector3 forearmUp = (handTarget.up + upperArmNormRotation * Vector3.up) / 2;
             Quaternion forearmNormRotation = Quaternion.LookRotation(handTarget.position - forearm.position, forearmUp);
 #if IVR_DEBUG
@@ -743,14 +850,17 @@ namespace IVR {
             return forearmNormRotation;
         }
 
-        protected Quaternion CalculateHandNorm(Transform handTarget) {
+        protected Quaternion CalculateHandNorm(Transform handTarget)
+        {
             Quaternion handNormRotation = Quaternion.LookRotation(handTarget.position - forearm.position, handTarget.up);
 
             return handNormRotation;
         }
 
-        public void Calculate(Transform handTarget) {
-            if (handTarget != null) {
+        public void Calculate(Transform handTarget)
+        {
+            if (handTarget != null)
+            {
                 upperArm.rotation = CalculateUpperArmNorm(handTarget) * fromNormUpperArm;
                 forearm.rotation = CalculateForearmNorm(handTarget) * fromNormForearm;
 #if INSTANTVR_ADVANCED
@@ -772,7 +882,8 @@ namespace IVR {
     }
 
     [System.Serializable]
-    public class LegMovements {
+    public class LegMovements
+    {
         private Transform characterTransform;
         public Transform upperLeg;
         public Transform lowerLeg;
@@ -785,14 +896,18 @@ namespace IVR {
         private float upperLegLength, lowerLegLength;
         private float upperLegLength2, lowerLegLength2;
 
-        public LegMovements(ArmMovements.BodySide bodySide_in, Animator animator, Transform characterTransform_in) {
+        public LegMovements(ArmMovements.BodySide bodySide_in, Animator animator, Transform characterTransform_in)
+        {
             characterTransform = characterTransform_in;
 
-            if (bodySide_in == ArmMovements.BodySide.Left) {
+            if (bodySide_in == ArmMovements.BodySide.Left)
+            {
                 upperLeg = animator.GetBoneTransform(HumanBodyBones.LeftUpperLeg);
                 lowerLeg = animator.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
                 foot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
-            } else {
+            }
+            else
+            {
                 upperLeg = animator.GetBoneTransform(HumanBodyBones.RightUpperLeg);
                 lowerLeg = animator.GetBoneTransform(HumanBodyBones.RightLowerLeg);
                 foot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
@@ -807,7 +922,8 @@ namespace IVR {
             FromNormTPose();
         }
 
-        public bool IsInTPose() {
+        public bool IsInTPose()
+        {
             float d;
             Ray hip2foot = new Ray(upperLeg.position, foot.position - upperLeg.position);
 
@@ -824,31 +940,37 @@ namespace IVR {
             return true;
         }
 
-        public void FromNormTPose() {
+        public void FromNormTPose()
+        {
             fromNormUpperLeg = Quaternion.Inverse(UpperLegNorm()) * upperLeg.rotation;
             fromNormLowerLeg = Quaternion.Inverse(LowerLegNorm(foot)) * lowerLeg.rotation;
             fromNormFoot = Quaternion.Inverse(FootNorm(foot)) * foot.rotation;
         }
 
-        public void FromNormTracking(Transform footTarget) {
+        public void FromNormTracking(Transform footTarget)
+        {
             fromNormUpperLeg = Quaternion.Inverse(UpperLegNorm()) * upperLeg.rotation;
             fromNormLowerLeg = Quaternion.Inverse(LowerLegNorm(footTarget)) * lowerLeg.rotation;
             fromNormFoot = Quaternion.Inverse(footTarget.rotation) * foot.rotation;
         }
 
-        private Quaternion UpperLegNorm() {
+        private Quaternion UpperLegNorm()
+        {
             return Quaternion.LookRotation(lowerLeg.position - upperLeg.position, characterTransform.forward);
         }
 
-        private Quaternion LowerLegNorm(Transform footTarget) {
+        private Quaternion LowerLegNorm(Transform footTarget)
+        {
             return Quaternion.LookRotation(footTarget.position - lowerLeg.position, characterTransform.forward);
         }
 
-        private Quaternion FootNorm(Transform footTarget) {
+        private Quaternion FootNorm(Transform footTarget)
+        {
             return Quaternion.LookRotation(characterTransform.forward);
         }
 
-        private Quaternion CalculateUpperLegNorm(Transform footTarget) {
+        private Quaternion CalculateUpperLegNorm(Transform footTarget)
+        {
             float dHipTarget = Vector3.Distance(upperLeg.position, footTarget.position);
             float hipAngle = Mathf.Acos((dHipTarget * dHipTarget + upperLegLength2 - lowerLegLength2) / (2 * upperLegLength * dHipTarget)) * Mathf.Rad2Deg;
             if (float.IsNaN(hipAngle)) hipAngle = 0;
@@ -865,21 +987,25 @@ namespace IVR {
             return upperLegNormRotation;
         }
 
-        private Quaternion CalculateLowerLegNorm(Transform footTarget) {
+        private Quaternion CalculateLowerLegNorm(Transform footTarget)
+        {
             //Debug.DrawLine(lowerLeg.position, footTarget.position, Color.blue);
             Quaternion lowerLegNormRotation = Quaternion.LookRotation(footTarget.position - lowerLeg.position, footTarget.forward);
 
             return lowerLegNormRotation;
         }
 
-        private Quaternion CalculateFootNorm(Transform footTarget) {
+        private Quaternion CalculateFootNorm(Transform footTarget)
+        {
             Quaternion footNormRotation = footTarget.rotation;
 
             return footNormRotation;
         }
 
-        public void Calculate(Transform footTarget) {
-            if (upperLeg != null) {
+        public void Calculate(Transform footTarget)
+        {
+            if (upperLeg != null)
+            {
                 upperLeg.rotation = CalculateUpperLegNorm(footTarget) * fromNormUpperLeg;
                 lowerLeg.rotation = CalculateLowerLegNorm(footTarget) * fromNormLowerLeg;
                 foot.rotation = CalculateFootNorm(footTarget) * fromNormFoot;

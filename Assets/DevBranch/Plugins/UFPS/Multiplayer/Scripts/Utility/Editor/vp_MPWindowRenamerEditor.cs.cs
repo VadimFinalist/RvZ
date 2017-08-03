@@ -16,16 +16,16 @@ using UnityEditor;
 public class vp_MPWindowRenamerEditor : Editor
 {
 
-	/// <summary>
-	/// 
-	/// </summary>
-	protected  virtual void OnEnable()
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual void OnEnable()
+    {
 
-		// set window name to the editor-defined product name (ProjectSettings -> Player -> Product Name')
-		((vp_MPWindowRenamer)target).ProductName = PlayerSettings.productName;
+        // set window name to the editor-defined product name (ProjectSettings -> Player -> Product Name')
+        ((vp_MPWindowRenamer)target).ProductName = PlayerSettings.productName;
 
-	}
+    }
 
 }
 

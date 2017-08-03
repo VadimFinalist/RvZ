@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------
 // <copyright file="LoadBalancingPeer.cs" company="Exit Games GmbH">
 //   Loadbalancing Framework for Photon - Copyright (C) 2016 Exit Games GmbH
 // </copyright>
@@ -21,10 +21,10 @@ namespace ExitGames.Client.Photon.LoadBalancing
     using System.Collections.Generic;
     using ExitGames.Client.Photon;
 
-    #if UNITY || NETFX_CORE
+#if UNITY || NETFX_CORE
     using Hashtable = ExitGames.Client.Photon.Hashtable;
     using SupportClass = ExitGames.Client.Photon.SupportClass;
-    #endif
+#endif
 
 
     /// <summary>
@@ -63,36 +63,36 @@ namespace ExitGames.Client.Photon.LoadBalancing
         [Conditional("UNITY")]
         private void ConfigUnitySockets()
         {
-            #pragma warning disable 0162    // the library variant defines if we should use PUN's SocketUdp variant (at all)
+#pragma warning disable 0162    // the library variant defines if we should use PUN's SocketUdp variant (at all)
             if (PhotonPeer.NoSocket)
             {
-                #if !UNITY_EDITOR && (UNITY_PS3 || UNITY_ANDROID)
+#if !UNITY_EDITOR && (UNITY_PS3 || UNITY_ANDROID)
                 this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketUdpNativeDynamic);
-                #elif !UNITY_EDITOR && UNITY_IPHONE
+#elif !UNITY_EDITOR && UNITY_IPHONE
                 this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketUdpNativeStatic);
-                #elif !UNITY_EDITOR && (UNITY_WINRT)
+#elif !UNITY_EDITOR && (UNITY_WINRT)
                 // this automatically uses a separate assembly-file with Win8-style Socket usage (not possible in Editor)
-                #else
+#else
                 Type udpSocket = Type.GetType("ExitGames.Client.Photon.SocketUdp, Assembly-CSharp");
                 this.SocketImplementationConfig[ConnectionProtocol.Udp] = udpSocket;
                 if (udpSocket == null)
                 {
-                    #if UNITY
+#if UNITY
                     UnityEngine.Debug.Log("Could not find a suitable C# socket class. This Photon3Unity3D.dll only supports native socket plugins.");
-                    #endif
+#endif
                 }
-                #endif
+#endif
             }
-            #pragma warning restore 0162
+#pragma warning restore 0162
 
 
-            #if UNITY_WEBGL
+#if UNITY_WEBGL
             if (this.TransportProtocol != ConnectionProtocol.WebSocket && this.TransportProtocol != ConnectionProtocol.WebSocketSecure)
             {
                 UnityEngine.Debug.Log("For UNITY_WEBGL, use protocol WebSocketSecure. Overriding currently set protcol " + this.TransportProtocol + ".");
                 this.TransportProtocol = ConnectionProtocol.WebSocketSecure;
             }
-            #endif
+#endif
 
 
             // to support WebGL export in Unity, we find and assign the SocketWebTcp class (if it's in the project).
@@ -478,7 +478,7 @@ namespace ExitGames.Client.Photon.LoadBalancing
                 opParameters.Add(ParameterCode.ExpectedValues, expectedProperties);
             }
 
-            if (webflags!=null && webflags.HttpForward)
+            if (webflags != null && webflags.HttpForward)
             {
                 opParameters[ParameterCode.EventForward] = webflags.WebhookFlags;
             }
@@ -691,7 +691,7 @@ namespace ExitGames.Client.Photon.LoadBalancing
             opParameters[(byte)ParameterCode.Code] = (byte)eventCode;
             if (customEventContent != null)
             {
-                opParameters[(byte) ParameterCode.Data] = customEventContent;
+                opParameters[(byte)ParameterCode.Data] = customEventContent;
             }
 
             if (raiseEventOptions == null)
@@ -702,27 +702,27 @@ namespace ExitGames.Client.Photon.LoadBalancing
             {
                 if (raiseEventOptions.CachingOption != EventCaching.DoNotCache)
                 {
-                    opParameters[(byte) ParameterCode.Cache] = (byte) raiseEventOptions.CachingOption;
+                    opParameters[(byte)ParameterCode.Cache] = (byte)raiseEventOptions.CachingOption;
                 }
                 if (raiseEventOptions.Receivers != ReceiverGroup.Others)
                 {
-                    opParameters[(byte) ParameterCode.ReceiverGroup] = (byte) raiseEventOptions.Receivers;
+                    opParameters[(byte)ParameterCode.ReceiverGroup] = (byte)raiseEventOptions.Receivers;
                 }
                 if (raiseEventOptions.InterestGroup != 0)
                 {
-                    opParameters[(byte) ParameterCode.Group] = (byte) raiseEventOptions.InterestGroup;
+                    opParameters[(byte)ParameterCode.Group] = (byte)raiseEventOptions.InterestGroup;
                 }
                 if (raiseEventOptions.TargetActors != null)
                 {
-                    opParameters[(byte) ParameterCode.ActorList] = raiseEventOptions.TargetActors;
+                    opParameters[(byte)ParameterCode.ActorList] = raiseEventOptions.TargetActors;
                 }
                 if (raiseEventOptions.Flags.HttpForward)
                 {
-                    opParameters[(byte) ParameterCode.EventForward] = raiseEventOptions.Flags.WebhookFlags; //TURNBASED
+                    opParameters[(byte)ParameterCode.EventForward] = raiseEventOptions.Flags.WebhookFlags; //TURNBASED
                 }
             }
 
-            return this.OpCustom((byte) OperationCode.RaiseEvent, opParameters, sendReliable, raiseEventOptions.SequenceChannel, false);
+            return this.OpCustom((byte)OperationCode.RaiseEvent, opParameters, sendReliable, raiseEventOptions.SequenceChannel, false);
         }
 
 
@@ -1594,7 +1594,7 @@ namespace ExitGames.Client.Photon.LoadBalancing
     /// <summary>
     /// Options of lobby types available. Lobby types might be implemented in certain Photon versions and won't be available on older servers.
     /// </summary>
-    public enum LobbyType :byte
+    public enum LobbyType : byte
     {
         /// <summary>This lobby is used unless another is defined by game or JoinRandom. Room-lists will be sent and JoinRandomRoom can filter by matching properties.</summary>
         Default = 0,
@@ -1634,7 +1634,7 @@ namespace ExitGames.Client.Photon.LoadBalancing
 
         public override string ToString()
         {
-            return String.Format((string) "lobby '{0}'[{1}]", (object) this.Name, (object) this.Type);
+            return String.Format((string)"lobby '{0}'[{1}]", (object)this.Name, (object)this.Type);
         }
     }
 

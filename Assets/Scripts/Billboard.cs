@@ -1,10 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class Billboard : MonoBehaviour {
+public class Billboard : MonoBehaviour
+{
 
-    void Update() {
-        if (Camera.main != null) {
+    void Update()
+    {
+        if (Camera.main != null)
+        {
             transform.LookAt(Camera.main.transform);
         }
     }

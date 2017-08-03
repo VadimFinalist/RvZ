@@ -9,13 +9,17 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class IVR_Animator : IVR_Extension {
-        void OnDestroy() {
+    public class IVR_Animator : IVR_Extension
+    {
+        void OnDestroy()
+        {
             InstantVR ivr = this.GetComponent<InstantVR>();
 
-            if (ivr != null) {
+            if (ivr != null)
+            {
                 IVR_AnimatorHead defaultHead = ivr.headTarget.GetComponent<IVR_AnimatorHead>();
                 if (defaultHead != null)
                     DestroyImmediate(defaultHead);
@@ -43,7 +47,8 @@ namespace IVR {
         }
     }
 
-    public class IVR_Animate : MonoBehaviour {
+    public class IVR_Animate : MonoBehaviour
+    {
 
         public bool startStep = false;
 
@@ -59,15 +64,18 @@ namespace IVR {
         public float f = 0;
         public int keyFrameNr1, keyFrameNr2;
 
-        public void Initialize() {
+        public void Initialize()
+        {
         }
 
-        void Update() {
+        void Update()
+        {
             if (startStep)
                 f = CalculateFraction(f);
         }
 
-        public Vector3 AnimationLerp(Vector3 from, Vector3 to, ref float t) {
+        public Vector3 AnimationLerp(Vector3 from, Vector3 to, ref float t)
+        {
             Mathf.Clamp01(t);
 
             UpdateKeyFrames(from, to);
@@ -76,35 +84,42 @@ namespace IVR {
             return InterpolatedPosition(keyFrames[keyFrameNr1], keyFrames[keyFrameNr2], t);
         }
 
-        private float CalculateFraction(float f) {
+        private float CalculateFraction(float f)
+        {
             f += Time.deltaTime * (frameSpeed / nrFrames);
-            if (f >= 1) {
+            if (f >= 1)
+            {
                 startStep = false;
                 //f = 0;
             }
             return f;
         }
 
-        private void UpdateKeyFrames(Vector3 origin, Vector3 target) {
+        private void UpdateKeyFrames(Vector3 origin, Vector3 target)
+        {
             keyFrames = new KeyFrame[3];
             keyFrames[0] = new KeyFrame(0, 12, origin, Vector3.zero, 24);
             keyFrames[1] = new KeyFrame(12, 24, new Vector3(origin.x / 2 + target.x / 2, target.y / 2 + 0.3f, origin.z / 2 + target.z / 2), Vector3.zero, 24);
             keyFrames[2] = new KeyFrame(24, 60, new Vector3(target.x, target.y, target.z), Vector3.zero, 24);
         }
 
-        void CalculateKeyFrameNr(KeyFrame[] keyFrames, float f, out int keyFrameNr1, out int keyFrameNr2) {
+        void CalculateKeyFrameNr(KeyFrame[] keyFrames, float f, out int keyFrameNr1, out int keyFrameNr2)
+        {
             keyFrameNr1 = 0;
             keyFrameNr2 = 1;
 
-            for (int i = 0; i < keyFrames.Length - 1; i++) {
-                if (f >= keyFrames[i].fromF && f < keyFrames[i + 1].fromF) {
+            for (int i = 0; i < keyFrames.Length - 1; i++)
+            {
+                if (f >= keyFrames[i].fromF && f < keyFrames[i + 1].fromF)
+                {
                     keyFrameNr1 = i;
                     keyFrameNr2 = i + 1;
                 }
             }
         }
 
-        private Vector3 InterpolatedPosition(KeyFrame keyFrame1, KeyFrame keyFrame2, float t) {
+        private Vector3 InterpolatedPosition(KeyFrame keyFrame1, KeyFrame keyFrame2, float t)
+        {
             float frameLen = keyFrames[keyFrameNr2].fromF - keyFrames[keyFrameNr1].fromF;
             float localT = (t - keyFrame1.fromF) / frameLen;
 
@@ -113,13 +128,15 @@ namespace IVR {
 
 
         [System.Serializable]
-        public class KeyFrame {
+        public class KeyFrame
+        {
             public Vector3 position;
             public Vector3 euler;
             public float fromF;
             public float toF;
 
-            public KeyFrame(int fromFrameNr_in, int toFrameNr_in, Vector3 position_in, Vector3 euler_in, float totalFrames) {
+            public KeyFrame(int fromFrameNr_in, int toFrameNr_in, Vector3 position_in, Vector3 euler_in, float totalFrames)
+            {
                 position = position_in;
                 euler = euler_in;
                 fromF = fromFrameNr_in / totalFrames;

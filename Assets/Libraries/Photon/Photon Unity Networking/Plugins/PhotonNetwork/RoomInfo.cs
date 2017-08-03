@@ -232,7 +232,7 @@ public class RoomInfo
         {
             this.serverSideMasterClient = true;
             bool isUpdate = this.masterClientIdField != 0;
-            this.masterClientIdField = (int) propertiesToCache[GamePropertyKey.MasterClientId];
+            this.masterClientIdField = (int)propertiesToCache[GamePropertyKey.MasterClientId];
             if (isUpdate)
             {
                 PhotonNetwork.networkingPeer.UpdateMasterClient();

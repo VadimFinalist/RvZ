@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------
 // <copyright file="Player.cs" company="Exit Games GmbH">
 //   Loadbalancing Framework for Photon - Copyright (C) 2011 Exit Games GmbH
 // </copyright>
@@ -21,10 +21,10 @@ namespace ExitGames.Client.Photon.LoadBalancing
     using System.Collections.Generic;
     using ExitGames.Client.Photon;
 
-    #if UNITY || NETFX_CORE
+#if UNITY || NETFX_CORE
     using Hashtable = ExitGames.Client.Photon.Hashtable;
     using SupportClass = ExitGames.Client.Photon.SupportClass;
-    #endif
+#endif
 
 
     /// <summary>
@@ -129,8 +129,8 @@ namespace ExitGames.Client.Photon.LoadBalancing
             }
         }
 
-		/// <summary>Custom object associated with this Player. Not synchronized!</summary>
-		public object Tag;
+        /// <summary>Custom object associated with this Player. Not synchronized!</summary>
+        public object Tag;
 
 
         /// <summary>

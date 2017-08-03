@@ -8,13 +8,13 @@ using System.Collections.Generic;
 public class NetworkCullingHandler : MonoBehaviour
 {
     #region VARIABLES
-    
+
     private int orderIndex;
 
     private CullArea cullArea;
 
     private List<int> previousActiveCells, activeCells;
-    
+
     private PhotonView pView;
 
     private Vector3 lastPosition, currentPosition;
@@ -37,12 +37,12 @@ public class NetworkCullingHandler : MonoBehaviour
                 return;
             }
         }
-        
+
         if (cullArea == null)
         {
             cullArea = GameObject.FindObjectOfType<CullArea>();
         }
-        
+
         previousActiveCells = new List<int>(0);
         activeCells = new List<int>(0);
 
@@ -107,7 +107,7 @@ public class NetworkCullingHandler : MonoBehaviour
     }
 
     #endregion
-    
+
     /// <summary>
     ///     Checks if the interest groups have changed and perform action if necessary.
     /// </summary>
@@ -193,7 +193,7 @@ public class NetworkCullingHandler : MonoBehaviour
         {
             return;
         }
-        
+
         string subscribedAndActiveCells = "Inside cells:\n";
         string subscribedCells = "Subscribed cells:\n";
 
@@ -206,8 +206,8 @@ public class NetworkCullingHandler : MonoBehaviour
 
             subscribedCells += activeCells[index] + "  ";
         }
-        
-        GUI.Label(new Rect(20.0f, Screen.height - 100.0f, 200.0f, 40.0f), "<color=white>" + subscribedAndActiveCells + "</color>", new GUIStyle() { alignment = TextAnchor.UpperLeft, fontSize = 16 } );
-        GUI.Label(new Rect(20.0f, Screen.height - 60.0f, 200.0f, 40.0f), "<color=white>" + subscribedCells + "</color>", new GUIStyle() { alignment = TextAnchor.UpperLeft, fontSize = 16 } );
+
+        GUI.Label(new Rect(20.0f, Screen.height - 100.0f, 200.0f, 40.0f), "<color=white>" + subscribedAndActiveCells + "</color>", new GUIStyle() { alignment = TextAnchor.UpperLeft, fontSize = 16 });
+        GUI.Label(new Rect(20.0f, Screen.height - 60.0f, 200.0f, 40.0f), "<color=white>" + subscribedCells + "</color>", new GUIStyle() { alignment = TextAnchor.UpperLeft, fontSize = 16 });
     }
 }

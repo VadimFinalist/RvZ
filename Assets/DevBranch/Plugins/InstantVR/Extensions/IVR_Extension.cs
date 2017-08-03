@@ -9,9 +9,11 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class IVR_Extension : MonoBehaviour {
+    public class IVR_Extension : MonoBehaviour
+    {
         [HideInInspector]
         protected InstantVR ivr = null;
         [HideInInspector]
@@ -30,25 +32,29 @@ namespace IVR {
         [HideInInspector]
         protected GameObject trackerObj;
 
-        public virtual void StartExtension(InstantVR ivr) {
+        public virtual void StartExtension(InstantVR ivr)
+        {
             this.ivr = ivr;
             trackerRotation = Quaternion.Euler(trackerEulerAngles);
         }
-        public virtual void UpdateExtension() {
+        public virtual void UpdateExtension()
+        {
             trackerRotation = Quaternion.Euler(trackerEulerAngles);
             TrackerObject();
         }
         public virtual void LateUpdateExtension() { }
 
         #region TrackerObject
-        private void TrackerObject() {
+        private void TrackerObject()
+        {
             if (showTracker)
                 ShowTracker();
             else
                 HideTracker();
         }
 
-        private void ShowTracker() {
+        private void ShowTracker()
+        {
             if (trackerObj == null)
                 CreateTrackerObj();
 
@@ -61,26 +67,33 @@ namespace IVR {
             Debug.DrawRay(trackerObj.transform.position, trackerObj.transform.forward);
         }
 
-        private void HideTracker() {
-            if (trackerObj != null) {
+        private void HideTracker()
+        {
+            if (trackerObj != null)
+            {
                 MonoBehaviour.Destroy(trackerObj);
             }
         }
 
-        private void CreateTrackerObj() {
-            if (trackerPrefab == null) {
+        private void CreateTrackerObj()
+        {
+            if (trackerPrefab == null)
+            {
                 trackerObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 trackerObj.transform.localScale = new Vector3(0.2f, 0.1f, 0.05f);
                 Collider c = trackerObj.GetComponent<Collider>();
                 Destroy(c);
-            } else {
+            }
+            else
+            {
                 trackerObj = MonoBehaviour.Instantiate(trackerPrefab);
             }
         }
         #endregion
     }
 
-    public class IVR_HandController : IVR_Controller {
+    public class IVR_HandController : IVR_Controller
+    {
         /*
         public float thumbInput;
         public float indexInput;
@@ -90,7 +103,8 @@ namespace IVR {
         */
     }
 
-    public class IVR_Controller : MonoBehaviour {
+    public class IVR_Controller : MonoBehaviour
+    {
 
         [HideInInspector]
         protected InstantVR ivr;
@@ -120,18 +134,22 @@ namespace IVR {
         }
         */
         protected bool tracking = false;
-        public bool isTracking() {
+        public bool isTracking()
+        {
             return tracking;
         }
-        public void setTracking(bool b) {
+        public void setTracking(bool b)
+        {
             tracking = b;
         }
 
         protected bool selected = false;
-        public bool isSelected() {
+        public bool isSelected()
+        {
             return selected;
         }
-        public void SetSelection(bool selection) {
+        public void SetSelection(bool selection)
+        {
             selected = selection;
         }
 
@@ -146,11 +164,13 @@ namespace IVR {
         private float angularVelocity = 0;
         private Vector3 velocityAxis = Vector3.one;
 
-        void Start() {
+        void Start()
+        {
             updateTime = Time.time;
         }
 
-        public virtual void StartController(InstantVR ivr) {
+        public virtual void StartController(InstantVR ivr)
+        {
             this.ivr = ivr;
 
             startPosition = transform.position - ivr.transform.position;
@@ -160,12 +180,14 @@ namespace IVR {
             lastRotation = startRotation;
         }
 
-        public virtual void OnTargetReset() {
+        public virtual void OnTargetReset()
+        {
             if (selected)
                 Calibrate(true);
         }
 
-        public void Calibrate(bool calibrateOrientation) {
+        public void Calibrate(bool calibrateOrientation)
+        {
             //extension.trackerPosition = ...
 
             //if (calibrateOrientation) {
@@ -173,28 +195,35 @@ namespace IVR {
             //}
         }
 
-        public void TransferCalibration(IVR_Controller lastController) {
+        public void TransferCalibration(IVR_Controller lastController)
+        {
         }
 
         [HideInInspector]
         private bool indirectUpdate = false;
 
-        public virtual void UpdateController() {
+        public virtual void UpdateController()
+        {
             Vector3 localPosition = extension.trackerPosition + extension.trackerRotation * controllerPosition;
             Quaternion localRotation = extension.trackerRotation * controllerRotation;
 
             position = ivr.transform.position + ivr.transform.rotation * localPosition;
             rotation = ivr.transform.rotation * localRotation;
 
-            if (selected) { // this should be moved out of here in the future, because it removes the possibility to combine controllers
-                if (extrapolation == false) {
+            if (selected)
+            { // this should be moved out of here in the future, because it removes the possibility to combine controllers
+                if (extrapolation == false)
+                {
                     transform.position = position;
                     transform.rotation = rotation;
-                } else {
+                }
+                else
+                {
                     float deltaTime = Time.time - updateTime;
                     CalculateVelocity(deltaTime);
 
-                    if (deltaTime > 0) {
+                    if (deltaTime > 0)
+                    {
                         updateTime = Time.time;
                         indirectUpdate = true;
                     }
@@ -202,8 +231,10 @@ namespace IVR {
             }
         }
 
-        private void CalculateVelocity(float deltaTime) {
-            if (deltaTime > 0) {
+        private void CalculateVelocity(float deltaTime)
+        {
+            if (deltaTime > 0)
+            {
                 float angle = 0;
                 Quaternion rotationalChange = Quaternion.Inverse(lastRotation) * rotation;
 
@@ -221,10 +252,13 @@ namespace IVR {
             }
         }
 
-        void Update() {
-            if (indirectUpdate) {
+        void Update()
+        {
+            if (indirectUpdate)
+            {
                 float dTime = Time.time - updateTime;
-                if (dTime < 0.5F) { //extrapolate for 0.5s maximum
+                if (dTime < 0.5F)
+                { //extrapolate for 0.5s maximum
                     transform.position = lastPosition + positionalVelocity * dTime;
                     transform.rotation = lastRotation * Quaternion.AngleAxis(angularVelocity * dTime, velocityAxis);
                 }

@@ -9,12 +9,14 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class IVR_TraditionalHand : IVR_HandController {
+    public class IVR_TraditionalHand : IVR_HandController
+    {
 
-//        [HideInInspector]
-//        private IVR_HandMovementsBase handMovements;
+        //        [HideInInspector]
+        //        private IVR_HandMovementsBase handMovements;
         [HideInInspector]
         private IVR_AnimatorHand handAnimator;
 
@@ -25,10 +27,12 @@ namespace IVR {
         [HideInInspector]
         private bool fingerAxisAvailable, indexFingerAxisAvailable;
 
-        void Start() {
+        void Start()
+        {
         }
 
-        public override void StartController(InstantVR ivr) {
+        public override void StartController(InstantVR ivr)
+        {
             extension = ivr.GetComponent<IVR_Traditional>();
             base.StartController(ivr);
             tracking = true;
@@ -36,14 +40,18 @@ namespace IVR {
             handAnimator = GetComponent<IVR_AnimatorHand>();
         }
 
-        public override void UpdateController() {
-            if (enabled) {
-                if (handAnimator != null) {
+        public override void UpdateController()
+        {
+            if (enabled)
+            {
+                if (handAnimator != null)
+                {
                     handAnimator.UpdateController();
 
                     position = handAnimator.position;
                     rotation = handAnimator.rotation;
-                    if (selected) {
+                    if (selected)
+                    {
                         transform.position = position;
                         transform.rotation = rotation;
                     }
@@ -65,8 +73,10 @@ namespace IVR {
          */
 
 
-        public override void OnTargetReset() {
-            if (selected) {
+        public override void OnTargetReset()
+        {
+            if (selected)
+            {
                 Calibrate(true);
             }
         }

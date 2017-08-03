@@ -11,29 +11,35 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace IVR {
+namespace IVR
+{
 
-    public enum InputDeviceIDs {
+    public enum InputDeviceIDs
+    {
         Head,
         LeftHand,
         RightHand,
         None
     }
 
-    public class InteractionEventData : PointerEventData {
+    public class InteractionEventData : PointerEventData
+    {
         public InteractionEventData(EventSystem eventSystem) : base(eventSystem) { }
 
         public InputDeviceIDs inputDevice;
     }
 
-    public class IVR_Interaction : BaseInputModule {
+    public class IVR_Interaction : BaseInputModule
+    {
 
-        private enum PointerType {
+        private enum PointerType
+        {
             Gaze,
             Touch
         }
 
-        private class InteractionPointer {
+        private class InteractionPointer
+        {
             public Transform pointerTransform;
             public Vector3 localPointingDirection;
             public InteractionEventData data;
@@ -58,20 +64,24 @@ namespace IVR {
 
             public PointerType type;
 
-            public InteractionPointer(PointerType type, Transform pointerTransform, EventSystem eventSystem) {
+            public InteractionPointer(PointerType type, Transform pointerTransform, EventSystem eventSystem)
+            {
                 this.type = type;
                 this.pointerTransform = pointerTransform;
                 this.data = new InteractionEventData(eventSystem);
             }
 
-            public void ProcessFocus() {
+            public void ProcessFocus()
+            {
                 if (!focusingEnabled)
                     return;
 
-                if (focusObject != previousFocusObject) {
+                if (focusObject != previousFocusObject)
+                {
                     if (previousFocusObject != null)
                         ExecuteEvents.ExecuteHierarchy(previousFocusObject, data, ExecuteEvents.pointerExitHandler);
-                    if (focusObject != null) {
+                    if (focusObject != null)
+                    {
                         focusing = ExecuteEvents.ExecuteHierarchy(focusObject, data, ExecuteEvents.pointerEnterHandler);
                         focusStart = Time.time;
                         hasClicked = false;
@@ -80,27 +90,39 @@ namespace IVR {
                 }
             }
 
-            public void ProcessTouch() {
-                if (!touching) { // first touch
+            public void ProcessTouch()
+            {
+                if (!touching)
+                { // first touch
                     touchedObject = data.pointerCurrentRaycast.gameObject;
                     if (touchedObject == null) // object is a 3D object, as we do not use Physicsraycaster, use the focusObject
                         touchedObject = focusObject;
                     touching = ExecuteEvents.ExecuteHierarchy(touchedObject, data, ExecuteEvents.pointerDownHandler);
 
-                } else { // we were already touching
-                    if (data.delta.sqrMagnitude > 0) { // moved finger during touch
+                }
+                else
+                { // we were already touching
+                    if (data.delta.sqrMagnitude > 0)
+                    { // moved finger during touch
                         GameObject pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(data.pointerCurrentRaycast.gameObject);
-                        if (!data.dragging) { // we were not dragging yet
-                            if (pointerDrag != null) { // start dragging only where there is something to drag
+                        if (!data.dragging)
+                        { // we were not dragging yet
+                            if (pointerDrag != null)
+                            { // start dragging only where there is something to drag
                                 data.pointerDrag = pointerDrag;
                                 data.dragging = ExecuteEvents.ExecuteHierarchy(data.pointerDrag, data, ExecuteEvents.beginDragHandler);
                             }
-                        } else { // still dragging
+                        }
+                        else
+                        { // still dragging
                             ExecuteEvents.ExecuteHierarchy(data.pointerDrag, data, ExecuteEvents.dragHandler);
                         }
 
-                    } else { // finger did not move
-                        if (data.dragging) { // we were dragging
+                    }
+                    else
+                    { // finger did not move
+                        if (data.dragging)
+                        { // we were dragging
                             ExecuteEvents.ExecuteHierarchy(data.pointerDrag, data, ExecuteEvents.endDragHandler);
                             data.dragging = false;
                         }
@@ -108,9 +130,12 @@ namespace IVR {
                 }
             }
 
-            public void ProcessNoTouch() {
-                if (touching) { // We were touching
-                    if (data.dragging) {
+            public void ProcessNoTouch()
+            {
+                if (touching)
+                { // We were touching
+                    if (data.dragging)
+                    {
                         ExecuteEvents.ExecuteHierarchy(data.pointerDrag, data, ExecuteEvents.endDragHandler);
                         data.dragging = false;
                     }
@@ -121,14 +146,18 @@ namespace IVR {
                 }
             }
 
-            public void ProcessClick() {
+            public void ProcessClick()
+            {
                 if (hasClicked)
                     return;
 
-                if (touchedObject != null) {
+                if (touchedObject != null)
+                {
                     ExecuteEvents.ExecuteHierarchy(touchedObject, data, ExecuteEvents.pointerClickHandler);
                     ExecuteEvents.ExecuteHierarchy(touchedObject, data, ExecuteEvents.pointerUpHandler);
-                } else {
+                }
+                else
+                {
                     ExecuteEvents.ExecuteHierarchy(focusObject, data, ExecuteEvents.pointerClickHandler);
                     ExecuteEvents.ExecuteHierarchy(focusObject, data, ExecuteEvents.pointerUpHandler);
                 }
@@ -137,7 +166,7 @@ namespace IVR {
         }
         private InteractionPointer[] pointers;
 #if INSTANTVR_ADVANCED
-#region FingerInput
+        #region FingerInput
         public void EnableFingerInputModule(IVR_HandMovements handMovements, bool isLeft, bool touch, float autoActivation) {
             if (pointers == null)
                 pointers = new InteractionPointer[4]; // 0 = left index, 1 = right index, 2 = head, 3 = none;
@@ -204,10 +233,11 @@ namespace IVR {
 
             pointer.ProcessNoTouch();
         }
-#endregion
+        #endregion
 #endif
-#region HeadInput
-        public void EnableGazeInputModule(Transform cameraTransform, ControllerInput.Side inputSide, ControllerInput.Button activationButton, float autoActivation) {
+        #region HeadInput
+        public void EnableGazeInputModule(Transform cameraTransform, ControllerInput.Side inputSide, ControllerInput.Button activationButton, float autoActivation)
+        {
             if (pointers == null)
                 pointers = new InteractionPointer[3]; // 0 = left index, 1 = right index, 2 = head
 
@@ -221,68 +251,86 @@ namespace IVR {
                 pointer.controllerInputSide = (inputSide == ControllerInput.Side.Left) ? controllerInput.left : controllerInput.right;
             pointer.controllerButton = activationButton;
 
-            pointers[(int) InputDeviceIDs.Head] = pointer;
+            pointers[(int)InputDeviceIDs.Head] = pointer;
         }
-#endregion
+        #endregion
 
-        public Vector3 GetFocusPoint(InputDeviceIDs inputDeviceID) {
-            return pointers[(int) inputDeviceID].focusPosition;
+        public Vector3 GetFocusPoint(InputDeviceIDs inputDeviceID)
+        {
+            return pointers[(int)inputDeviceID].focusPosition;
         }
 
-        public GameObject GetFocusObject(InputDeviceIDs inputDeviceID) {
-            if (pointers[(int) inputDeviceID].focusObject != null)
-                return pointers[(int) inputDeviceID].focusObject;
+        public GameObject GetFocusObject(InputDeviceIDs inputDeviceID)
+        {
+            if (pointers[(int)inputDeviceID].focusObject != null)
+                return pointers[(int)inputDeviceID].focusObject;
             else
                 return null;
         }
 
-        public Vector3 GetTouchPoint(InputDeviceIDs inputDeviceID) {
-            return pointers[(int) inputDeviceID].touchPosition;
+        public Vector3 GetTouchPoint(InputDeviceIDs inputDeviceID)
+        {
+            return pointers[(int)inputDeviceID].touchPosition;
         }
 
-        public GameObject GetTouchObject(InputDeviceIDs inputDeviceID) {
-            if (pointers[(int) inputDeviceID].touchedObject != null) {
-                return pointers[(int) inputDeviceID].touchedObject;
-            } else
+        public GameObject GetTouchObject(InputDeviceIDs inputDeviceID)
+        {
+            if (pointers[(int)inputDeviceID].touchedObject != null)
+            {
+                return pointers[(int)inputDeviceID].touchedObject;
+            }
+            else
                 return null;
         }
 
-        public float GetGazeDuration(InputDeviceIDs inputDeviceID) {
-            return Time.time - pointers[(int) inputDeviceID].focusStart;
+        public float GetGazeDuration(InputDeviceIDs inputDeviceID)
+        {
+            return Time.time - pointers[(int)inputDeviceID].focusStart;
         }
 
         // This function is only being called when the game view has focus :(
-        public override void Process() {
+        public override void Process()
+        {
         }
 
-        public void Update() {
-            for (int i = 0; i < pointers.Length; i++) {
+        public void Update()
+        {
+            for (int i = 0; i < pointers.Length; i++)
+            {
                 if (pointers[i] != null)
-                    ProcessPointer(pointers[i], (InputDeviceIDs) i);
+                    ProcessPointer(pointers[i], (InputDeviceIDs)i);
             }
         }
 
-        public void ProcessPointer(InputDeviceIDs inputDeviceID) {
-            ProcessPointer(pointers[(int) inputDeviceID], inputDeviceID);
+        public void ProcessPointer(InputDeviceIDs inputDeviceID)
+        {
+            ProcessPointer(pointers[(int)inputDeviceID], inputDeviceID);
         }
 
-        private void ProcessPointer(InteractionPointer pointer, InputDeviceIDs inputDeviceID) {
+        private void ProcessPointer(InteractionPointer pointer, InputDeviceIDs inputDeviceID)
+        {
             CastRayFromPointer(pointer, inputDeviceID);
 
             pointer.ProcessFocus();
-            if (pointer.focusObject != null && pointer.focusTimeToTouch != 0 && Time.time - pointer.focusStart > pointer.focusTimeToTouch) { // we are clicking
+            if (pointer.focusObject != null && pointer.focusTimeToTouch != 0 && Time.time - pointer.focusStart > pointer.focusTimeToTouch)
+            { // we are clicking
                 pointer.ProcessClick();
             }
 
-            if (pointer.type == PointerType.Gaze) {
-                if (pointer.controllerInputSide.GetButton(pointer.controllerButton)) { // we are touching
+            if (pointer.type == PointerType.Gaze)
+            {
+                if (pointer.controllerInputSide.GetButton(pointer.controllerButton))
+                { // we are touching
                     pointer.ProcessTouch();
-                } else {
+                }
+                else
+                {
                     pointer.ProcessNoTouch();
                 }
             }
 
-            if (pointer.data.pointerCurrentRaycast.gameObject == null) { // no focus
+            if (pointer.data.pointerCurrentRaycast.gameObject == null)
+            { // no focus
                 return;
             }
 
@@ -294,41 +342,55 @@ namespace IVR {
             pointer.data.pointerPress = null; //Clear this for setting later
             pointer.data.useDragThreshold = true;
 
-            if (pointer.type == PointerType.Touch) {
+            if (pointer.type == PointerType.Touch)
+            {
                 float distance = DistanceTipToTransform(pointer.pointerTransform, pointer.data.pointerCurrentRaycast.gameObject.transform);
-                if (distance < 0) { // we are touching
+                if (distance < 0)
+                { // we are touching
                     pointer.ProcessTouch();
-                } else {
+                }
+                else
+                {
                     pointer.ProcessNoTouch();
                 }
             }
 
-            if (pointer.controllerInputSide.GetButton(pointer.controllerButton)) { // we are clicking
+            if (pointer.controllerInputSide.GetButton(pointer.controllerButton))
+            { // we are clicking
                 pointer.ProcessTouch();
-            } else {
+            }
+            else
+            {
                 pointer.ProcessNoTouch();
             }
         }
 
-        private void CastRayFromPointer(InteractionPointer pointer, InputDeviceIDs inputDeviceID) {
+        private void CastRayFromPointer(InteractionPointer pointer, InputDeviceIDs inputDeviceID)
+        {
             pointer.data.Reset();
             pointer.data.inputDevice = inputDeviceID;
 
             Vector3 pointingDirection = pointer.pointerTransform.rotation * pointer.localPointingDirection;
 
-            if (pointer.focusingEnabled) {
+            if (pointer.focusingEnabled)
+            {
                 RaycastHit hit;
                 bool raycastHit = Physics.Raycast(pointer.pointerTransform.position, pointingDirection, out hit);
-                if (raycastHit) {
+                if (raycastHit)
+                {
                     pointer.focusPosition = hit.point;
                     pointer.focusObject = hit.transform.gameObject;
-                } else {
+                }
+                else
+                {
                     pointer.focusPosition = pointer.pointerTransform.position + pointingDirection * 10;
                     pointer.focusObject = null;
                 }
 
                 pointer.data.position = Camera.main.WorldToScreenPoint(pointer.focusPosition);
-            } else {
+            }
+            else
+            {
                 pointer.focusPosition = pointer.pointerTransform.position;
                 pointer.focusObject = null;
 
@@ -340,11 +402,12 @@ namespace IVR {
             pointer.previousPosition = pointer.data.position;
 
             eventSystem.RaycastAll(pointer.data, m_RaycastResultCache);
-            
+
             pointer.data.pointerCurrentRaycast = FindFirstRaycast(m_RaycastResultCache);
             m_RaycastResultCache.Clear();
 
-            if (pointer.data.pointerCurrentRaycast.gameObject != null) { // we are focusing on a UI element
+            if (pointer.data.pointerCurrentRaycast.gameObject != null)
+            { // we are focusing on a UI element
                 pointer.focusObject = pointer.data.pointerCurrentRaycast.gameObject;
                 // EventSystem.RaycastAll always casts from main.camera. This is why we need a trick to look like it is casting from the pointerlocation (e.g. finger)
                 // The result does not look right in scene view, but does look OK in game view
@@ -357,7 +420,8 @@ namespace IVR {
         }
 
 
-        private Vector2 NormalizedCartesianToSpherical(Vector3 cartCoords) {
+        private Vector2 NormalizedCartesianToSpherical(Vector3 cartCoords)
+        {
             cartCoords.Normalize();
             if (cartCoords.x == 0)
                 cartCoords.x = Mathf.Epsilon;
@@ -368,7 +432,8 @@ namespace IVR {
             return new Vector2(outPolar, outElevation);
         }
 
-        private float DistanceTipToTransform(Transform fingerTip, Transform transform) {
+        private float DistanceTipToTransform(Transform fingerTip, Transform transform)
+        {
             return (-transform.InverseTransformPoint(fingerTip.position).z * transform.lossyScale.z) - 0.005F;
         }
     }

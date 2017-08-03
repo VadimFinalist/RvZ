@@ -1,38 +1,48 @@
-﻿namespace NetBase {
+﻿namespace NetBase
+{
     using UnityEngine;
 
     [RequireComponent(typeof(PhotonView))]
-    public abstract class NetworkAudio : Photon.PunBehaviour {
+    public abstract class NetworkAudio : Photon.PunBehaviour
+    {
 
         private static NetworkAudio instance;
 
-        void Awake() {
+        void Awake()
+        {
             instance = this;
         }
 
         // Play a sound both locally and for all connected players
-        public static void SendPlayClipAtPoint(AudioClip clip, Vector3 position, float volume) {
-            if (instance != null) {
+        public static void SendPlayClipAtPoint(AudioClip clip, Vector3 position, float volume)
+        {
+            if (instance != null)
+            {
                 SendPlayClipAtPoint(instance.GetClipId(clip), position, volume);
             }
         }
 
         // Play a sound both locally and for all connected players
-        public static void SendPlayClipAtPoint(string clipName, Vector3 position, float volume) {
-            if (instance != null) {
+        public static void SendPlayClipAtPoint(string clipName, Vector3 position, float volume)
+        {
+            if (instance != null)
+            {
                 SendPlayClipAtPoint(instance.GetClipId(clipName), position, volume);
             }
         }
 
         // Play a sound both locally and for all connected players
-        public static void SendPlayClipAtPoint(int clipId, Vector3 position, float volume) {
+        public static void SendPlayClipAtPoint(int clipId, Vector3 position, float volume)
+        {
             instance.photonView.RPC("PlayClipAtPoint", PhotonTargets.All, clipId, position, volume);
         }
 
         [PunRPC]
-        protected void PlayClipAtPoint(int clipId, Vector3 position, float volume) {
+        protected void PlayClipAtPoint(int clipId, Vector3 position, float volume)
+        {
             AudioClip clip = GetClip(clipId);
-            if (clip != null) {
+            if (clip != null)
+            {
                 AudioSource.PlayClipAtPoint(clip, position, volume);
             }
         }

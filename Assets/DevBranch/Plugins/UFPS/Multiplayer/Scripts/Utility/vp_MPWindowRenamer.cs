@@ -27,16 +27,16 @@ public class vp_MPWindowRenamer : MonoBehaviour
 {
 
 #if UNITY_EDITOR
-	[vp_HelpBox("If included in a standalone build, this script will force the window title to a string composed of Photon Player ID and current Client / Master status. It can be used with a desktop tool to rearrange multiple client windows dynamically for better development workflow.\n\nNOTES:\n\t1) Works only on Windows Standalone.\n\t2) Not intended for inclusion in a final game.", UnityEditor.MessageType.Info, null, null, false, vp_PropertyDrawerUtility.Space.Nothing)]
-	public float helpBox;
+    [vp_HelpBox("If included in a standalone build, this script will force the window title to a string composed of Photon Player ID and current Client / Master status. It can be used with a desktop tool to rearrange multiple client windows dynamically for better development workflow.\n\nNOTES:\n\t1) Works only on Windows Standalone.\n\t2) Not intended for inclusion in a final game.", UnityEditor.MessageType.Info, null, null, false, vp_PropertyDrawerUtility.Space.Nothing)]
+    public float helpBox;
 #endif
 
-	[HideInInspector]
-	public string ProductName = "UFPS";		// will be set to 'PlayerSettings.productName' by the editor script
-											// TIP: this can be defined in the editor: 'ProjectSettings -> Player -> Product Name'
+    [HideInInspector]
+    public string ProductName = "UFPS";     // will be set to 'PlayerSettings.productName' by the editor script
+                                            // TIP: this can be defined in the editor: 'ProjectSettings -> Player -> Product Name'
 #if UNITY_STANDALONE_WIN
 
-#if !UNITY_EDITOR	// if editor is allowed to execute the below it will update external windows with its own status = bad
+#if !UNITY_EDITOR    // if editor is allowed to execute the below it will update external windows with its own status = bad
 
 	private string WindowName = null;
 

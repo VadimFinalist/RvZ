@@ -10,15 +10,18 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
 #if UNITY_ANDROID
     [HelpURL("http://passervr.com/documentation/instantvr-extensions/gear-vr/")]
 #else
     [HelpURL("http://passervr.com/documentation/instantvr-extensions/oculus-rift/")]
 #endif
-    public class IVR_UnityVR : IVR_Extension {
-        public override void StartExtension(InstantVR ivr) {
+    public class IVR_UnityVR : IVR_Extension
+    {
+        public override void StartExtension(InstantVR ivr)
+        {
             base.StartExtension(ivr);
 
             IVR_UnityVRHead unityVrHead = ivr.headTarget.GetComponent<IVR_UnityVRHead>();

@@ -44,10 +44,10 @@ public class PhotonTransformView : MonoBehaviour, IPunObservable
 
     bool m_ReceivedNetworkUpdate = false;
 
-	/// <summary>
-	/// Flag to skip initial data when Object is instantiated and rely on the first deserialized data instead.
-	/// </summary>
-	bool m_firstTake = false;
+    /// <summary>
+    /// Flag to skip initial data when Object is instantiated and rely on the first deserialized data instead.
+    /// </summary>
+    bool m_firstTake = false;
 
     void Awake()
     {
@@ -58,10 +58,10 @@ public class PhotonTransformView : MonoBehaviour, IPunObservable
         this.m_ScaleControl = new PhotonTransformViewScaleControl(this.m_ScaleModel);
     }
 
-	void OnEnable()
-	{
-		m_firstTake = true;
-	}
+    void OnEnable()
+    {
+        m_firstTake = true;
+    }
 
     void Update()
     {
@@ -82,7 +82,7 @@ public class PhotonTransformView : MonoBehaviour, IPunObservable
             return;
         }
 
-       	transform.localPosition = this.m_PositionControl.UpdatePosition(transform.localPosition);
+        transform.localPosition = this.m_PositionControl.UpdatePosition(transform.localPosition);
     }
 
     void UpdateRotation()
@@ -133,14 +133,14 @@ public class PhotonTransformView : MonoBehaviour, IPunObservable
         {
             this.m_ReceivedNetworkUpdate = true;
 
-			// force latest data to avoid initial drifts when player is instantiated.
-			if (m_firstTake)
-			{
-				m_firstTake = false;
-				this.transform.localPosition = this.m_PositionControl.GetNetworkPosition();
-				this.transform.localRotation = this.m_RotationControl.GetNetworkRotation();
-				this.transform.localScale = this.m_ScaleControl.GetNetworkScale();
-			}
+            // force latest data to avoid initial drifts when player is instantiated.
+            if (m_firstTake)
+            {
+                m_firstTake = false;
+                this.transform.localPosition = this.m_PositionControl.GetNetworkPosition();
+                this.transform.localRotation = this.m_RotationControl.GetNetworkRotation();
+                this.transform.localScale = this.m_ScaleControl.GetNetworkScale();
+            }
 
         }
     }

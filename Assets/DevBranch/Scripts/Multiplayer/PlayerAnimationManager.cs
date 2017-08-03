@@ -58,7 +58,7 @@ namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
             {
                 v = 0;
             }
-            
+
             animator.SetFloat("Speed", h * h + v * v);
             animator.SetFloat("Direction", h, DirectionDampTime, Time.deltaTime);
         }

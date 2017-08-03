@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Very basic component to move a GameObject by WASD and Space.
@@ -11,7 +11,7 @@ using UnityEngine;
 /// JumpForce defines how high the object "jumps". 
 /// JumpTimeout defines after how many seconds you can jump again.
 /// </remarks>
-[RequireComponent(typeof (PhotonView))]
+[RequireComponent(typeof(PhotonView))]
 public class MoveByKeys : Photon.MonoBehaviour
 {
     public float Speed = 10f;
@@ -56,7 +56,7 @@ public class MoveByKeys : Photon.MonoBehaviour
                 {
                     this.jumpingTime = this.JumpTimeout;
 
-                    Vector2 jump = Vector2.up*this.JumpForce;
+                    Vector2 jump = Vector2.up * this.JumpForce;
                     if (this.body2d != null)
                     {
                         this.body2d.AddForce(jump);

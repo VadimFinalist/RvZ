@@ -10,8 +10,10 @@
 using UnityEngine;
 using IVR;
 
-public class InputHandler : MonoBehaviour {
-    public enum WalkTypes {
+public class InputHandler : MonoBehaviour
+{
+    public enum WalkTypes
+    {
         SmoothWalking,
         PointingTeleport,
         Teleport
@@ -49,8 +51,9 @@ public class InputHandler : MonoBehaviour {
     private bool rightLettingGo;
 #endif
 
-#region Start
-    public void Start () {
+    #region Start
+    public void Start()
+    {
         ivr = GetComponent<InstantVR>();
         ivr.SetPlayerHeight(playerHeight);
 
@@ -77,10 +80,11 @@ public class InputHandler : MonoBehaviour {
             pointingDevice = GetPointingDevice();
         }
 #endif
-	}
+    }
 
     // this function is called when a left button has been pressed
-    private void OnButtonDownLeft(ControllerInput.Button buttonID) {
+    private void OnButtonDownLeft(ControllerInput.Button buttonID)
+    {
 #if INSTANTVR_ADVANCED
         if (walkingType == WalkTypes.PointingTeleport && buttonID == leftHandMovements.activationButton) {
             // When activation button is pressed we teleport to the focus position
@@ -106,8 +110,10 @@ public class InputHandler : MonoBehaviour {
     }
 
     // this function is called when a right button has been pressed
-    private void OnButtonDownRight(ControllerInput.Button buttonID) {
-        if (walkingType == WalkTypes.Teleport && buttonID == ControllerInput.Button.ButtonA) {
+    private void OnButtonDownRight(ControllerInput.Button buttonID)
+    {
+        if (walkingType == WalkTypes.Teleport && buttonID == ControllerInput.Button.ButtonA)
+        {
             // When button One (A on Xbox controller) is pressed we teleport in the looking direction
             Teleport(ivr.transform.position + ivr.headTarget.transform.forward * 50 * Time.deltaTime);
         }
@@ -135,7 +141,8 @@ public class InputHandler : MonoBehaviour {
 #endif
     }
 
-    private void OnButtonUpLeft(ControllerInput.Button buttonID) {
+    private void OnButtonUpLeft(ControllerInput.Button buttonID)
+    {
 #if INSTANTVR_ADVANCED
         if (fingerMovements == FingerMovements.ClickGrabbing && buttonID == ControllerInput.Button.Trigger2) {
             if (leftLettingGo && leftHandMovements.grabbedObject == null) {
@@ -154,7 +161,8 @@ public class InputHandler : MonoBehaviour {
 #endif
     }
 
-    private void OnButtonUpRight(ControllerInput.Button buttonID) {
+    private void OnButtonUpRight(ControllerInput.Button buttonID)
+    {
 #if INSTANTVR_ADVANCED
         if (fingerMovements == FingerMovements.ClickGrabbing && buttonID == ControllerInput.Button.Trigger2) {
             if (rightLettingGo && rightHandMovements.grabbedObject == null) {
@@ -173,7 +181,8 @@ public class InputHandler : MonoBehaviour {
     }
 
 
-    private InputDeviceIDs GetPointingDevice() {
+    private InputDeviceIDs GetPointingDevice()
+    {
         if (headMovements != null && headMovements.interaction == HeadMovements.InteractionType.Gazing)
             return InputDeviceIDs.Head;
 
@@ -187,13 +196,15 @@ public class InputHandler : MonoBehaviour {
         Debug.LogError("Gaze/Pointing interaction needs to be set on head or hand for PointingTeleport");
         return InputDeviceIDs.None;
     }
-#endregion
+    #endregion
 
-#region Update
-    public void Update() {
+    #region Update
+    public void Update()
+    {
         CheckQuit();
 
-        if (walkingType == WalkTypes.SmoothWalking) {
+        if (walkingType == WalkTypes.SmoothWalking)
+        {
             // move the character using the left analog stick
             float horizontal = 0;
             float vertical = 0;
@@ -210,7 +221,8 @@ public class InputHandler : MonoBehaviour {
             if (walking || sidestepping)
                 ivr.Move(horizontal, 0, vertical);
 
-            if (rotation) {
+            if (rotation)
+            {
                 // rotate the character using the right analog stick left/right
                 horizontal = controller0.left.stickHorizontal * 50;
                 ivr.Rotate(horizontal * Time.deltaTime);
@@ -272,9 +284,11 @@ public class InputHandler : MonoBehaviour {
     }
 #endif
 
-    private void PointingTeleport(InputDeviceIDs pointingDevice) {
+    private void PointingTeleport(InputDeviceIDs pointingDevice)
+    {
         Vector3 targetPosition;
-        switch (pointingDevice) {
+        switch (pointingDevice)
+        {
             case InputDeviceIDs.Head:
                 targetPosition = headMovements.focusPoint;
                 break;
@@ -294,38 +308,47 @@ public class InputHandler : MonoBehaviour {
         Teleport(targetPosition);
     }
 
-    private void Teleport(Vector3 position) {
+    private void Teleport(Vector3 position)
+    {
         RaycastHit hit;
 
         // raycast to ensure that we do not teleport into objects
-        if (Physics.Raycast(position + Vector3.up, Vector3.down, out hit, 1.5F)) {
+        if (Physics.Raycast(position + Vector3.up, Vector3.down, out hit, 1.5F))
+        {
             position += Vector3.up * ((hit.point.y - ivr.transform.position.y) + 0.05f);
         }
 
         ivr.transform.position = position;
     }
-#endregion
+    #endregion
 
-    public void ControllerPressButtonA() {
+    public void ControllerPressButtonA()
+    {
         controller0.right.PressButton(ControllerInput.Button.ButtonA);
     }
-    public void ControllerPressButtonB() {
+    public void ControllerPressButtonB()
+    {
         controller0.right.PressButton(ControllerInput.Button.ButtonB);
     }
-    public void ControllerPressButtonX() {
+    public void ControllerPressButtonX()
+    {
         controller0.right.PressButton(ControllerInput.Button.ButtonX);
     }
-    public void ControllerPressButtonY() {
+    public void ControllerPressButtonY()
+    {
         controller0.right.PressButton(ControllerInput.Button.ButtonY);
     }
-    public void ControllerPressRightOption() {
+    public void ControllerPressRightOption()
+    {
         controller0.right.PressButton(ControllerInput.Button.Option);
     }
-    public void ControllerPressLeftOption() {
+    public void ControllerPressLeftOption()
+    {
         controller0.left.PressButton(ControllerInput.Button.Option);
     }
 
-    private void CheckQuit() {
+    private void CheckQuit()
+    {
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
     }

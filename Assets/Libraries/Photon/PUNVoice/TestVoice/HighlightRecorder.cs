@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HighlightRecorder: MonoBehaviour
+public class HighlightRecorder : MonoBehaviour
 {
     private PhotonVoiceRecorder recorder;
     private Renderer rendererComp;
@@ -35,4 +35,3 @@ public class HighlightRecorder: MonoBehaviour
         }
     }
 }
- 

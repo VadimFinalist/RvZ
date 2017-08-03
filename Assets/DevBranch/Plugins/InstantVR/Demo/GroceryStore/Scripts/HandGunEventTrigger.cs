@@ -2,8 +2,10 @@
 using UnityEngine.EventSystems;
 using IVR;
 
-public class HandGunEventTrigger : EventTrigger {
-    public override void OnPointerClick(PointerEventData eventData) {
+public class HandGunEventTrigger : EventTrigger
+{
+    public override void OnPointerClick(PointerEventData eventData)
+    {
         base.OnPointerClick(eventData);
 
 #if INSTANTVR_ADVANCED

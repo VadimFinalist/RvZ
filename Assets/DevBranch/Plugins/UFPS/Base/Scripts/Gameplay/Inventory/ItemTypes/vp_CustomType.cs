@@ -44,16 +44,16 @@ public class vp_CustomType : vp_ItemType
 {
 
 #if UNITY_EDITOR
-	[vp_Separator]
-	public vp_Separator customSeparator1;
+    [vp_Separator]
+    public vp_Separator customSeparator1;
 #endif
 
-	public bool Variable1 = false;
-	public float Variable2 = 100.0f;
+    public bool Variable1 = false;
+    public float Variable2 = 100.0f;
 
 #if UNITY_EDITOR
     [vp_HelpBox("This is an example object. For info on how to create your own item types, see the comments in \"vp_CustomType.cs\"", UnityEditor.MessageType.Info)]
-	public float customHelp;
+    public float customHelp;
 #endif
 
 }

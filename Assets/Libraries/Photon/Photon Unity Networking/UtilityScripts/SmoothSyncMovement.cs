@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class SmoothSyncMovement : Photon.MonoBehaviour, IPunObservable
@@ -18,7 +18,7 @@ public class SmoothSyncMovement : Photon.MonoBehaviour, IPunObservable
         {
             //We own this player: send the others our data
             stream.SendNext(transform.position);
-            stream.SendNext(transform.rotation); 
+            stream.SendNext(transform.rotation);
         }
         else
         {

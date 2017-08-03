@@ -60,14 +60,14 @@ namespace POpusCodec
 
             _channelCount = (int)numChannels;
             _handle = Wrapper.opus_decoder_create(outputSamplingRateHz, numChannels);
-            _version = Marshal.PtrToStringAnsi( Wrapper.opus_get_version_string());
+            _version = Marshal.PtrToStringAnsi(Wrapper.opus_get_version_string());
 
             if (_handle == IntPtr.Zero)
             {
                 throw new OpusException(OpusStatusCode.AllocFail, "Memory was not allocated for the encoder");
             }
         }
-        
+
         private float[] bufferFloat; // allocated for exactly 1 frame size as first valid frame received
 
         // pass null to indicate packet loss
@@ -77,13 +77,13 @@ namespace POpusCodec
             {
                 return EmptyBufferFloat;
             }
-            
+
             int numSamplesDecoded = 0;
 
             float[] buf;
             if (this.bufferFloat == null)
             {
-                buf = new float[MaxFrameSize * _channelCount];                
+                buf = new float[MaxFrameSize * _channelCount];
             }
             else
             {
@@ -97,7 +97,7 @@ namespace POpusCodec
                 _previousPacketInvalid = false;
             }
             else
-            { 
+            {
                 int bandwidth = Wrapper.opus_packet_get_bandwidth(packetData);
                 _previousPacketInvalid = bandwidth == (int)OpusStatusCode.InvalidPacket;
             }

@@ -11,10 +11,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class HeadMovements : IVR_Movements {
-        public enum InteractionType {
+    public class HeadMovements : IVR_Movements
+    {
+        public enum InteractionType
+        {
             None,
             Gazing,
         }
@@ -33,15 +36,18 @@ namespace IVR {
 
         private IVR_Interaction inputModule;
 
-        public override void StartMovements(InstantVR ivr) {
+        public override void StartMovements(InstantVR ivr)
+        {
             base.StartMovements(ivr);
 
             Camera headCamera = ivr.GetComponentInChildren<Camera>();
             headcam = headCamera.transform;
 
-            if (interaction != InteractionType.None) {
+            if (interaction != InteractionType.None)
+            {
                 inputModule = ivr.GetComponent<IVR_Interaction>();
-                if (inputModule == null) {
+                if (inputModule == null)
+                {
                     EventSystem eventSystem = FindObjectOfType<EventSystem>();
                     if (eventSystem != null)
                         DestroyImmediate(eventSystem.gameObject);
@@ -51,7 +57,8 @@ namespace IVR {
                 inputModule.EnableGazeInputModule(headcam, controllerSide, activationButton, autoActivation);
             }
 
-            if (interaction != InteractionType.None && focusPointObj == null) {
+            if (interaction != InteractionType.None && focusPointObj == null)
+            {
                 focusPointObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 focusPointObj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 Destroy(focusPointObj.GetComponent<Collider>());
@@ -60,17 +67,21 @@ namespace IVR {
 
         protected float lastFocus;
 
-        public override void UpdateMovements() {
-            if (interaction != InteractionType.None) {
+        public override void UpdateMovements()
+        {
+            if (interaction != InteractionType.None)
+            {
                 inputModule.ProcessPointer(InputDeviceIDs.Head);
                 lookingAtObject = inputModule.GetFocusObject(InputDeviceIDs.Head);
                 focusPoint = inputModule.GetFocusPoint(InputDeviceIDs.Head);
-                if (focusPointObj != null) {
+                if (focusPointObj != null)
+                {
                     focusPointObj.transform.position = focusPoint;
                 }
 
                 IVR_Reticle reticle = focusPointObj.GetComponent<IVR_Reticle>();
-                if (reticle != null) {
+                if (reticle != null)
+                {
                     reticle.gazePhase = Mathf.Clamp01(inputModule.GetGazeDuration(InputDeviceIDs.Head) / autoActivation);
                 }
 

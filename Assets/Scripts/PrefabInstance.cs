@@ -6,12 +6,14 @@ using UnityEditor.Callbacks;
 using System.Collections.Generic;
 
 [ExecuteInEditMode]
-public class PrefabInstance : MonoBehaviour {
+public class PrefabInstance : MonoBehaviour
+{
     public GameObject prefab;
 
 #if UNITY_EDITOR
     // Struct of all components. Used for edit-time visualization and gizmo drawing
-    public struct Thingy {
+    public struct Thingy
+    {
         public Mesh mesh;
         public Matrix4x4 matrix;
         public List<Material> materials;
@@ -20,45 +22,53 @@ public class PrefabInstance : MonoBehaviour {
     [System.NonSerializedAttribute]
     public List<Thingy> things = new List<Thingy>();
 
-    void Start() {
+    void Start()
+    {
         if (EditorApplication.isPlaying)
             BakeInstance(this);
     }
 
-    void OnValidate() {
+    void OnValidate()
+    {
         things.Clear();
         if (enabled)
             Rebuild(prefab, Matrix4x4.identity);
     }
 
-    void OnEnable() {
+    void OnEnable()
+    {
         things.Clear();
         if (enabled)
             Rebuild(prefab, Matrix4x4.identity);
     }
 
-    void Rebuild(GameObject source, Matrix4x4 inMatrix) {
+    void Rebuild(GameObject source, Matrix4x4 inMatrix)
+    {
         if (!source)
             return;
 
         Matrix4x4 baseMat = inMatrix * Matrix4x4.TRS(-source.transform.position, Quaternion.identity, Vector3.one);
 
-        foreach (Renderer mr in source.GetComponentsInChildren(typeof(Renderer), true)) {
-            things.Add(new Thingy() {
+        foreach (Renderer mr in source.GetComponentsInChildren(typeof(Renderer), true))
+        {
+            things.Add(new Thingy()
+            {
                 mesh = mr.GetComponent<MeshFilter>().sharedMesh,
                 matrix = baseMat * mr.transform.localToWorldMatrix,
                 materials = new List<Material>(mr.sharedMaterials)
             });
         }
 
-        foreach (PrefabInstance pi in source.GetComponentsInChildren(typeof(PrefabInstance), true)) {
+        foreach (PrefabInstance pi in source.GetComponentsInChildren(typeof(PrefabInstance), true))
+        {
             if (pi.enabled && pi.gameObject.activeSelf)
                 Rebuild(pi.prefab, baseMat * pi.transform.localToWorldMatrix);
         }
     }
 
     // Editor-time-only update: Draw the meshes so we can see the objects in the scene view
-    void Update() {
+    void Update()
+    {
         if (EditorApplication.isPlaying)
             return;
         Matrix4x4 mat = transform.localToWorldMatrix;
@@ -70,12 +80,14 @@ public class PrefabInstance : MonoBehaviour {
     // Picking logic: Since we don't have gizmos.drawmesh, draw a bounding cube around each thingy
     void OnDrawGizmos() { DrawGizmos(new Color(0, 0, 0, 0)); }
     void OnDrawGizmosSelected() { DrawGizmos(new Color(0, 0, 1, .2f)); }
-    void DrawGizmos(Color col) {
+    void DrawGizmos(Color col)
+    {
         if (EditorApplication.isPlaying)
             return;
         Gizmos.color = col;
         Matrix4x4 mat = transform.localToWorldMatrix;
-        foreach (Thingy t in things) {
+        foreach (Thingy t in things)
+        {
             Gizmos.matrix = mat * t.matrix;
             Gizmos.DrawCube(t.mesh.bounds.center, t.mesh.bounds.size);
         }
@@ -83,13 +95,15 @@ public class PrefabInstance : MonoBehaviour {
 
     // Baking stuff: Copy in all the referenced objects into the scene on play or build
     [PostProcessScene(-2)]
-    public static void OnPostprocessScene() {
+    public static void OnPostprocessScene()
+    {
         Debug.Log("OPS");
         foreach (PrefabInstance pi in UnityEngine.Object.FindObjectsOfType(typeof(PrefabInstance)))
             BakeInstance(pi);
     }
 
-    public static void BakeInstance(PrefabInstance pi) {
+    public static void BakeInstance(PrefabInstance pi)
+    {
         if (!pi.prefab || !pi.enabled)
             return;
         pi.enabled = false;

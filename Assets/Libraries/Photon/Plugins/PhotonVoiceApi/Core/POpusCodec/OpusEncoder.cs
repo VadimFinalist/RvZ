@@ -17,7 +17,7 @@ namespace POpusCodec
         private int _frameSizePerChannel = 960;
         private SamplingRate _inputSamplingRate = SamplingRate.Sampling48000;
         private Channels _inputChannels = Channels.Stereo;
-        
+
         public SamplingRate InputSamplingRate
         {
             get

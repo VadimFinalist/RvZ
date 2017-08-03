@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [ExecuteInEditMode]
 [AddComponentMenu("Image Effects/BloodOverlay")]
@@ -8,7 +8,7 @@ public class BleedBehavior : MonoBehaviour
     public float TestingBloodAmount = 0.5f; //0-1 //only in Editor (for testing purposes)
 
     static public float minBloodAmount = 0; //0-1 //the minimum blood amount. You could optionally increase this (at runtime), the lower the player's HP is, to show the player has low health.
-    
+
     public float EdgeSharpness = 1; //>=1 //defines how sharp the resulting alpha map will be
     public float minAlpha = 0; //0-1
     public float maxAlpha = 1; //0-1
@@ -24,15 +24,15 @@ public class BleedBehavior : MonoBehaviour
     public Texture2D Image; //RGBA
     public Texture2D Normals; //normalmap
     public Shader Shader; //ImageBlendEffect.shader
-	
-	private Material _material;
 
-	private void Awake()
-	{
+    private Material _material;
+
+    private void Awake()
+    {
         _material = new Material(Shader);
         _material.SetTexture("_BlendTex", Image);
         _material.SetTexture("_BumpMap", Normals);
-	}
+    }
 
     public void Update()
     {
@@ -40,11 +40,11 @@ public class BleedBehavior : MonoBehaviour
         {
             BloodAmount -= autoFadeOutAbsReduc * Time.deltaTime;
             BloodAmount *= Mathf.Pow(1 - autoFadeOutRelReduc, Time.deltaTime);
-            BloodAmount = Mathf.Max(BloodAmount,0);
+            BloodAmount = Mathf.Max(BloodAmount, 0);
         }
     }
 
-	private void OnRenderImage(RenderTexture source, RenderTexture destination)
+    private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         if (!Application.isPlaying)
         {
@@ -72,6 +72,6 @@ public class BleedBehavior : MonoBehaviour
         _material.SetFloat("_EdgeSharpness", EdgeSharpness);
         _material.SetFloat("_Distortion", distortion);
 
-		Graphics.Blit(source, destination, _material);
-	}
+        Graphics.Blit(source, destination, _material);
+    }
 }

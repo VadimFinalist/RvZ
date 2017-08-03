@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CSharpSocket.cs" company="Exit Games GmbH">
 //   Protocol & Photon Client Lib - Copyright (C) 2013 Exit Games GmbH
 // </copyright>
@@ -162,7 +162,7 @@ namespace ExitGames.Client.Photon
 
                     this.AddressResolvedAsIpv6 = (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6);
                     this.State = PhotonSocketState.Connected;
-                    
+
                     this.peerBase.OnConnect();
                 }
             }
@@ -170,7 +170,7 @@ namespace ExitGames.Client.Photon
             {
                 if (this.ReportDebugOfLevel(DebugLevel.ERROR))
                 {
-                    this.Listener.DebugReturn(DebugLevel.ERROR, "Connect() to '" + this.ServerAddress + "' (" + ((ipAddress == null ) ? "": ipAddress.AddressFamily.ToString()) + ") failed: " + se.ToString());
+                    this.Listener.DebugReturn(DebugLevel.ERROR, "Connect() to '" + this.ServerAddress + "' (" + ((ipAddress == null) ? "" : ipAddress.AddressFamily.ToString()) + ") failed: " + se.ToString());
                 }
 
                 this.HandleException(StatusCode.SecurityExceptionOnConnect);

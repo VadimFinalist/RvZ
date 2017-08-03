@@ -18,10 +18,10 @@ using UnityEditor;
 public class vp_EditorApplicationQuit : Editor
 {
 
-	static vp_EditorApplicationQuit()
-	{
-		vp_GlobalEvent.Register("EditorApplicationQuit", () => { EditorApplication.isPlaying = false; });
-	}
-			
+    static vp_EditorApplicationQuit()
+    {
+        vp_GlobalEvent.Register("EditorApplicationQuit", () => { EditorApplication.isPlaying = false; });
+    }
+
 }
 

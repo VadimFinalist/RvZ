@@ -31,75 +31,75 @@ using System.Collections.Generic;
 public class vp_DamageTransfer : MonoBehaviour
 {
 
-	public GameObject TargetObject = null;
+    public GameObject TargetObject = null;
 
-	protected vp_DamageHandler m_TargetDamageHandler = null;
-	protected Collider m_Collider = null;
-
-
-	/// <summary>
-	/// 
-	/// </summary>
-	void Start()
-	{
-		
-		// verify collider
-		m_Collider = transform.GetComponent<Collider>();
-		if (m_Collider == null)
-		{
-			Debug.LogError("Error (" + this + ") This component requires a collider. Disabling self!");
-			this.enabled = false;
-			return;
-		}
-
-		// find target damage handler
-		if (TargetObject != null)
-			m_TargetDamageHandler = TargetObject.GetComponentInChildren<vp_DamageHandler>();
-		else
-		{
-			m_TargetDamageHandler = vp_DamageHandler.GetDamageHandlerOfCollider(m_Collider);
-			if(m_TargetDamageHandler != null)
-				TargetObject = m_TargetDamageHandler.gameObject;
-		}
-
-	}
+    protected vp_DamageHandler m_TargetDamageHandler = null;
+    protected Collider m_Collider = null;
 
 
-	/// <summary>
-	/// forwards damage in UFPS format to a damagehandler on the target object
-	/// </summary>
-	public virtual void Damage(vp_DamageInfo damageInfo)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    void Start()
+    {
 
-		if (!enabled)
-			return;
+        // verify collider
+        m_Collider = transform.GetComponent<Collider>();
+        if (m_Collider == null)
+        {
+            Debug.LogError("Error (" + this + ") This component requires a collider. Disabling self!");
+            this.enabled = false;
+            return;
+        }
 
-		if (m_TargetDamageHandler != null)
-			m_TargetDamageHandler.Damage(damageInfo);
-		else
-			Damage(damageInfo.Damage);
+        // find target damage handler
+        if (TargetObject != null)
+            m_TargetDamageHandler = TargetObject.GetComponentInChildren<vp_DamageHandler>();
+        else
+        {
+            m_TargetDamageHandler = vp_DamageHandler.GetDamageHandlerOfCollider(m_Collider);
+            if (m_TargetDamageHandler != null)
+                TargetObject = m_TargetDamageHandler.gameObject;
+        }
 
-	}
-	
+    }
 
-	/// <summary>
-	/// forwards damage in float format by executing the method 'Damage(float)'
-	/// on the target object
-	/// </summary>
-	public virtual void Damage(float damage)
-	{
 
-		if (!enabled)
-			return;
+    /// <summary>
+    /// forwards damage in UFPS format to a damagehandler on the target object
+    /// </summary>
+    public virtual void Damage(vp_DamageInfo damageInfo)
+    {
 
-		if (m_TargetDamageHandler != null)
-			m_TargetDamageHandler.Damage(damage);
-		else if(TargetObject != null)
-			TargetObject.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
-		else
-			gameObject.SendMessageUpwards("Damage", damage, SendMessageOptions.DontRequireReceiver);
+        if (!enabled)
+            return;
 
-	}
+        if (m_TargetDamageHandler != null)
+            m_TargetDamageHandler.Damage(damageInfo);
+        else
+            Damage(damageInfo.Damage);
+
+    }
+
+
+    /// <summary>
+    /// forwards damage in float format by executing the method 'Damage(float)'
+    /// on the target object
+    /// </summary>
+    public virtual void Damage(float damage)
+    {
+
+        if (!enabled)
+            return;
+
+        if (m_TargetDamageHandler != null)
+            m_TargetDamageHandler.Damage(damage);
+        else if (TargetObject != null)
+            TargetObject.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
+        else
+            gameObject.SendMessageUpwards("Damage", damage, SendMessageOptions.DontRequireReceiver);
+
+    }
 
 
 }

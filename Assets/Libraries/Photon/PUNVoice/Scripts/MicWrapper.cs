@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System;
 
@@ -19,7 +19,7 @@ internal class MicWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloat
         int maxFreq;
         Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
         var frequency = suggestedFrequency;
-//        minFreq = maxFreq = 44100; // test like android client
+        //        minFreq = maxFreq = 44100; // test like android client
         if (suggestedFrequency < minFreq || maxFreq != 0 && suggestedFrequency > maxFreq)
         {
             Debug.LogWarningFormat("PUNVoice: MicWrapper does not support suggested frequency {0} (min: {1}, max: {2}). Setting to {2}",
@@ -31,7 +31,7 @@ internal class MicWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloat
 
     public void Dispose()
     {
-		Microphone.End(this.device);
+        Microphone.End(this.device);
     }
 
     public int SamplingRate { get { return this.mic.frequency; } }
@@ -47,7 +47,7 @@ internal class MicWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloat
         // loop detection
         if (micPos < micPrevPos)
         {
-            micLoopCnt++;            
+            micLoopCnt++;
         }
         micPrevPos = micPos;
 
@@ -65,6 +65,6 @@ internal class MicWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloat
         else
         {
             return false;
-        }        
+        }
     }
 }

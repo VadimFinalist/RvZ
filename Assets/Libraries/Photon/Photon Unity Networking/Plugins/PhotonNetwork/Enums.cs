@@ -495,14 +495,14 @@ public enum CloudRegionCode
 [Flags]
 public enum CloudRegionFlag
 {
-    eu =    1 << 0,
-    us =    1 << 1,
-    asia =  1 << 2,
-    jp =    1 << 3,
-    au =    1 << 4,
-    usw =   1 << 5,
-    sa =    1 << 6,
-    cae =   1 << 7
+    eu = 1 << 0,
+    us = 1 << 1,
+    asia = 1 << 2,
+    jp = 1 << 3,
+    au = 1 << 4,
+    usw = 1 << 5,
+    sa = 1 << 6,
+    cae = 1 << 7
 };
 
 

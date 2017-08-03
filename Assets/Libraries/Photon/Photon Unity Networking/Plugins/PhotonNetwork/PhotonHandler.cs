@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PhotonHandler.cs" company="Exit Games GmbH">
 //   Part of: Photon Unity Networking
 // </copyright>
@@ -61,7 +61,7 @@ internal class PhotonHandler : Photon.MonoBehaviour
     }
 
 
-    #if UNITY_MIN_5_4
+#if UNITY_MIN_5_4
 
     protected void Start()
     {
@@ -71,8 +71,8 @@ internal class PhotonHandler : Photon.MonoBehaviour
             PhotonNetwork.networkingPeer.SetLevelInPropsIfSynced(SceneManagerHelper.ActiveSceneName);
         };
     }
-    
-    #else
+
+#else
     
     /// <summary>Called by Unity after a new level was loaded.</summary>
     protected void OnLevelWasLoaded(int level)
@@ -81,7 +81,7 @@ internal class PhotonHandler : Photon.MonoBehaviour
         PhotonNetwork.networkingPeer.SetLevelInPropsIfSynced(SceneManagerHelper.ActiveSceneName);
     }
 
-    #endif
+#endif
 
 
     /// <summary>Called by Unity when the application is closed. Disconnects.</summary>

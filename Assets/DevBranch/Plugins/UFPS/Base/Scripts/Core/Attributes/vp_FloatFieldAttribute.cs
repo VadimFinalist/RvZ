@@ -22,16 +22,16 @@ using UnityEngine;
 public class vp_FloatFieldAttribute : PropertyAttribute
 {
 
-	public readonly string Label;
-	public float Min;
-	public float Max;
+    public readonly string Label;
+    public float Min;
+    public float Max;
 
-	public vp_FloatFieldAttribute(string label, float min = -10000000, float max = 10000000)
-	{
-		Label = label;
-		Min = min;
-		Max = max;
-	}
+    public vp_FloatFieldAttribute(string label, float min = -10000000, float max = 10000000)
+    {
+        Label = label;
+        Min = min;
+        Max = max;
+    }
 
 }
 
@@ -43,18 +43,18 @@ public class vp_FloatFieldAttribute : PropertyAttribute
 public class vp_FloatFieldDrawer : PropertyDrawer
 {
 
-	private vp_FloatFieldAttribute FloatAttribute { get { return ((vp_FloatFieldAttribute)attribute); } }
+    private vp_FloatFieldAttribute FloatAttribute { get { return ((vp_FloatFieldAttribute)attribute); } }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+    {
 
-		prop.floatValue = vp_PropertyDrawerUtility.ClampedFloatField(pos, FloatAttribute.Label, prop.floatValue, FloatAttribute.Min, FloatAttribute.Max);
+        prop.floatValue = vp_PropertyDrawerUtility.ClampedFloatField(pos, FloatAttribute.Label, prop.floatValue, FloatAttribute.Min, FloatAttribute.Max);
 
-	}
+    }
 
 }
 

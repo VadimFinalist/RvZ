@@ -18,26 +18,26 @@ using System.Collections;
 
 public class vp_FPWeaponHandler : vp_WeaponHandler
 {
-	
 
-	/// <summary>
-	/// 
-	/// </summary>
-	protected virtual bool OnAttempt_AutoReload()
-	{
 
-		if (!ReloadAutomatically)
-			return false;
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual bool OnAttempt_AutoReload()
+    {
 
-		if (CurrentWeapon == null)
-			return false;
+        if (!ReloadAutomatically)
+            return false;
 
-		if (CurrentWeapon.AnimationType == (int)vp_Weapon.Type.Melee)
-			return false;
+        if (CurrentWeapon == null)
+            return false;
 
-		return m_Player.Reload.TryStart();
+        if (CurrentWeapon.AnimationType == (int)vp_Weapon.Type.Melee)
+            return false;
 
-	}
+        return m_Player.Reload.TryStart();
+
+    }
 
 
 }

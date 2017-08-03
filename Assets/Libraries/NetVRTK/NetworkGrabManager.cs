@@ -1,4 +1,5 @@
-﻿namespace NetVRTK {
+﻿namespace NetVRTK
+{
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
@@ -6,7 +7,8 @@
     using NetBase;
 
     [RequireComponent(typeof(VRTK_InteractableObject)), RequireComponent(typeof(PhotonView))]
-    public class NetworkGrabManager : NetworkBehaviour {
+    public class NetworkGrabManager : NetworkBehaviour
+    {
         public PhotonView[] ownAdditionalPhotonviews;
 
         private int grabOwner;
@@ -14,60 +16,73 @@
 
         private VRTK_InteractableObject io;
 
-        public int currentGrabOwner {
-            get {
+        public int currentGrabOwner
+        {
+            get
+            {
                 return grabOwner;
             }
         }
 
-        public override bool HasChanged() {
+        public override bool HasChanged()
+        {
             return prevGrabOwner != grabOwner;
         }
 
-        public override void Serialize(PhotonStream stream, PhotonMessageInfo info) {
+        public override void Serialize(PhotonStream stream, PhotonMessageInfo info)
+        {
             stream.Serialize(ref grabOwner);
             //if (HasChanged() || stream.isReading) {
             //    Debug.Log("GRAB " + (stream.isWriting ? "Sent " : "Recvd ") + this + " --> " + grabOwner);
             //}
         }
 
-        public override void Retain() {
+        public override void Retain()
+        {
             prevGrabOwner = grabOwner;
         }
 
-        public override void Apply() {
+        public override void Apply()
+        {
             io.isGrabbable = (grabOwner == 0);
         }
 
-        private void InitState(int ownerId) {
+        private void InitState(int ownerId)
+        {
             grabOwner = ownerId;
         }
 
-        void Awake() {
+        void Awake()
+        {
             io = GetComponent<VRTK_InteractableObject>();
         }
 
-        void OnEnable() {
+        void OnEnable()
+        {
             io.InteractableObjectGrabbed += HandleGrab;
             io.InteractableObjectUngrabbed += HandleUngrab;
             InitState(photonView.ownerId);
             Retain();
         }
 
-        void OnDisable() {
+        void OnDisable()
+        {
             io.InteractableObjectGrabbed -= HandleGrab;
             io.InteractableObjectUngrabbed -= HandleUngrab;
         }
 
-        private void HandleGrab(object sender, InteractableObjectEventArgs e) {
+        private void HandleGrab(object sender, InteractableObjectEventArgs e)
+        {
             photonView.TransferOwnership(PhotonNetwork.player);
-            foreach (PhotonView pv in ownAdditionalPhotonviews) {
+            foreach (PhotonView pv in ownAdditionalPhotonviews)
+            {
                 pv.TransferOwnership(PhotonNetwork.player);
             }
             InitState(PhotonNetwork.player.ID);
         }
 
-        private void HandleUngrab(object sender, InteractableObjectEventArgs e) {
+        private void HandleUngrab(object sender, InteractableObjectEventArgs e)
+        {
             //photonView.TransferOwnership(PhotonNetwork.player);
             //foreach (PhotonView pv in ownAdditionalPhotonviews) {
             //    pv.TransferOwnership(PhotonNetwork.player);

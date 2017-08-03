@@ -9,12 +9,15 @@
 
 using UnityEngine;
 
-namespace IVR {
-    public class IVR_Movements : MonoBehaviour {
+namespace IVR
+{
+    public class IVR_Movements : MonoBehaviour
+    {
         [HideInInspector]
         public InstantVR ivr;
 
-        public virtual void StartMovements(InstantVR _ivr) {
+        public virtual void StartMovements(InstantVR _ivr)
+        {
             ivr = _ivr;
         }
 

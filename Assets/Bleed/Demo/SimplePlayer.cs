@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class SimplePlayer : MonoBehaviour 
+public class SimplePlayer : MonoBehaviour
 {
     [SerializeField]
     private float maxHP = 100;
@@ -15,12 +15,12 @@ public class SimplePlayer : MonoBehaviour
     [SerializeField]
     float recoverSpeed = 1;//HP per second
 
-	void Start () 
+    void Start()
     {
         HP = maxHP;
-	}
+    }
 
-    void Update ()
+    void Update()
     {
         HP += recoverSpeed * Time.deltaTime;
         if (HP > maxHP)

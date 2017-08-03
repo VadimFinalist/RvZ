@@ -9,17 +9,20 @@
 
 using UnityEditor;
 
-namespace IVR {
+namespace IVR
+{
 
     [CustomEditor(typeof(IVR_UnityVR))]
-    public class IVR_UnityVR_Editor : IVR_Extension_Editor {
+    public class IVR_UnityVR_Editor : IVR_Extension_Editor
+    {
 
         private InstantVR ivr;
         private IVR_UnityVR ivrUnity;
 
         private IVR_UnityVRHead unityHead;
 
-        public override void OnInspectorGUI() {
+        public override void OnInspectorGUI()
+        {
 #if !UNITY_ANDROID
             if (PlayerSettings.virtualRealitySupported == false)
                 EditorGUILayout.HelpBox("VirtualRealitySupported needs to be enabled in Player Settings for Rift support", MessageType.Warning, true);
@@ -33,24 +36,29 @@ namespace IVR {
             base.OnInspectorGUI();
         }
 
-        void OnDestroy() {
-            if (ivrUnity == null && ivr != null) {
+        void OnDestroy()
+        {
+            if (ivrUnity == null && ivr != null)
+            {
                 unityHead = ivr.headTarget.GetComponent<IVR_UnityVRHead>();
                 if (unityHead != null)
                     DestroyImmediate(unityHead, true);
             }
         }
 
-        void OnEnable() {
+        void OnEnable()
+        {
             ivrUnity = (IVR_UnityVR)target;
             if (!ivrUnity)
                 return;
 
             ivr = ivrUnity.GetComponent<InstantVR>();
 
-            if (ivr != null) {
+            if (ivr != null)
+            {
                 unityHead = ivr.headTarget.GetComponent<IVR_UnityVRHead>();
-                if (unityHead == null) {
+                if (unityHead == null)
+                {
                     unityHead = ivr.headTarget.gameObject.AddComponent<IVR_UnityVRHead>();
                     unityHead.extension = ivrUnity;
                 }
@@ -58,14 +66,18 @@ namespace IVR {
                 IVR_Extension[] extensions = ivr.GetComponents<IVR_Extension>();
                 if (ivrUnity.priority == -1)
                     ivrUnity.priority = extensions.Length - 1;
-                for (int i = 0; i < extensions.Length; i++) {
-                    if (ivrUnity == extensions[i]) {
-                        while (i < ivrUnity.priority) {
+                for (int i = 0; i < extensions.Length; i++)
+                {
+                    if (ivrUnity == extensions[i])
+                    {
+                        while (i < ivrUnity.priority)
+                        {
                             MoveUp(unityHead);
                             ivrUnity.priority--;
                             //Debug.Log ("Rift Move up to : " + i + " now: " + ivrRift.priority);
                         }
-                        while (i > ivrUnity.priority) {
+                        while (i > ivrUnity.priority)
+                        {
                             MoveDown(unityHead);
                             ivrUnity.priority++;
                             //Debug.Log ("Rift Move down to : " + i + " now: " + ivrRift.priority);

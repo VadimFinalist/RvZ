@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////////
 //
 //	vp_DMMaster.cs
 //	© Opsive. All Rights Reserved.
@@ -21,40 +21,40 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class vp_DMMaster : vp_MPMaster
 {
-	
-
-	/// <summary>
-	/// 
-	/// </summary>
-	[PunRPC]
-	protected override void ReceiveFreeze(PhotonMessageInfo info)
-	{
-
-		if (!info.sender.isMasterClient)
-			return;
-
-		base.ReceiveFreeze(info);
-
-		vp_DMDemoScoreBoard.ShowScore = true;
-
-	}
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	[PunRPC]
-	protected override void ReceiveUnFreeze(PhotonMessageInfo info)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    [PunRPC]
+    protected override void ReceiveFreeze(PhotonMessageInfo info)
+    {
 
-		if (!info.sender.isMasterClient)
-			return;
+        if (!info.sender.isMasterClient)
+            return;
 
-		base.ReceiveUnFreeze(info);
+        base.ReceiveFreeze(info);
 
-		vp_DMDemoScoreBoard.ShowScore = false;
-		
-	}
-	
-	
+        vp_DMDemoScoreBoard.ShowScore = true;
+
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [PunRPC]
+    protected override void ReceiveUnFreeze(PhotonMessageInfo info)
+    {
+
+        if (!info.sender.isMasterClient)
+            return;
+
+        base.ReceiveUnFreeze(info);
+
+        vp_DMDemoScoreBoard.ShowScore = false;
+
+    }
+
+
 }

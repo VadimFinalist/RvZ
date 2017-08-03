@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------
 // <copyright file="PhotonEditor.cs" company="Exit Games GmbH">
 //   PhotonNetwork Framework for Unity - Copyright (C) 2011 Exit Games GmbH
 // </copyright>
@@ -83,7 +83,7 @@ public class PunWizardText
 [InitializeOnLoad]
 public class PhotonEditor : EditorWindow
 {
-    protected static Type WindowType = typeof (PhotonEditor);
+    protected static Type WindowType = typeof(PhotonEditor);
 
     protected Vector2 scrollPos = Vector2.zero;
 
@@ -195,19 +195,19 @@ public class PhotonEditor : EditorWindow
         // after a compile, check RPCs to create a cache-list
         if (!postCompileActionsDone && !EditorApplication.isCompiling && !EditorApplication.isPlayingOrWillChangePlaymode && PhotonNetwork.PhotonServerSettings != null)
         {
-            #if UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_5_0
+#if UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_5_0
             if (EditorApplication.isUpdating)
             {
                 return;
             }
-            #endif
+#endif
 
             PhotonEditor.UpdateRpcList();
             postCompileActionsDone = true; // on compile, this falls back to false (without actively doing anything)
 
-            #if UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_5_0
+#if UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_5_0
             PhotonEditor.ImportWin8Support();
-            #endif
+#endif
         }
     }
 
@@ -397,7 +397,7 @@ public class PhotonEditor : EditorWindow
             GUILayout.FlexibleSpace();
             if (GUILayout.Button(new GUIContent(CurrentLang.OpenCloudDashboardText, CurrentLang.OpenCloudDashboardTooltip), GUILayout.Width(205)))
             {
-				Application.OpenURL(UrlCloudDashboard + Uri.EscapeUriString(this.mailOrAppId));
+                Application.OpenURL(UrlCloudDashboard + Uri.EscapeUriString(this.mailOrAppId));
                 this.mailOrAppId = "";
             }
             GUILayout.FlexibleSpace();
@@ -460,7 +460,7 @@ public class PhotonEditor : EditorWindow
         scale.height = 30;
 
         GUI.Label(scale, title, bgStyle);
-        GUILayout.Space(scale.height+5);
+        GUILayout.Space(scale.height + 5);
     }
 
     protected virtual void UiMainWizard()
@@ -546,7 +546,7 @@ public class PhotonEditor : EditorWindow
 
         if (GUILayout.Button(new GUIContent(CurrentLang.OpenForumText, CurrentLang.OpenForumTooltip)))
         {
-			Application.OpenURL(UrlForum);
+            Application.OpenURL(UrlForum);
         }
 
         GUILayout.EndVertical();
@@ -561,9 +561,9 @@ public class PhotonEditor : EditorWindow
         EditorUtility.DisplayProgressBar(CurrentLang.ConnectionTitle, CurrentLang.ConnectionInfo, 0.5f);
 
         string accountServiceType = string.Empty;
-        #if PHOTON_VOICE
+#if PHOTON_VOICE
         accountServiceType = "voice";
-        #endif
+#endif
 
         AccountService client = new AccountService();
         client.RegisterByEmail(email, RegisterOrigin, accountServiceType); // this is the synchronous variant using the static RegisterOrigin. "result" is in the client
@@ -573,9 +573,9 @@ public class PhotonEditor : EditorWindow
         {
             this.mailOrAppId = client.AppId;
             PhotonNetwork.PhotonServerSettings.UseCloud(this.mailOrAppId, 0);
-            #if PHOTON_VOICE
+#if PHOTON_VOICE
             PhotonNetwork.PhotonServerSettings.VoiceAppID = client.AppId2;
-            #endif
+#endif
             PhotonEditor.SaveSettings();
 
             this.photonSetupState = PhotonSetupStates.GoEditPhotonServerSettings;
@@ -601,8 +601,8 @@ public class PhotonEditor : EditorWindow
 
     protected internal static bool CheckPunPlus()
     {
-		androidLibExists = 	File.Exists("Assets/Plugins/Android/armeabi-v7a/libPhotonSocketPlugin.so") && 
-							File.Exists("Assets/Plugins/Android/x86/libPhotonSocketPlugin.so");
+        androidLibExists = File.Exists("Assets/Plugins/Android/armeabi-v7a/libPhotonSocketPlugin.so") &&
+                            File.Exists("Assets/Plugins/Android/x86/libPhotonSocketPlugin.so");
 
 
         iphoneLibExists = File.Exists("Assets/Plugins/IOS/libPhotonSocketPlugin.a");
@@ -619,7 +619,7 @@ public class PhotonEditor : EditorWindow
             return; // don't import while compiling
         }
 
-        #if UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_5_0
+#if UNITY_4_2 || UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7 || UNITY_5 || UNITY_5_0
         const string win8Package = "Assets/Plugins/Photon3Unity3D-Win8.unitypackage";
 
         bool win8LibsExist = File.Exists("Assets/Plugins/WP8/Photon3Unity3D.dll") && File.Exists("Assets/Plugins/Metro/Photon3Unity3D.dll");
@@ -627,7 +627,7 @@ public class PhotonEditor : EditorWindow
         {
             AssetDatabase.ImportPackage(win8Package, false);
         }
-        #endif
+#endif
     }
 
 
@@ -664,14 +664,14 @@ public class PhotonEditor : EditorWindow
             foreach (MethodInfo method in methods)
             {
                 bool isOldRpc = false;
-                #pragma warning disable 618
+#pragma warning disable 618
                 // we let the Editor check for outdated RPC attributes in code. that should not cause a compile warning
-                if (method.IsDefined(typeof (RPC), false))
+                if (method.IsDefined(typeof(RPC), false))
                 {
                     countOldRpcs++;
                     isOldRpc = true;
                 }
-                #pragma warning restore 618
+#pragma warning restore 618
 
                 if (isOldRpc || method.IsDefined(typeof(PunRPC), false))
                 {

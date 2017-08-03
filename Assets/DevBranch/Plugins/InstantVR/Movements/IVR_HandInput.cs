@@ -7,7 +7,8 @@
  * - hand movements are now set directly from controllers
  */
 
-namespace IVR {
+namespace IVR
+{
     /*
 
     public class IVR_HandInput : IVR_Input {

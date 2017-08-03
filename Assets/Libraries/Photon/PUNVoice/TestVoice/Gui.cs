@@ -2,23 +2,25 @@
 using System.Collections;
 using System;
 
-public class Gui : MonoBehaviour {
+public class Gui : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         PhotonNetwork.networkingPeer.TrafficStatsEnabled = true;
-		PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsEnabled = true;
+        PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsEnabled = true;
         //PhotonVoiceNetwork.Client.loadBalancingPeer.DebugOut = ExitGames.Client.Photon.DebugLevel.ALL;
         //PhotonNetwork.logLevel = PhotonLogLevel.Full;
     }
 
-	float dataRateNextTime = 0;
+    float dataRateNextTime = 0;
     int prevInBytes;
     int prevOutBytes;
     int dataRateIn;
     int dataRateOut;
-	// Update is called once per frame
-	void OnGUI()
+    // Update is called once per frame
+    void OnGUI()
     {
         // TODO: better way to ref recorder
         PhotonVoiceRecorder rec = null;
@@ -30,7 +32,7 @@ public class Gui : MonoBehaviour {
                 break;
             }
         }
-        
+
         var lStyle = new GUIStyle("label");
         lStyle.fontSize = 24 * Screen.height / 600;
         lStyle.wordWrap = false;
@@ -59,7 +61,7 @@ public class Gui : MonoBehaviour {
 #if UNITY_5_3
                 PhotonNetwork.ConnectUsingSettings(string.Format("1.{0}", UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex));
 #else
-                PhotonNetwork.ConnectUsingSettings(string.Format("1.{0}", Application.loadedLevel));
+            PhotonNetwork.ConnectUsingSettings(string.Format("1.{0}", Application.loadedLevel));
 #endif        
         }
         if (GUILayout.Button("Disconnect", bStyle))
@@ -68,7 +70,7 @@ public class Gui : MonoBehaviour {
         }
         GUILayout.EndHorizontal();
         roomName = "";
-        if (PhotonVoiceNetwork.ClientState == ExitGames.Client.Photon.LoadBalancing.ClientState.Joined) 
+        if (PhotonVoiceNetwork.ClientState == ExitGames.Client.Photon.LoadBalancing.ClientState.Joined)
         {
             roomName = PhotonVoiceNetwork.CurrentRoomName;
         }
@@ -76,8 +78,8 @@ public class Gui : MonoBehaviour {
         if (dataRateNextTime < Time.time)
         {
             dataRateNextTime = Time.time + 1;
-            dataRateIn = (PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsIncoming.TotalPacketBytes - prevInBytes)/1;
-            dataRateOut = (PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsOutgoing.TotalPacketBytes - prevOutBytes)/1;
+            dataRateIn = (PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsIncoming.TotalPacketBytes - prevInBytes) / 1;
+            dataRateOut = (PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsOutgoing.TotalPacketBytes - prevOutBytes) / 1;
             prevInBytes = PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsIncoming.TotalPacketBytes;
             prevOutBytes = PhotonVoiceNetwork.Client.loadBalancingPeer.TrafficStatsOutgoing.TotalPacketBytes;
         }
@@ -96,7 +98,7 @@ public class Gui : MonoBehaviour {
         }
         GUILayout.Label("Frames Sent/Rcvd/Lost: " + PhotonVoiceNetwork.Client.FramesSent + "/" + PhotonVoiceNetwork.Client.FramesReceived + "/" + PhotonVoiceNetwork.Client.FramesLost, lStyleSmall);
         GUILayout.Label("Voice RTT/Var: " + PhotonVoiceNetwork.Client.RoundTripTime + "/" + PhotonVoiceNetwork.Client.RoundTripTimeVariance, lStyleSmall);
-        
+
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
 
@@ -120,22 +122,22 @@ public class Gui : MonoBehaviour {
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button((PhotonVoiceNetwork.Client.DebugEchoMode ? "[X] " : "[ ] ")  + "Debug Echo", bStyle))
+        if (GUILayout.Button((PhotonVoiceNetwork.Client.DebugEchoMode ? "[X] " : "[ ] ") + "Debug Echo", bStyle))
         {
             PhotonVoiceNetwork.Client.DebugEchoMode = !PhotonVoiceNetwork.Client.DebugEchoMode;
         }
 
         if (rec != null && rec.photonView.isMine)
         {
-            
-            if (GUILayout.Button((rec.Transmit ? "[X] ": "[ ] ") + "Transmit", bStyle))
+
+            if (GUILayout.Button((rec.Transmit ? "[X] " : "[ ] ") + "Transmit", bStyle))
             {
                 rec.Transmit = !rec.Transmit;
             }
             if (GUILayout.Button((rec.VoiceDetector.On ? "[X] " : "[ ] ") + "Detect", bStyle))
             {
                 rec.Detect = !rec.Detect;
-            }            
+            }
             if (GUILayout.Button((rec.VoiceDetectorCalibrating ? "[X] " : "[ ] ") + "Calibrate Detector", bStyle))
             {
                 rec.VoiceDetectorCalibrate(2000);
@@ -157,7 +159,7 @@ public class Gui : MonoBehaviour {
         GUILayout.Label("Set Group (offs Debug Echo): ", lStyleSmall);
         for (byte i = 0; i < 5; i++)
         {
-            if (GUILayout.Button((PhotonVoiceNetwork.Client.GlobalAudioGroup == i ? "[X] " : "[ ] ")  + (i == 0 ? "No" : i.ToString()), bStyleSmall))
+            if (GUILayout.Button((PhotonVoiceNetwork.Client.GlobalAudioGroup == i ? "[X] " : "[ ] ") + (i == 0 ? "No" : i.ToString()), bStyleSmall))
             {
                 PhotonVoiceNetwork.Client.GlobalAudioGroup = i;
             }
@@ -165,15 +167,15 @@ public class Gui : MonoBehaviour {
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-		GUILayout.Label("Mic: ", lStyleSmall);
+        GUILayout.Label("Mic: ", lStyleSmall);
         foreach (var x in Microphone.devices)
-        {            
+        {
             if (GUILayout.Button((PhotonVoiceNetwork.MicrophoneDevice == x ? "[X] " : "[ ] ") + x, bStyleSmall))
             {
                 PhotonVoiceNetwork.MicrophoneDevice = x;
             }
         }
         GUILayout.EndHorizontal();
-        GUI.enabled = true;        
-	}    
+        GUI.enabled = true;
+    }
 }

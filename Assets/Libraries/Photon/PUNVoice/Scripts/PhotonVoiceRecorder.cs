@@ -10,7 +10,7 @@ using Voice = ExitGames.Client.Photon.Voice;
 public class PhotonVoiceRecorder : Photon.MonoBehaviour
 {
     private Voice.LocalVoice voice = Voice.LocalVoice.Dummy;
-    
+
     private string microphoneDevice = null;
 
     /// <summary>
@@ -69,7 +69,7 @@ public class PhotonVoiceRecorder : Photon.MonoBehaviour
                 var debugEchoMode = PhotonVoiceNetwork.Client.DebugEchoMode;
                 PhotonVoiceNetwork.Client.DebugEchoMode = false;
 
-                Voice.VoiceInfo voiceInfo = new Voice.VoiceInfo((int)pvs.SamplingRate, mic.Channels, (int)pvs.FrameDuration, pvs.Bitrate, photonView.viewID);                
+                Voice.VoiceInfo voiceInfo = new Voice.VoiceInfo((int)pvs.SamplingRate, mic.Channels, (int)pvs.FrameDuration, pvs.Bitrate, photonView.viewID);
                 var prevVoice = this.voice;
                 this.voice = PhotonVoiceNetwork.CreateLocalVoice(mic, voiceInfo);
                 this.voice.AudioGroup = prevVoice.AudioGroup;
@@ -128,7 +128,7 @@ public class PhotonVoiceRecorder : Photon.MonoBehaviour
                 }
                 var mic = new MicWrapper(micDev, (int)pvs.SamplingRate);
                 channels = mic.Channels;
-                audioStream = mic;                
+                audioStream = mic;
             }
             else
             {
@@ -140,7 +140,7 @@ public class PhotonVoiceRecorder : Photon.MonoBehaviour
                 }
             }
 
-            Voice.VoiceInfo voiceInfo = new Voice.VoiceInfo((int)pvs.SamplingRate, channels, (int)pvs.FrameDuration, pvs.Bitrate, photonView.viewID);            
+            Voice.VoiceInfo voiceInfo = new Voice.VoiceInfo((int)pvs.SamplingRate, channels, (int)pvs.FrameDuration, pvs.Bitrate, photonView.viewID);
             this.voice = PhotonVoiceNetwork.CreateLocalVoice(audioStream, voiceInfo);
 
             this.VoiceDetector.On = PhotonVoiceSettings.Instance.VoiceDetection;
@@ -149,7 +149,7 @@ public class PhotonVoiceRecorder : Photon.MonoBehaviour
             if (this.voice != Voice.LocalVoice.Dummy)
             {
                 this.voice.Transmit = PhotonVoiceSettings.Instance.AutoTransmit;
-            } 
+            }
             else if (PhotonVoiceSettings.Instance.AutoTransmit)
             {
                 Debug.LogWarning("PUNVoice: Cannot Transmit.");

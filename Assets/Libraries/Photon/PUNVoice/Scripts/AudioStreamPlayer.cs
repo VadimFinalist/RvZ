@@ -72,7 +72,7 @@ public class AudioStreamPlayer
     {
 
         int bufferSamples = (maxPlayLagMs + playDelayMs) * frequency / 1000 + frameSamples + frequency; // frame + max delay + 1 sec. just in case
-        
+
         this.frameSamples = frameSamples;
         this.frameSize = frameSamples * channels;
 

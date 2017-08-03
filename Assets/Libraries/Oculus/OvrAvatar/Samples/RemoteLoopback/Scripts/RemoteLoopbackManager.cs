@@ -4,15 +4,17 @@ using System;
 using System.IO;
 using Oculus.Avatar;
 
-public class RemoteLoopbackManager : MonoBehaviour {
+public class RemoteLoopbackManager : MonoBehaviour
+{
 
     public OvrAvatar LocalAvatar;
     public OvrAvatar LoopbackAvatar;
 
-	void Start () {
+    void Start()
+    {
         LocalAvatar.RecordPackets = true;
         LocalAvatar.PacketRecorded += OnLocalAvatarPacketRecorded;
-	}
+    }
 
     void OnLocalAvatarPacketRecorded(object sender, OvrAvatar.PacketEventArgs args)
     {
@@ -31,6 +33,6 @@ public class RemoteLoopbackManager : MonoBehaviour {
     void ReceivePacketData(byte[] data)
     {
         IntPtr packet = CAPI.ovrAvatarPacket_Read((UInt32)data.Length, data);
-        LoopbackAvatar.GetComponent<OvrAvatarRemoteDriver>().QueuePacket(0, new OvrAvatarPacket{ ovrNativePacket = packet });
+        LoopbackAvatar.GetComponent<OvrAvatarRemoteDriver>().QueuePacket(0, new OvrAvatarPacket { ovrNativePacket = packet });
     }
 }

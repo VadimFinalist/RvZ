@@ -14,10 +14,10 @@
 
 namespace ExitGames.Client.Photon.LoadBalancing
 {
-    #if UNITY || NETFX_CORE
+#if UNITY || NETFX_CORE
     using Hashtable = ExitGames.Client.Photon.Hashtable;
     using SupportClass = ExitGames.Client.Photon.SupportClass;
-    #endif
+#endif
 
 
     /// <summary>
@@ -32,7 +32,7 @@ namespace ExitGames.Client.Photon.LoadBalancing
 
         public override string ToString()
         {
-        return string.Format("{0}\t is: {1}", this.Name, (!this.IsOnline) ? "offline" : this.IsInRoom ? "playing" : "on master");
+            return string.Format("{0}\t is: {1}", this.Name, (!this.IsOnline) ? "offline" : this.IsInRoom ? "playing" : "on master");
         }
     }
 }

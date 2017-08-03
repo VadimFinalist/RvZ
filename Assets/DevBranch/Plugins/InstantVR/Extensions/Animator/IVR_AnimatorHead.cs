@@ -8,16 +8,19 @@
  */
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
-    public class IVR_AnimatorHead : IVR_Controller {
+    public class IVR_AnimatorHead : IVR_Controller
+    {
 
         public float headWeight = 0.9f;
 
         //    private IVR.HeadMovementsBase headMovements;
         //    /private Transform cameraTransform;
 
-        public override void StartController(InstantVR ivr) {
+        public override void StartController(InstantVR ivr)
+        {
             extension = ivr.GetComponent<IVR_Animator>();
             base.StartController(ivr);
             tracking = true;
@@ -26,7 +29,8 @@ namespace IVR {
             //        cameraTransform = ivr.GetComponentInChildren<Camera>().transform;
         }
 
-        public override void UpdateController() {
+        public override void UpdateController()
+        {
             controllerPosition = startPosition;
             controllerRotation = startRotation;
 
@@ -35,7 +39,8 @@ namespace IVR {
 
         }
 
-        public virtual void UpdateEyes() {
+        public virtual void UpdateEyes()
+        {
             /*
             Quaternion headRotation = transform.rotation * Quaternion.Inverse(ivr.characterTransform.rotation);
             Quaternion eyeRotation = Quaternion.LerpUnclamped(Quaternion.identity, headRotation, 1 / headWeight); // should be non-linear
@@ -52,12 +57,16 @@ namespace IVR {
             */
         }
 
-        private Vector3 LookTarget(Vector3 centerEyePosition, Vector3 lookDirection) {
+        private Vector3 LookTarget(Vector3 centerEyePosition, Vector3 lookDirection)
+        {
 
             RaycastHit hit;
-            if (Physics.Raycast(centerEyePosition, lookDirection, out hit, 10)) {
+            if (Physics.Raycast(centerEyePosition, lookDirection, out hit, 10))
+            {
                 return hit.point;
-            } else {
+            }
+            else
+            {
                 // look to 'infinity'
                 return centerEyePosition + lookDirection * 10;
             }

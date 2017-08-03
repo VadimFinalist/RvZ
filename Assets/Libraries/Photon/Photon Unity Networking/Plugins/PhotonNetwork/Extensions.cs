@@ -26,11 +26,11 @@ public static class Extensions
     public static ParameterInfo[] GetCachedParemeters(this MethodInfo mo)
     {
         ParameterInfo[] result;
-        bool cached= parametersOfMethods.TryGetValue(mo, out result);
+        bool cached = parametersOfMethods.TryGetValue(mo, out result);
 
         if (!cached)
         {
-            result =  mo.GetParameters();
+            result = mo.GetParameters();
             parametersOfMethods[mo] = result;
         }
 
@@ -211,18 +211,18 @@ public static class GameObjectExtensions
     /// <returns>Unity 3.5: active. Any newer Unity: activeInHierarchy.</returns>
     public static bool GetActive(this GameObject target)
     {
-        #if UNITY_3_5
+#if UNITY_3_5
         return target.active;
-        #else
+#else
         return target.activeInHierarchy;
-        #endif
+#endif
     }
 
-    #if UNITY_3_5
+#if UNITY_3_5
     /// <summary>Unity-version-independent setter for active and SetActive().</summary>
     public static void SetActive(this GameObject target, bool value)
     {
         target.active = value;
     }
-    #endif
+#endif
 }

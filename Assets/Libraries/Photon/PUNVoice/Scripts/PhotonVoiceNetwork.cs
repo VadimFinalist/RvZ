@@ -34,26 +34,26 @@ public class PhotonVoiceNetwork : MonoBehaviour
         }
     }
 
-	internal static PhotonVoiceNetwork getInstance()
-	{
-		lock (instanceLock)
-		{
-			if (destroyed)
-			{
-				return null;
-			}
-			if (_instance == null)
-			{
-				_singleton = new GameObject();
-				_instance = _singleton.AddComponent<PhotonVoiceNetwork>();
-				_singleton.name = "PhotonVoiceNetworkSingleton";
+    internal static PhotonVoiceNetwork getInstance()
+    {
+        lock (instanceLock)
+        {
+            if (destroyed)
+            {
+                return null;
+            }
+            if (_instance == null)
+            {
+                _singleton = new GameObject();
+                _instance = _singleton.AddComponent<PhotonVoiceNetwork>();
+                _singleton.name = "PhotonVoiceNetworkSingleton";
 
-				//DontDestroyOnLoad(_singleton);
-			}
-			return _instance;
-		}
-	}
-	
+                //DontDestroyOnLoad(_singleton);
+            }
+            return _instance;
+        }
+    }
+
     void OnDestroy()
     {
         if (this != _instance)
@@ -71,12 +71,12 @@ public class PhotonVoiceNetwork : MonoBehaviour
         client = new UnityVoiceFrontend(this);
         //client.loadBalancingPeer.DebugOut = DebugLevel.ALL;
         //PhotonNetwork.logLevel = PhotonLogLevel.Full;
-                
-		// client.loadBalancingPeer.QuickResendAttempts = 3;
+
+        // client.loadBalancingPeer.QuickResendAttempts = 3;
         // client.loadBalancingPeer.SentCountAllowance = 7;
         // PhotonNetwork.networkingPeer.QuickResendAttempts = 3;
         // PhotonNetwork.networkingPeer.SentCountAllowance = 7;
-        
+
         //client.loadBalancingPeer.DebugOut = PhotonVoiceSettings.Instance.DebugLevel; // null ref while PhotonVoiceSettings is object's script
     }
 
@@ -86,15 +86,15 @@ public class PhotonVoiceNetwork : MonoBehaviour
         //if (SceneManager.GetActiveScene().buildIndex != 0)
         getInstance();
     }
-    
+
     public void Awake()
     {
-		if (Microphone.devices.Length < 1)
+        if (Microphone.devices.Length < 1)
         {
             Debug.LogError("PUNVoice: No microphone device found");
         }
-	}
-	
+    }
+
     /// <summary>
     /// Connects Voice client to a Master Server of region specified in settings, using the Name Server to find the IP.
     /// </summary>
@@ -106,12 +106,13 @@ public class PhotonVoiceNetwork : MonoBehaviour
 
         if (PhotonNetwork.PhotonServerSettings.HostType == ServerSettings.HostingOption.SelfHosted)
         {
-            string voiceMasterAddress = string.Format("{0}:{1}",PhotonNetwork.PhotonServerSettings.ServerAddress,
+            string voiceMasterAddress = string.Format("{0}:{1}", PhotonNetwork.PhotonServerSettings.ServerAddress,
                 PhotonNetwork.PhotonServerSettings.VoiceServerPort);
             Debug.LogFormat("PUNVoice: connecting to master {0}", voiceMasterAddress);
             return instance.client.Connect(voiceMasterAddress, null, null, null, null);
         }
-        else {
+        else
+        {
             Debug.LogFormat("PUNVoice: connecting to region {0}", PhotonNetwork.networkingPeer.CloudRegion.ToString());
             return instance.client.ConnectToRegionMaster(PhotonNetwork.networkingPeer.CloudRegion.ToString());
         }
@@ -177,7 +178,7 @@ public class PhotonVoiceNetwork : MonoBehaviour
             return;
         }
 
-        Application.RequestUserAuthorization(UserAuthorization.Microphone);        
+        Application.RequestUserAuthorization(UserAuthorization.Microphone);
     }
 
     protected void OnApplicationQuit()
@@ -383,12 +384,12 @@ public class UnityVoiceFrontend : Voice.LoadBalancingFrontend
             {
                 return;
             }
-            else 
+            else
             {
-                Debug.LogFormat("PUNVoice: Player {0} voice #{1} speaker replaced.", playerId, voiceId);                
+                Debug.LogFormat("PUNVoice: Player {0} voice #{1} speaker replaced.", playerId, voiceId);
             }
         }
-        else 
+        else
         {
             Debug.LogFormat("PUNVoice: Player {0} voice #{1} speaker created.", playerId, voiceId);
         }
@@ -493,7 +494,7 @@ public class UnityVoiceFrontend : Voice.LoadBalancingFrontend
         }
         else
         {
-            Debug.LogWarningFormat("PUNVoice: Audio Frame event for not existing speaker for voice #{0} of player {1}.",  
+            Debug.LogWarningFormat("PUNVoice: Audio Frame event for not existing speaker for voice #{0} of player {1}.",
                 voiceId, playerId);
         }
 
@@ -511,7 +512,7 @@ public class UnityVoiceFrontend : Voice.LoadBalancingFrontend
             case LoadBalancing.ClientState.JoinedLobby:
                 if (PhotonNetwork.inRoom)
                 {
-                    this.OpJoinOrCreateRoom(string.Format("{0}_voice_", PhotonNetwork.room.name), 
+                    this.OpJoinOrCreateRoom(string.Format("{0}_voice_", PhotonNetwork.room.name),
                         new LoadBalancing.RoomOptions() { IsVisible = false }, null);
                 }
                 else

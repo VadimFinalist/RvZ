@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 // Wraps UnityEngine.AudioClip with Voice.IAudioStream interface.
@@ -9,7 +9,7 @@ internal class AudioClipWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloa
     private int readPos;
     private float startTime;
     public int SamplingRate { get { return audioClip.frequency; } }
-    
+
     public bool Loop { get; set; }
 
     public AudioClipWrapper(AudioClip audioClip)
@@ -31,7 +31,7 @@ internal class AudioClipWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloa
         {
             this.audioClip.GetData(buffer, readPos);
             readPos += bufferSamplesCount;
-            
+
             if (readPos >= audioClip.samples)
             {
                 if (this.Loop)
@@ -53,7 +53,7 @@ internal class AudioClipWrapper : ExitGames.Client.Photon.Voice.IAudioStreamFloa
         }
     }
 
-    public void Dispose() 
+    public void Dispose()
     {
 
     }

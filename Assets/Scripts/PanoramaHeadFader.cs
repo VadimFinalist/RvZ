@@ -4,7 +4,8 @@ using UnityEngine;
 using VRTK;
 
 [RequireComponent(typeof(VRTK_InteractableObject))]
-public class PanoramaHeadFader : MonoBehaviour {
+public class PanoramaHeadFader : MonoBehaviour
+{
     public GameObject projectionSphere;
     [Tooltip("The distance where 100% opaqueness is reached")]
     public float minDistance = 0.25f;
@@ -15,7 +16,8 @@ public class PanoramaHeadFader : MonoBehaviour {
     private Renderer projSphereRenderer;
     private Renderer objectRenderer;
 
-    void Awake() {
+    void Awake()
+    {
         io = GetComponent<VRTK_InteractableObject>();
         io.InteractableObjectGrabbed += HandleGrab;
         io.InteractableObjectUngrabbed += HandleUngrab;
@@ -25,21 +27,30 @@ public class PanoramaHeadFader : MonoBehaviour {
         enabled = false;
     }
 
-    void Update() {
+    void Update()
+    {
         VRTK_SDKManager sdk = VRTK_SDKManager.instance;
         Vector3 hmdPos = sdk.loadedSetup.actualHeadset.transform.position;
         Vector3 objPos = transform.position;
         float dist = Vector3.Distance(hmdPos, objPos);
         float alpha;
-        if (minDistance < maxDistance) {
-            if (dist <= minDistance) {
+        if (minDistance < maxDistance)
+        {
+            if (dist <= minDistance)
+            {
                 alpha = 1f;
-            } else if (dist >= maxDistance) {
+            }
+            else if (dist >= maxDistance)
+            {
                 alpha = 0f;
-            } else {
+            }
+            else
+            {
                 alpha = 1f - (dist - minDistance) / (maxDistance - minDistance);
             }
-        } else {
+        }
+        else
+        {
             alpha = 0f;
         }
         Color col = projSphereRenderer.material.GetColor("_Color");
@@ -47,19 +58,22 @@ public class PanoramaHeadFader : MonoBehaviour {
         projSphereRenderer.material.SetColor("_Color", col);
     }
 
-    private void HandleGrab(object sender, InteractableObjectEventArgs e) {
+    private void HandleGrab(object sender, InteractableObjectEventArgs e)
+    {
         projSphereRenderer.material.SetTexture("_MainTex", objectRenderer.material.GetTexture("_MainTex"));
         ResetAlpha();
         enabled = true;
     }
 
-    private void HandleUngrab(object sender, InteractableObjectEventArgs e) {
+    private void HandleUngrab(object sender, InteractableObjectEventArgs e)
+    {
         ResetAlpha();
         projSphereRenderer.material.SetTexture("_MainTex", null);
         enabled = false;
     }
 
-    private void ResetAlpha() {
+    private void ResetAlpha()
+    {
         Color col = projSphereRenderer.material.GetColor("_Color");
         col.a = 0f;
         projSphereRenderer.material.SetColor("_Color", col);

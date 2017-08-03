@@ -6,7 +6,7 @@ public class ViewDrag : MonoBehaviour
     Vector3 hit_position = Vector3.zero;
     Vector3 current_position = Vector3.zero;
     Vector3 camera_position = Vector3.zero;
-//    float z = 0.0f;
+    //    float z = 0.0f;
 
     // Use this for initialization
     void Start()

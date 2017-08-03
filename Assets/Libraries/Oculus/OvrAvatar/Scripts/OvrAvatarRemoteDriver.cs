@@ -10,7 +10,7 @@ public class OvrAvatarRemoteDriver : OvrAvatarDriver
 
     IntPtr CurrentSDKPacket = IntPtr.Zero;
     float CurrentSDKPacketTime = 0f;
-  
+
     public void QueuePacket(int sequence, OvrAvatarPacket packet)
     {
         packetQueue.Enqueue(packet);

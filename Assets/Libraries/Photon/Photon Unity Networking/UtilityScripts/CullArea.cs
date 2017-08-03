@@ -51,7 +51,7 @@ public class CullArea : MonoBehaviour
     ///     who are in the same cell or interested in updates of the current cell.
     /// </summary>
     public readonly int[] SUBDIVISION_THIRD_LEVEL_ORDER = new int[12] { 0, 3, 2, 3, 1, 3, 2, 3, 1, 3, 2, 3 };
-    
+
     public Vector2 Center;
     public Vector2 Size = new Vector2(25.0f, 25.0f);
 
@@ -67,16 +67,16 @@ public class CullArea : MonoBehaviour
 
     public bool YIsUpAxis = true;
     public bool RecreateCellHierarchy = false;
-        
+
     private int idCounter;
-    
+
     /// <summary>
     ///     Creates the cell hierarchy at runtime.
     /// </summary>
     private void Awake()
     {
         idCounter = FIRST_GROUP_ID;
-        
+
         CreateCellHierarchy();
     }
 
@@ -86,12 +86,12 @@ public class CullArea : MonoBehaviour
     public void OnDrawGizmos()
     {
         idCounter = FIRST_GROUP_ID;
-        
+
         if (RecreateCellHierarchy)
         {
             CreateCellHierarchy();
         }
-        
+
         DrawCells();
     }
 
@@ -110,9 +110,9 @@ public class CullArea : MonoBehaviour
             else
             {
                 Application.Quit();
-            }            
+            }
         }
-        
+
         CellTreeNode rootNode = new CellTreeNode(idCounter++, CellTreeNode.ENodeType.Root, null);
 
         if (YIsUpAxis)
@@ -154,9 +154,9 @@ public class CullArea : MonoBehaviour
         {
             return;
         }
-        
-        int rowCount = (int) Subdivisions[(cellLevelInHierarchy - 1)].x;
-        int columnCount = (int) Subdivisions[(cellLevelInHierarchy - 1)].y;
+
+        int rowCount = (int)Subdivisions[(cellLevelInHierarchy - 1)].x;
+        int columnCount = (int)Subdivisions[(cellLevelInHierarchy - 1)].y;
 
         float startX = parent.Center.x - (parent.Size.x / 2.0f);
         float width = parent.Size.x / rowCount;
@@ -166,9 +166,9 @@ public class CullArea : MonoBehaviour
             for (int column = 0; column < columnCount; ++column)
             {
                 float xPos = startX + (row * width) + (width / 2.0f);
-                
+
                 CellTreeNode node = new CellTreeNode(idCounter++, (NumberOfSubdivisions == cellLevelInHierarchy) ? CellTreeNode.ENodeType.Leaf : CellTreeNode.ENodeType.Node, parent);
-                
+
                 if (YIsUpAxis)
                 {
                     float startY = parent.Center.y - (parent.Size.y / 2.0f);
@@ -191,7 +191,7 @@ public class CullArea : MonoBehaviour
                     node.TopLeft = new Vector3(xPos - (width / 2.0f), 0.0f, zPos - (depth / 2.0f));
                     node.BottomRight = new Vector3(xPos + (width / 2.0f), 0.0f, zPos + (depth / 2.0f));
                 }
-                
+
                 parent.AddChild(node);
 
                 CreateChildCells(node, (cellLevelInHierarchy + 1));
@@ -226,8 +226,8 @@ public class CullArea : MonoBehaviour
 
         foreach (Vector2 v in Subdivisions)
         {
-            horizontalCells *= (int) v.x;
-            verticalCells *= (int) v.y;
+            horizontalCells *= (int)v.x;
+            verticalCells *= (int)v.y;
         }
 
         CellCount = horizontalCells * verticalCells;
@@ -247,7 +247,7 @@ public class CullArea : MonoBehaviour
 
         List<int> nearbyCells = new List<int>(0);
         CellTree.RootNode.GetNearbyCells(nearbyCells, YIsUpAxis, position);
-        
+
         foreach (int id in nearbyCells)
         {
             if (!insideCells.Contains(id))

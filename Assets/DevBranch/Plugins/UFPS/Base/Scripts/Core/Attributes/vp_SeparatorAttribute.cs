@@ -29,7 +29,7 @@ public class vp_Separator
 /// </summary>
 public class vp_SeparatorAttribute : PropertyAttribute
 {
-	public vp_SeparatorAttribute(){	}
+    public vp_SeparatorAttribute() { }
 }
 
 
@@ -40,15 +40,15 @@ public class vp_SeparatorAttribute : PropertyAttribute
 public class vp_SeparatorDrawer : PropertyDrawer
 {
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    public override void OnGUI(Rect pos, SerializedProperty prop, GUIContent label)
+    {
 
-		vp_PropertyDrawerUtility.Separator(pos);
+        vp_PropertyDrawerUtility.Separator(pos);
 
-	}
+    }
 
 }
 

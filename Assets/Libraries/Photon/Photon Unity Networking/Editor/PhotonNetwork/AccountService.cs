@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------------------
+﻿// ----------------------------------------------------------------------------
 // <copyright file="AccountService.cs" company="Exit Games GmbH">
 //   Photon Cloud Account Service - Copyright (C) 2012 Exit Games GmbH
 // </copyright>
@@ -216,17 +216,17 @@ public class AccountService
         {
             // returnCode == 0 means: all ok. message is new AppId
             this.AppId = message;
-            #if PHOTON_VOICE
+#if PHOTON_VOICE
             this.AppId2 = messageDetailed;
-            #endif
+#endif
         }
         else
         {
             // any error gives returnCode != 0
             this.AppId = string.Empty;
-            #if PHOTON_VOICE
+#if PHOTON_VOICE
             this.AppId2 = string.Empty;
-            #endif
+#endif
             this.Message = message;
         }
     }

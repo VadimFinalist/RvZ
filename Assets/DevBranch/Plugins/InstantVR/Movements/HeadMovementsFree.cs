@@ -8,13 +8,16 @@
  */
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
-    public static class HeadUtils {
+    public static class HeadUtils
+    {
 
         private static Vector3 neckEyeDelta = new Vector3(0, 0.13F, 0.13F);
 
-        public static Vector3 GetNeckEyeDelta(InstantVR ivr) {
+        public static Vector3 GetNeckEyeDelta(InstantVR ivr)
+        {
             if (ivr.characterTransform == null)
                 return neckEyeDelta;
 
@@ -26,7 +29,8 @@ namespace IVR {
             Transform leftEyeBone = animator.GetBoneTransform(HumanBodyBones.LeftEye);
             Transform rightEyeBone = animator.GetBoneTransform(HumanBodyBones.RightEye);
 
-            if (neckBone != null && leftEyeBone != null && rightEyeBone != null) {
+            if (neckBone != null && leftEyeBone != null && rightEyeBone != null)
+            {
                 Vector3 centerEyePosition = (leftEyeBone.transform.position + rightEyeBone.transform.position) / 2;
                 Vector3 worldNeckEyeDelta = (centerEyePosition - neckBone.position);
                 neckEyeDelta = ivr.headTarget.InverseTransformDirection(worldNeckEyeDelta);
@@ -35,13 +39,16 @@ namespace IVR {
             return neckEyeDelta;
         }
 
-        public static Vector3 GetHeadEyeDelta(InstantVR ivr) {
+        public static Vector3 GetHeadEyeDelta(InstantVR ivr)
+        {
             Animator animator = ivr.characterTransform.GetComponent<Animator>();
-            if (animator != null) {
+            if (animator != null)
+            {
                 Transform neckBone = animator.GetBoneTransform(HumanBodyBones.Neck);
                 Transform leftEyeBone = animator.GetBoneTransform(HumanBodyBones.LeftEye);
                 Transform rightEyeBone = animator.GetBoneTransform(HumanBodyBones.RightEye);
-                if (neckBone != null && leftEyeBone != null && rightEyeBone != null) {
+                if (neckBone != null && leftEyeBone != null && rightEyeBone != null)
+                {
                     Vector3 centerEyePosition = (leftEyeBone.position + rightEyeBone.position) / 2;
                     Vector3 worldHeadEyeDelta = (centerEyePosition - neckBone.position);
                     Vector3 localHeadEyeDelta = ivr.headTarget.InverseTransformDirection(worldHeadEyeDelta);
@@ -52,7 +59,8 @@ namespace IVR {
             return new Vector3(0, 0.13F, 0.13F); ;
         }
 
-        public static Vector3 CalculateNeckPosition(Vector3 eyePosition, Quaternion eyeRotation, Vector3 eye2neck) {
+        public static Vector3 CalculateNeckPosition(Vector3 eyePosition, Quaternion eyeRotation, Vector3 eye2neck)
+        {
             Vector3 neckPosition = eyePosition + eyeRotation * eye2neck;
             return neckPosition;
         }

@@ -43,8 +43,8 @@ public class PhotonVoiceSettings : MonoBehaviour
     /// Log debug info.
     public bool DebugInfo = false;                    // set in inspector
 
-//    public string AppId = "<app-id>";
-//    public string AppVersion = "1.0";
+    //    public string AppId = "<app-id>";
+    //    public string AppVersion = "1.0";
 
 
     private static PhotonVoiceSettings instance;

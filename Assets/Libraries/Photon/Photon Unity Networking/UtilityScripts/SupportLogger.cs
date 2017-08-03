@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using UnityEngine;
 using System.Collections;
 
@@ -77,7 +77,7 @@ public class SupportLogging : MonoBehaviour
 
     public void OnFailedToConnectToPhoton(DisconnectCause cause)
     {
-        Debug.Log("SupportLogger OnFailedToConnectToPhoton("+cause+").");
+        Debug.Log("SupportLogger OnFailedToConnectToPhoton(" + cause + ").");
         this.LogBasics();
     }
 

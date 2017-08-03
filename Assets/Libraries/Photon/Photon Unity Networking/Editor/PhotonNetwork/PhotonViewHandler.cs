@@ -1,4 +1,4 @@
-#if UNITY_5 && !UNITY_5_0 && !UNITY_5_1 && !UNITY_5_2
+﻿#if UNITY_5 && !UNITY_5_0 && !UNITY_5_1 && !UNITY_5_2
 #define UNITY_MIN_5_3
 #endif
 
@@ -51,9 +51,9 @@ public class PhotonViewHandler : EditorWindow
         //Debug.Log("HierarchyChange. PV Count: " + pvObjects.Length);
 
         string levelName = SceneManagerHelper.ActiveSceneName;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         levelName = SceneManagerHelper.EditorActiveSceneName;
-        #endif
+#endif
         int minViewIdInThisScene = PunSceneSettings.MinViewIdForScene(levelName);
         //Debug.Log("Level '" + Application.loadedLevelName + "' has a minimum ViewId of: " + minViewIdInThisScene);
 
@@ -126,7 +126,7 @@ public class PhotonViewHandler : EditorWindow
         {
             if (view.viewID == 0)
             {
-                Undo.RecordObject(view, "Automatic viewID change for: "+view.gameObject.name);
+                Undo.RecordObject(view, "Automatic viewID change for: " + view.gameObject.name);
 
                 // Debug.LogWarning("setting scene ID: " + view.gameObject.name + " ID: " + view.subId.ID + " scene ID: " + view.GetSceneID() + " IsPersistent: " + EditorUtility.IsPersistent(view.gameObject) + " IsSceneViewIDFree: " + IsSceneViewIDFree(view.subId.ID, view));
                 int nextViewId = PhotonViewHandler.GetID(lastUsedId, usedInstanceViewNumbers);
@@ -147,9 +147,9 @@ public class PhotonViewHandler : EditorWindow
                 lastUsedId = nextViewId;
                 fixedSomeId = true;
 
-                #if !UNITY_MIN_5_3
+#if !UNITY_MIN_5_3
                 EditorUtility.SetDirty(view);
-                #endif
+#endif
             }
         }
 

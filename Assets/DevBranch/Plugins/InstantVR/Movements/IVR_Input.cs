@@ -12,47 +12,60 @@
 
 using UnityEngine;
 
-namespace IVR {
+namespace IVR
+{
 
-    public static class Controllers {
+    public static class Controllers
+    {
         public static ControllerInput[] controllers;
 
-        public static void Update() {
-            if (controllers != null) {
+        public static void Update()
+        {
+            if (controllers != null)
+            {
                 for (int i = 0; i < controllers.Length; i++)
                     controllers[i].Update();
             }
         }
 
-        public static ControllerInput GetController(int playerID) {
-            if (controllers == null) {
+        public static ControllerInput GetController(int playerID)
+        {
+            if (controllers == null)
+            {
                 controllers = new ControllerInput[1];
                 controllers[0] = new ControllerInput();
             }
             return controllers[0];
         }
 
-        public static void Clear() {
-            if (controllers != null) {
+        public static void Clear()
+        {
+            if (controllers != null)
+            {
                 for (int i = 0; i < controllers.Length; i++)
                     controllers[i].Clear();
             }
         }
 
-        public static void EndFrame() {
-            if (controllers != null) {
+        public static void EndFrame()
+        {
+            if (controllers != null)
+            {
                 for (int i = 0; i < controllers.Length; i++)
                     controllers[i].EndFrame();
             }
         }
     }
 
-    public class ControllerInput {
-        public enum Side {
+    public class ControllerInput
+    {
+        public enum Side
+        {
             Left,
             Right
         }
-        public enum Button {
+        public enum Button
+        {
             ButtonA = 0,
             ButtonB = 1,
             ButtonX = 2,
@@ -74,18 +87,21 @@ namespace IVR {
         public ControllerInputSide left;
         public ControllerInputSide right;
 
-        public void Update() {
+        public void Update()
+        {
             left.Update();
             right.Update();
         }
 
-        public ControllerInput() {
+        public ControllerInput()
+        {
             left = new ControllerInputSide();
             right = new ControllerInputSide();
         }
 
         private bool cleared;
-        public void Clear() {
+        public void Clear()
+        {
             if (cleared)
                 return;
 
@@ -96,12 +112,15 @@ namespace IVR {
             right.Clear();
         }
 
-        public void EndFrame() {
+        public void EndFrame()
+        {
             cleared = false;
         }
 
-        public bool GetButton(Side side, Button buttonID) {
-            switch (side) {
+        public bool GetButton(Side side, Button buttonID)
+        {
+            switch (side)
+            {
                 case Side.Left:
                     return left.GetButton(buttonID);
                 case Side.Right:
@@ -113,7 +132,8 @@ namespace IVR {
         }
     }
 
-    public class ControllerInputSide {
+    public class ControllerInputSide
+    {
         public float stickHorizontal;
         public float stickVertical;
         public bool stickButton;
@@ -142,59 +162,77 @@ namespace IVR {
         private bool lastStickButton;
         private bool lastOption;
 
-        public void Update() {
-            for (int i = 0; i < 4; i++) {
-                if (buttons[i] && !lastButtons[i]) {
+        public void Update()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (buttons[i] && !lastButtons[i])
+                {
                     if (OnButtonDownEvent != null)
-                        OnButtonDownEvent((ControllerInput.Button) i);
+                        OnButtonDownEvent((ControllerInput.Button)i);
 
-                } else if (!buttons[i] && lastButtons[i]) {
+                }
+                else if (!buttons[i] && lastButtons[i])
+                {
                     if (OnButtonUpEvent != null)
-                        OnButtonUpEvent((ControllerInput.Button) i);
+                        OnButtonUpEvent((ControllerInput.Button)i);
                 }
                 lastButtons[i] = buttons[i];
             }
 
-            if (trigger1 > 0.2F && !lastTrigger1) {
+            if (trigger1 > 0.2F && !lastTrigger1)
+            {
                 if (OnButtonDownEvent != null)
                     OnButtonDownEvent(ControllerInput.Button.Trigger1);
                 lastTrigger1 = true;
-            } else if (trigger1 < 0.1F && lastTrigger1) {
+            }
+            else if (trigger1 < 0.1F && lastTrigger1)
+            {
                 if (OnButtonUpEvent != null)
                     OnButtonUpEvent(ControllerInput.Button.Trigger1);
                 lastTrigger1 = false;
             }
 
-            if (trigger2 > 0.2F && !lastTrigger2) {
+            if (trigger2 > 0.2F && !lastTrigger2)
+            {
                 if (OnButtonDownEvent != null)
                     OnButtonDownEvent(ControllerInput.Button.Trigger2);
                 lastTrigger2 = true;
-            } else if (trigger2 < 0.1F && lastTrigger2) {
+            }
+            else if (trigger2 < 0.1F && lastTrigger2)
+            {
                 if (OnButtonUpEvent != null)
                     OnButtonUpEvent(ControllerInput.Button.Trigger2);
                 lastTrigger2 = false;
             }
 
-            if (stickButton && !lastStickButton) {
+            if (stickButton && !lastStickButton)
+            {
                 if (OnButtonDownEvent != null)
                     OnButtonDownEvent(ControllerInput.Button.StickButton);
-            } else if (!stickButton && lastStickButton) {
+            }
+            else if (!stickButton && lastStickButton)
+            {
                 if (OnButtonUpEvent != null)
                     OnButtonUpEvent(ControllerInput.Button.StickButton);
             }
             lastStickButton = stickButton;
 
-            if (option && !lastOption) {
+            if (option && !lastOption)
+            {
                 if (OnButtonDownEvent != null)
                     OnButtonDownEvent(ControllerInput.Button.Option);
-            } else if (!option && lastOption) {
+            }
+            else if (!option && lastOption)
+            {
                 if (OnButtonUpEvent != null)
                     OnButtonUpEvent(ControllerInput.Button.Option);
             }
             lastOption = option;
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             stickHorizontal = 0;
             stickVertical = 0;
             stickButton = false;
@@ -214,8 +252,10 @@ namespace IVR {
             option = false;
         }
 
-        public bool GetButton(ControllerInput.Button buttonID) {
-            switch (buttonID) {
+        public bool GetButton(ControllerInput.Button buttonID)
+        {
+            switch (buttonID)
+            {
                 case ControllerInput.Button.ButtonA:
                     return buttons[0];
                 case ControllerInput.Button.ButtonB:
@@ -247,8 +287,10 @@ namespace IVR {
             }
         }
 
-        public void PressButton(ControllerInput.Button buttonID) {
-            switch (buttonID) {
+        public void PressButton(ControllerInput.Button buttonID)
+        {
+            switch (buttonID)
+            {
                 case ControllerInput.Button.ButtonA:
                     buttons[0] = true;
                     break;

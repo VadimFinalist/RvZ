@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////////
 //
 //	vp_ItemGrab.cs
 //	© Opsive. All Rights Reserved.
@@ -30,53 +30,53 @@ using System.Collections.Generic;
 public class vp_ItemGrab : vp_Interactable
 {
 
-	vp_ItemPickup m_ItemPickup = null;
-	vp_ItemPickup ItemPickup
-	{
-		get
-		{
-			if (m_ItemPickup == null)
-				m_ItemPickup = transform.GetComponent<vp_ItemPickup>();
-			if (m_ItemPickup == null)
-			{
-				Debug.LogError("Error ("+this+") This component requires a vp_ItemPickup (disabling self).");
-			}
-			return m_ItemPickup;
-		}
-	}
+    vp_ItemPickup m_ItemPickup = null;
+    vp_ItemPickup ItemPickup
+    {
+        get
+        {
+            if (m_ItemPickup == null)
+                m_ItemPickup = transform.GetComponent<vp_ItemPickup>();
+            if (m_ItemPickup == null)
+            {
+                Debug.LogError("Error (" + this + ") This component requires a vp_ItemPickup (disabling self).");
+            }
+            return m_ItemPickup;
+        }
+    }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	protected override void Start()
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    protected override void Start()
+    {
 
-		base.Start();
+        base.Start();
 
-		if(InteractDistance == 0.0f)
-			InteractDistance = 2.5f;
+        if (InteractDistance == 0.0f)
+            InteractDistance = 2.5f;
 
-	}
+    }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public override bool TryInteract(vp_PlayerEventHandler player)
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    public override bool TryInteract(vp_PlayerEventHandler player)
+    {
 
-		if(ItemPickup == null)
-			return false;
-		
-		if(m_Player == null)
-			m_Player = player;
+        if (ItemPickup == null)
+            return false;
 
-		ItemPickup.TryGiveTo(m_Player.GetComponent<Collider>());
+        if (m_Player == null)
+            m_Player = player;
 
-		return true;
+        ItemPickup.TryGiveTo(m_Player.GetComponent<Collider>());
 
-	}
-	
+        return true;
+
+    }
+
 
 }
