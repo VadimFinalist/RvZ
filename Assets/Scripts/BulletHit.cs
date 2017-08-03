@@ -1,61 +1,46 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 
-public class BulletHit : MonoBehaviour
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Com.VadimUnityDev.Robots_vs_Zombies_VR
 {
-
-    public GameObject PF_OnHit;
-    public bool isPlayer = false;
-    public AudioClip[] Gun_Ricochets;
-
-    // Use this for initialization
-    void Start()
-    {
-        Destroy(gameObject, 3.0f);
-        Invoke("TurnOnCollider", 0.1f);
-    }
-
-    void TurnOnCollider()
-    {
-        CancelInvoke("TurnOnCollider");
-        GetComponent<Collider>().enabled = true;
-    }
-
-    // Update is called once per frame
-    void Update()
+    public class BulletHit : PlayerGeneralScript
     {
 
-    }
-
-    public void PlayHitSound()
-    {
-        AudioSource audio = GetComponent<AudioSource>();
-
-        audio.clip = Gun_Ricochets[Random.Range(0, Gun_Ricochets.Length)];
-        audio.Play();
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("BHIT : " + collision.gameObject.name);
-
-        if (isPlayer && collision.gameObject.tag == "Enemy")
+        /// <summary>
+        /// Use this for initialization
+        /// </summary>
+        /*void Start()
         {
-            //collision.gameObject.GetComponent<EnemyLogic>().GetHit();
 
-            Debug.Log(collision.gameObject.name);
-        }
+        }*/
 
-        if (isPlayer && PF_OnHit != null)
+        /// <summary>
+        /// Update is called once per frame
+        /// </summary>
+        /*void Update()
         {
-            GameObject iHit = Instantiate(PF_OnHit, transform.position, Quaternion.identity) as GameObject;
 
-            Destroy(iHit, 2f);
-        }
+        }*/
 
-        if (!isPlayer && collision.gameObject.tag != "Enemy_Drone")
+        /// <summary>
+        /// Method which invokes when bullet hits a player head
+        /// </summary>
+        /// <param name="other"></param>
+        private void OnTriggerEnter(Collider other)
         {
-            Destroy(gameObject);
+            if (other.gameObject.tag == "Bullet")
+            {
+                health -= (int)Random.Range(40.0f, 60.0f); //(int)Random.Range(30.0f, 70.0f)
+                gameObject.transform.Find("CanvasPlayerHealth/HealthGroup/TextHealth").GetComponent<Text>().text = health.ToString();
+                if (health <= 0)
+                {
+                    gameObject.transform.Find("CanvasPlayerHealth/HealthGroup/TextHealth").GetComponent<Text>().text = "0";
+                    Death(gameObject);
+                }
+            }
         }
     }
 }

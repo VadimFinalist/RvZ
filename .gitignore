@@ -12,8 +12,8 @@
 /Assets/Libraries/VRTK/Examples*
 /Assets/Libraries/DFVoice/*
 /Assets/Libraries/DFVoice.meta
-/Assets/Props/Textures/T_Ground_D_R.TGA
-/Assets/Props/Textures/T_Ground_N.TGA
+/Assets/Materials/Props/Textures/T_Ground_D_R.TGA
+/Assets/Materials/Props/Textures/T_Ground_N.TGA
 
 # Don't store the Photon network settings, they contain private info
 /Assets/Libraries/Photon/Photon Unity Networking/Resources/PhotonServerSettings.asset*
