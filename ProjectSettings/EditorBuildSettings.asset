@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Down Town Beta.unity
     guid: f11858a316cebc5498bf92090e837fbc
   - enabled: 0
-    path: Assets/DevBranch/Scenes/Menu.unity
+    path: 
     guid: ceaac6a24f462ad4eae2bd00be048cdc
   - enabled: 0
-    path: Assets/Scenes/Main.unity
+    path: Assets/Scenes/Room.unity
     guid: 6cb843ac7dcc47243b374ff13e628ef6
